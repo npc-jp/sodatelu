@@ -39,3 +39,31 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Capacitor (Android)
+# 生成物・ビルド一時ファイルは除外。プロジェクト構造（.gradle以外）はコミット対象
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/app/release/
+android/captures/
+android/.idea/
+android/app/google-services.json
+
+# Capacitor (iOS)
+ios/Pods/
+ios/.build/
+ios/build/
+ios/App/Pods/
+ios/App/build/
+ios/App/Podfile.lock
+ios/App/App.xcworkspace/xcuserdata/
+ios/App/App.xcodeproj/xcuserdata/
+ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
+ios/App/App/GoogleService-Info.plist
+
+# Keystore（絶対にコミットしない）
+*.keystore
+*.jks
+release-signing.properties

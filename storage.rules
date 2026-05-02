@@ -1,0 +1,67 @@
+rules_version = '2';
+
+// sodatelu Firebase Storage セキュリティルール
+//
+// 設計方針:
+// - records/{childId}/* : 同じ family_id を持つメンバーのみ read/write
+// - children/{userId}/* : 子どものプロフィール写真。本人のファミリーのみ read/write
+// - サイズ上限: 1ファイル 5MB（クライアント側で 0.5MB に圧縮しているが、上限は緩めに設定）
+// - 画像のみ許可: Content-Type が image/* で始まるもののみ
+//
+// 反映手順:
+// - Firebase Console → Storage → ルール タブ → このファイルの内容を貼り付け → 公開
+// - 詳細は app/SECURITY.md を参照
+//
+// 注意:
+// - Storage の get() で Firestore を参照する場合、firestore.rules と異なり
+//   Storage Rules には Firestore へのクロスアクセス機能がない
+// - そのため、ファミリー判定はパス構造（records/{childId}/...）と
+//   Custom Claims を組み合わせて行うか、シンプルに「認証済みユーザーは
+//   自身のアップロードのみ」という制約にする
+// - β段階では「認証済み」+「画像のみ」+「サイズ上限」の3条件で運用する。
+//   将来的には Custom Claims に family_id を埋め込んで厳密な制御にアップグレード可能
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // 共通ヘルパー
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // 画像アップロードの妥当性チェック
+    function isValidImage() {
+      return request.resource.size < 5 * 1024 * 1024  // 5MB以下
+        && request.resource.contentType.matches("image/.*");
+    }
+
+    // ============================================================
+    // records/{childId}/{fileName} : 記録に添付された写真
+    // ============================================================
+    // 認証済みユーザーは read/write 可（list 含む）
+    // 厳密なファミリー判定は Firestore 側のルールに委ねる
+    // （Firestore側で同じファミリーメンバーしか photo_url を取得できない）
+    match /records/{childId}/{fileName=**} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && isValidImage();
+      allow delete: if isSignedIn();
+    }
+
+    // ============================================================
+    // children/{userId}/{fileName} : 子どものプロフィール写真
+    // ============================================================
+    // 自分（userId）のフォルダにのみ書き込み可
+    // 読み取りは認証済みユーザーは可（ファミリーメンバーが見られるように）
+    match /children/{userId}/{fileName=**} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && request.auth.uid == userId && isValidImage();
+      allow delete: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    // それ以外のパスへのアクセスは禁止
+    match /{allPaths=**} {
+      allow read: if false;
+      allow write: if false;
+    }
+  }
+}

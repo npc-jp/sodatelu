@@ -1,0 +1,215 @@
+rules_version = '2';
+
+// sodatelu Firestore セキュリティルール
+//
+// 設計方針:
+// - users/{userId}: 本人のみ read/write、家族メンバーは get 可
+// - families/{familyId}: 同じ family_id を持つメンバーのみ read/write
+// - children/{childId}: 同じ family_id を持つメンバーのみ read/write
+// - records/{recordId}: 紐付くchild_idの所属familyメンバーのみ read/write
+// - milestones/{milestoneId}: 認証済みユーザーは全員 read 可。書き込みは管理者のみ
+// - invitations/{invitationId}: 招待を出した本人 + 招待先メールアドレスの本人のみ
+//
+// 重要: read を get / list に分離している
+// - get: 単一ドキュメント取得時の厳格な評価（家族メンバーかどうか等）
+// - list: クエリ時。Firestore は Rules がクエリ結果を全件保証できるか事前判定するため、
+//        条件付き read ルールではクエリが拒否されることがある。
+//        list は「認証済み」に緩めて、クライアント側のクエリ where 条件で
+//        family_id 絞り込みを担保する設計（Webβ前提の妥協）
+//        ※本番リリース前にカスタムクレームやサブコレクション化で厳格化を推奨
+//
+// プレミアム制限（CRIT-04）:
+// - records の category が premium カテゴリの場合は families.plan == "premium" を必須とする
+// - クライアント側で disabled していても、サーバー側でこの検証を必ず通す
+//
+// 反映手順:
+// - Firebase Console → Firestore → ルール タブ → このファイルの内容を貼り付け → 公開
+// - 詳細は app/SECURITY.md を参照
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================================
+    // 共通ヘルパー関数
+    // ============================================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function myFamilyId() {
+      return isSignedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.family_id
+        : null;
+    }
+
+    function isMyFamily(familyId) {
+      let myFamily = myFamilyId();
+      return myFamily != null && myFamily == /databases/$(database)/documents/families/$(familyId);
+    }
+
+    function isMyFamilyRef(familyRef) {
+      let myFamily = myFamilyId();
+      return myFamily != null && myFamily == familyRef;
+    }
+
+    // バッチ内で users.family_id が同時更新される場合の判定（オンボーディング用）
+    function isMyFamilyAfter(familyRef) {
+      return getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.family_id == familyRef;
+    }
+
+    function familyPlan(familyRef) {
+      return get(familyRef).data.plan;
+    }
+
+    function isPremiumCategory(category) {
+      return category in [
+        "がんばった",
+        "感じた",
+        "言った",
+        "行った",
+        "やめた",
+        "あげた・もらった",
+        "のりこえた",
+        "ありがとう"
+      ];
+    }
+
+    // ============================================================
+    // users コレクション
+    // ============================================================
+    match /users/{userId} {
+      // 単一取得: 本人 OR 家族メンバー
+      allow get: if isSelf(userId)
+        || (isSignedIn()
+            && resource.data.family_id != null
+            && isMyFamilyRef(resource.data.family_id));
+      // クエリ: 認証済みなら OK（where("family_id", "==", familyRef) 前提）
+      allow list: if isSignedIn();
+      allow create: if isSelf(userId);
+      allow update: if isSelf(userId);
+      allow delete: if isSelf(userId);
+    }
+
+    // ============================================================
+    // families コレクション
+    // ============================================================
+    match /families/{familyId} {
+      allow get: if isMyFamily(familyId);
+      allow list: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update: if isMyFamily(familyId);
+      allow delete: if isMyFamily(familyId);
+    }
+
+    // ============================================================
+    // children コレクション
+    // ============================================================
+    match /children/{childId} {
+      allow get: if isSignedIn()
+        && resource.data.family_id != null
+        && isMyFamilyRef(resource.data.family_id);
+      // クエリ: 認証済みなら OK（where("family_id", "==", familyRef) 前提）
+      allow list: if isSignedIn();
+
+      // 作成時: 通常は自分のファミリー、オンボーディング時はバッチ内更新後を許可
+      allow create: if isSignedIn()
+        && request.resource.data.family_id != null
+        && (
+          isMyFamilyRef(request.resource.data.family_id)
+          || isMyFamilyAfter(request.resource.data.family_id)
+        );
+
+      allow update: if isSignedIn()
+        && resource.data.family_id != null
+        && isMyFamilyRef(resource.data.family_id);
+
+      allow delete: if isSignedIn()
+        && resource.data.family_id != null
+        && isMyFamilyRef(resource.data.family_id);
+    }
+
+    // ============================================================
+    // records コレクション
+    // ============================================================
+    function isMyChild(childRef) {
+      let child = get(childRef).data;
+      return child.family_id != null && isMyFamilyRef(child.family_id);
+    }
+
+    function isPremiumByChild(childRef) {
+      let child = get(childRef).data;
+      return child.family_id != null && familyPlan(child.family_id) == "premium";
+    }
+
+    match /records/{recordId} {
+      allow get: if isSignedIn()
+        && resource.data.child_id != null
+        && isMyChild(resource.data.child_id);
+      // クエリ: 認証済みなら OK（where("child_id", "==", childRef) 前提）
+      allow list: if isSignedIn();
+
+      // 作成時: 自分のファミリーの子ども宛 + プレミアムカテゴリは plan==premium 必須
+      allow create: if isSignedIn()
+        && request.resource.data.child_id != null
+        && isMyChild(request.resource.data.child_id)
+        && (
+          !isPremiumCategory(request.resource.data.category)
+          || isPremiumByChild(request.resource.data.child_id)
+        );
+
+      allow update: if isSignedIn()
+        && resource.data.child_id != null
+        && isMyChild(resource.data.child_id)
+        && (
+          !isPremiumCategory(request.resource.data.category)
+          || isPremiumByChild(request.resource.data.child_id)
+        );
+
+      allow delete: if isSignedIn()
+        && resource.data.child_id != null
+        && isMyChild(resource.data.child_id);
+    }
+
+    // ============================================================
+    // milestones コレクション
+    // ============================================================
+    match /milestones/{milestoneId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // ============================================================
+    // invitations コレクション
+    // ============================================================
+    match /invitations/{invitationId} {
+      allow get: if isSignedIn() && (
+        // 自分のファミリー宛の招待（送信側）
+        (resource.data.family_id != null && isMyFamilyRef(resource.data.family_id))
+        // 自分宛の招待（受信側）
+        || (request.auth.token.email != null && resource.data.invited_email == request.auth.token.email)
+      );
+      // クエリ: 認証済みなら OK（where 条件で絞り込み前提）
+      allow list: if isSignedIn();
+
+      allow create: if isSignedIn()
+        && request.resource.data.family_id != null
+        && isMyFamilyRef(request.resource.data.family_id)
+        && request.resource.data.invited_by_uid == request.auth.uid;
+
+      // 更新は status の変更のみ（accept/decline/cancel）
+      allow update: if isSignedIn() && (
+        (request.auth.token.email != null && resource.data.invited_email == request.auth.token.email)
+        || (resource.data.family_id != null && isMyFamilyRef(resource.data.family_id))
+      );
+
+      allow delete: if isSignedIn()
+        && resource.data.family_id != null
+        && isMyFamilyRef(resource.data.family_id);
+    }
+  }
+}

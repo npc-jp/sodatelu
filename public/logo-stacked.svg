@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sodatelu ロゴ・縦並び（スタック型）
+  - 上: マーク（amber円 + 白い芽）
+  - 下: sodatelu テキスト（slate-800）
+  - スプラッシュ・オンボーディング・ローディング画面用
+  - viewBox: 240x320
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 240 320"
+     width="240" height="320"
+     role="img"
+     aria-label="sodatelu">
+
+  <!-- ロゴマーク: amber円・中心(120,110)・半径90 -->
+  <circle cx="120" cy="110" r="90" fill="#F59E0B"/>
+
+  <!-- 芽パス: 0.3516 倍 = 180/512 で(120,110)中心に配置 -->
+  <g transform="translate(30,20) scale(0.3516)">
+    <!-- 茎 -->
+    <path d="M256 360 L256 250"
+          stroke="#ffffff" stroke-width="14" stroke-linecap="round" fill="none"/>
+    <!-- 左の葉 -->
+    <path d="M256 270
+             C 256 230, 220 200, 170 200
+             C 170 240, 210 270, 256 270 Z"
+          fill="#ffffff"/>
+    <!-- 右の葉 -->
+    <path d="M256 270
+             C 256 230, 292 200, 342 200
+             C 342 240, 302 270, 256 270 Z"
+          fill="#ffffff"/>
+    <!-- 葉の中心くぼみ -->
+    <circle cx="256" cy="270" r="8" fill="#F59E0B"/>
+  </g>
+
+  <!-- テキスト: sodatelu・slate-800・中央寄せ -->
+  <text
+    x="120"
+    y="270"
+    text-anchor="middle"
+    dominant-baseline="auto"
+    fill="#1E293B"
+    font-family="'DM Sans', 'Geist', 'Inter', system-ui, -apple-system, sans-serif"
+    font-size="42"
+    font-weight="600"
+    letter-spacing="-0.5"
+  >sodatelu</text>
+</svg>

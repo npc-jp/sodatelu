@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sodatelu ロゴマーク・白版
+  - amberヘッダーや暗背景の上に重ねる用
+  - 円は白の輪郭（fill: none, stroke: white）
+  - 芽は白塗り
+  - 葉の中心くぼみは透明にして円ふちと馴染ませる
+  - 512x512 ベース
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="sodatelu">
+  <!-- 円: 白い輪郭（背景は透過） -->
+  <circle cx="256" cy="256" r="246" fill="none" stroke="#ffffff" stroke-width="20"/>
+
+  <!-- 茎 -->
+  <path d="M256 360 L256 250"
+        stroke="#ffffff" stroke-width="14" stroke-linecap="round" fill="none"/>
+
+  <!-- 左の葉 -->
+  <path d="M256 270
+           C 256 230, 220 200, 170 200
+           C 170 240, 210 270, 256 270 Z"
+        fill="#ffffff"/>
+
+  <!-- 右の葉 -->
+  <path d="M256 270
+           C 256 230, 292 200, 342 200
+           C 342 240, 302 270, 256 270 Z"
+        fill="#ffffff"/>
+</svg>
