@@ -1,31 +1,38 @@
 "use client";
 
-// Book画面: 成長アルバム
-// 写真付きの記録をタイムライン形式で表示。子ども切り替え対応
+// アルバム画面 — Bloom デザイン適用
+// 参照: design_handoff_bloom/dir-bloom-extra.jsx の BloomAlbum
+// Sprout + アルバム + 件数 / フィルタチップ / 月別グループ / カード
+//
+// 既存ロジック維持: 写真フィルタ、月別グループ、子ども切替
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useChild } from "@/lib/child-context";
 import { getRecordsByChild, type GrowthRecord } from "@/lib/firestore";
 import { Timestamp } from "firebase/firestore";
-import BottomNav from "@/components/bottom-nav";
-import AppHeader from "@/components/app-header";
-import Twemoji from "@/components/twemoji";
-import { Plus } from "lucide-react";
+import BloomBottomNav from "@/components/bloom-bottom-nav";
+import BloomCard from "@/components/bloom-card";
+import BloomFab from "@/components/bloom-fab";
+import { Sprout, Star } from "@/components/illustrations";
 
-const CATEGORY_STYLE: { [key: string]: { dot: string } } = {
-  できた: { dot: "✨" },
-  おめでとう: { dot: "🎉" },
-  始めた: { dot: "🌱" },
-  がんばった: { dot: "💪" },
-  感じた: { dot: "💭" },
-  言った: { dot: "💬" },
-  行った: { dot: "🚀" },
-  やめた: { dot: "🔖" },
-  "あげた・もらった": { dot: "🎁" },
-  のりこえた: { dot: "🏔️" },
-  ありがとう: { dot: "🙏" },
-};
+type FilterKey = "all" | "photos" | "done" | "started";
+
+const FILTERS: { key: FilterKey; label: string }[] = [
+  { key: "all", label: "すべて" },
+  { key: "photos", label: "写真あり" },
+  { key: "done", label: "できた" },
+  { key: "started", label: "はじめた" },
+];
+
+// カテゴリ → タグ色
+function categoryColor(category: string): string {
+  if (category === "始めた") return "var(--bloom-accent)";
+  if (category === "おめでとう") return "var(--bloom-pink)";
+  if (category === "ありがとう") return "var(--bloom-yellow)";
+  return "var(--bloom-primary)";
+}
 
 // 記録日と生年月日からその時の年齢を計算
 function ageAtRecord(birthDate: Timestamp, recordDate: Timestamp): string {
@@ -33,7 +40,6 @@ function ageAtRecord(birthDate: Timestamp, recordDate: Timestamp): string {
   const record = recordDate.toDate();
   const diffMs = record.getTime() - birth.getTime();
   const totalMonths = Math.floor(diffMs / (30.44 * 24 * 60 * 60 * 1000));
-
   if (totalMonths < 0) return "";
   if (totalMonths < 1) {
     const days = Math.floor(diffMs / (24 * 60 * 60 * 1000));
@@ -45,7 +51,7 @@ function ageAtRecord(birthDate: Timestamp, recordDate: Timestamp): string {
   return m > 0 ? `${y}歳${m}ヶ月` : `${y}歳`;
 }
 
-// 年月でグルーピング
+// 年月でグルーピング（新しい順）
 function groupByMonth(records: (GrowthRecord & { id: string })[]) {
   const groups: { [key: string]: (GrowthRecord & { id: string })[] } = {};
   records.forEach((rec) => {
@@ -62,183 +68,240 @@ export default function BookPage() {
   const { loading: authLoading } = useAuth();
   const { children: kids, selectedChild: child, selectChild, loading: childLoading } = useChild();
   const [records, setRecords] = useState<(GrowthRecord & { id: string })[]>([]);
-  const [recordsLoading, setRecordsLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<"all" | "photos">("all");
+  const [filter, setFilter] = useState<FilterKey>("all");
 
-  // 選択中の子どもが変わったら記録を再取得
   useEffect(() => {
     if (!child) return;
-    setRecordsLoading(true);
     getRecordsByChild(child.id).then((recs) => {
+      // 新しい順
+      recs.sort((a, b) => b.recorded_date.seconds - a.recorded_date.seconds);
       setRecords(recs);
-      setRecordsLoading(false);
     });
   }, [child]);
 
   if (authLoading || childLoading || !child) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-slate-400">読み込み中...</p>
+      <div
+        className="flex h-full items-center justify-center"
+        style={{ background: "var(--bloom-bg)" }}
+      >
+        <Sprout size={42} color="var(--bloom-primary)" />
       </div>
     );
   }
 
-  const displayRecords = viewMode === "photos"
-    ? records.filter((r) => r.photo_url)
-    : records;
+  // フィルタ適用
+  const filteredRecords = records.filter((r) => {
+    if (filter === "photos") return !!r.photo_url;
+    if (filter === "done") return r.category === "できた" || r.category === "おめでとう";
+    if (filter === "started") return r.category === "始めた";
+    return true;
+  });
 
-  const grouped = groupByMonth(displayRecords);
-  const photoCount = records.filter((r) => r.photo_url).length;
+  const grouped = groupByMonth(filteredRecords);
 
   return (
-    <div className="flex h-full flex-col">
+    <div
+      className="relative flex h-full flex-col pb-24"
+      style={{ background: "var(--bloom-bg)" }}
+    >
       {/* ヘッダー */}
-      <AppHeader
-        title="アルバム"
-        subtitle={`${child.name}の記録 ・ ${records.length}件 ・ 写真${photoCount}枚`}
-        subtitlePosition="below"
-        rightSlot={
-          <button
-            onClick={() => router.push("/add-child")}
-            className="flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-sm text-white hover:bg-white/30"
-          >
-            <Plus className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
-            きょうだい
-          </button>
-        }
-      >
-        {/* 子ども切り替え（2人以上） */}
-        {kids.length > 1 && (
-          <div className="mt-3 -mx-5 overflow-x-auto px-5">
-            <div className="flex gap-2 min-w-max">
-              {kids.map((kid) => (
+      <header className="flex items-center gap-2.5 px-[18px] pt-3.5 pb-2.5">
+        <Sprout size={18} color="var(--bloom-primary)" />
+        <h1
+          className="font-hand"
+          style={{ fontSize: 22, color: "var(--bloom-ink)" }}
+        >
+          アルバム
+        </h1>
+        <div
+          className="ml-auto text-[11px]"
+          style={{ color: "var(--bloom-ink-soft)" }}
+        >
+          {records.length}件
+        </div>
+      </header>
+
+      {/* 子ども切り替え */}
+      {kids.length > 1 && (
+        <div className="-mx-1 overflow-x-auto px-4 pb-1">
+          <div className="flex min-w-max gap-2">
+            {kids.map((kid) => {
+              const isActive = child.id === kid.id;
+              return (
                 <button
                   key={kid.id}
                   onClick={() => selectChild(kid.id)}
-                  className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                    child.id === kid.id
-                      ? "bg-white text-amber-600 shadow-sm"
-                      : "bg-amber-600/30 text-amber-100 hover:bg-amber-600/50"
-                  }`}
+                  className={`bloom-border flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 ${isActive ? "bloom-shadow-soft" : ""}`}
+                  style={{
+                    background: isActive ? "var(--bloom-primary)" : "#fff",
+                    color: isActive ? "#fff" : "var(--bloom-ink)",
+                    fontFamily: "Yusei Magic, sans-serif",
+                    fontSize: 12,
+                  }}
                 >
-                  {kid.photo_url ? (
-                    <img src={kid.photo_url} alt="" className="h-5 w-5 rounded-full object-cover" />
-                  ) : (
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-200 text-xs font-bold text-amber-700">
-                      {kid.name.charAt(0)}
-                    </span>
-                  )}
+                  <span
+                    className="flex h-5 w-5 items-center justify-center rounded-full font-hand"
+                    style={{ background: "var(--bloom-yellow)", fontSize: 11, color: "var(--bloom-ink)" }}
+                  >
+                    {kid.name.charAt(0)}
+                  </span>
                   {kid.name}
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
-        )}
-      </AppHeader>
+        </div>
+      )}
 
-      {/* 表示切り替え */}
-      <div className="flex border-b border-slate-200 bg-white px-5">
-        <button
-          onClick={() => setViewMode("all")}
-          className={`flex-1 py-3 text-center text-sm font-medium transition-colors ${
-            viewMode === "all"
-              ? "border-b-2 border-amber-500 text-amber-600"
-              : "text-slate-400"
-          }`}
-        >
-          すべて
-        </button>
-        <button
-          onClick={() => setViewMode("photos")}
-          className={`flex flex-1 items-center justify-center gap-1.5 py-3 text-center text-sm font-medium transition-colors ${
-            viewMode === "photos"
-              ? "border-b-2 border-amber-500 text-amber-600"
-              : "text-slate-400"
-          }`}
-        >
-          <Twemoji emoji="📷" size={16} ariaLabel="" />
-          写真のみ
-        </button>
+      {/* フィルタチップ */}
+      <div className="flex gap-1.5 overflow-x-auto px-3.5 pb-2 pt-1">
+        {FILTERS.map((f) => {
+          const active = filter === f.key;
+          return (
+            <button
+              key={f.key}
+              type="button"
+              onClick={() => setFilter(f.key)}
+              className="font-hand whitespace-nowrap rounded-[10px] px-3 py-1"
+              style={{
+                background: active ? "var(--bloom-primary)" : "#fff",
+                color: active ? "#fff" : "var(--bloom-ink)",
+                border: "1.5px solid var(--bloom-line)",
+                boxShadow: active ? "2px 2px 0 var(--bloom-line)" : "none",
+                fontSize: 11,
+              }}
+            >
+              {f.label}
+            </button>
+          );
+        })}
       </div>
 
-      {/* メインコンテンツ */}
-      <main className="flex-1 overflow-y-auto px-5 pb-24 pt-4">
-        {recordsLoading ? (
-          <div className="flex items-center justify-center py-16">
-            <p className="text-slate-400">読み込み中...</p>
-          </div>
-        ) : displayRecords.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="flex justify-center">
-              <Twemoji emoji={viewMode === "photos" ? "📷" : "📖"} size={48} ariaLabel="" />
-            </div>
-            <p className="mt-4 font-medium text-slate-600">
-              {viewMode === "photos"
-                ? "写真付きの記録がまだありません"
-                : "まだ記録がありません"}
+      <main className="flex-1 overflow-y-auto px-3.5 pb-10 pt-1.5">
+        {filteredRecords.length === 0 ? (
+          <BloomCard soft className="mt-4 p-6 text-center">
+            <Sprout size={36} color="var(--bloom-primary)" />
+            <p
+              className="font-hand mt-3"
+              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+            >
+              {filter === "photos"
+                ? "写真付きの きろくが まだありません"
+                : "まだ きろくが ありません"}
             </p>
             <button
+              type="button"
               onClick={() => router.push(`/write?childId=${child.id}`)}
-              className="mt-4 rounded-full bg-amber-500 px-6 py-2 text-sm font-semibold text-white hover:bg-amber-600"
+              className="bloom-border bloom-shadow font-hand mt-4 rounded-xl px-5 py-2.5 text-white"
+              style={{
+                background: "var(--bloom-primary)",
+                fontSize: 13,
+                letterSpacing: "0.08em",
+              }}
             >
-              記録をつける
+              はじめての きろく ✦
             </button>
-          </div>
+          </BloomCard>
         ) : (
-          Object.entries(grouped).map(([month, recs]) => (
-            <div key={month} className="mb-6">
-              <div className="mb-3 flex items-center gap-2 py-2">
-                <div className="h-px flex-1 bg-slate-200" />
-                <span className="text-sm font-bold text-slate-500">{month}</span>
-                <div className="h-px flex-1 bg-slate-200" />
+          Object.entries(grouped).map(([month, recs], idx) => (
+            <div key={month} className={idx === 0 ? "mt-2" : "mt-5"}>
+              {/* 月ヘッダー（手描き字 + 細線 + 件数） */}
+              <div className="mb-2 flex items-center gap-2 px-1">
+                <span
+                  className="font-hand"
+                  style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                >
+                  {month}
+                </span>
+                <div
+                  className="flex-1"
+                  style={{ height: 1, background: "var(--bloom-line-soft)" }}
+                />
+                <span
+                  className="text-[10px]"
+                  style={{ color: "var(--bloom-ink-soft)" }}
+                >
+                  {recs.length}件
+                </span>
               </div>
-
-              <div className="space-y-4">
+              {/* 記録カード列 */}
+              <div className="space-y-2">
                 {recs.map((rec) => (
-                  <button
+                  <BloomCard
                     key={rec.id}
-                    onClick={() => router.push(`/record?id=${rec.id}`)}
-                    className="w-full text-left"
+                    soft
+                    className="cursor-pointer overflow-hidden"
                   >
-                    <div className="overflow-hidden rounded-2xl bg-white shadow-sm transition-shadow hover:shadow-md">
-                      {rec.photo_url && (
-                        <img
-                          src={rec.photo_url}
-                          alt=""
-                          className="h-48 w-full object-cover"
-                        />
-                      )}
-                      <div className="p-4">
-                        <div className="flex items-start gap-2">
-                          {CATEGORY_STYLE[rec.category]?.dot ? (
-                            <Twemoji
-                              emoji={CATEGORY_STYLE[rec.category].dot}
-                              size={18}
-                              ariaLabel={rec.category}
-                            />
-                          ) : (
-                            <span className="text-base" aria-hidden>⚪</span>
-                          )}
-                          <div className="flex-1">
-                            <p className="font-medium text-slate-800">{rec.title}</p>
-                            {rec.memo && (
-                              <p className="mt-1 text-sm text-slate-500 line-clamp-2">
-                                {rec.memo}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                        <div className="mt-3 flex items-center justify-between">
-                          <p className="text-xs text-slate-400">
-                            {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}
-                          </p>
-                          <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-600">
-                            {ageAtRecord(child.birth_date, rec.recorded_date)}
+                    <button
+                      type="button"
+                      onClick={() => router.push(`/record?id=${rec.id}`)}
+                      className="block w-full text-left"
+                    >
+                      {rec.photo_url ? (
+                        <div className="relative">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={rec.photo_url}
+                            alt=""
+                            className="h-32 w-full object-cover"
+                            style={{ borderBottom: "2px solid var(--bloom-line)" }}
+                          />
+                          <span
+                            className="absolute"
+                            style={{ top: 8, right: 8 }}
+                          >
+                            <Star size={14} color="var(--bloom-yellow)" />
                           </span>
                         </div>
+                      ) : null}
+                      <div className="p-3">
+                        <div className="flex items-baseline justify-between">
+                          <div className="flex min-w-0 items-center gap-1.5">
+                            <span
+                              className="font-hand inline-block rounded-lg px-2 py-0.5 text-white"
+                              style={{
+                                background: categoryColor(rec.category),
+                                fontSize: 10,
+                                border: "1.5px solid var(--bloom-line)",
+                              }}
+                            >
+                              {rec.category}
+                            </span>
+                            <span
+                              className="font-hand truncate"
+                              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                            >
+                              {rec.title}
+                            </span>
+                          </div>
+                          <span
+                            className="ml-2 shrink-0 text-[10px]"
+                            style={{ color: "var(--bloom-ink-soft)" }}
+                          >
+                            {`${rec.recorded_date.toDate().getMonth() + 1}/${rec.recorded_date.toDate().getDate()}`}
+                          </span>
+                        </div>
+                        {rec.memo && (
+                          <p
+                            className="mt-1 line-clamp-2 text-[11px]"
+                            style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
+                          >
+                            {rec.memo}
+                          </p>
+                        )}
+                        <div
+                          className="mt-2 inline-block rounded-full px-2 py-0.5 text-[10px]"
+                          style={{
+                            background: "var(--bloom-primary-soft)",
+                            color: "var(--bloom-ink)",
+                          }}
+                        >
+                          {ageAtRecord(child.birth_date, rec.recorded_date)}
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                  </BloomCard>
                 ))}
               </div>
             </div>
@@ -246,7 +309,8 @@ export default function BookPage() {
         )}
       </main>
 
-      <BottomNav current="book" />
+      <BloomFab onClick={() => router.push(`/write?childId=${child.id}`)} />
+      <BloomBottomNav current="book" />
     </div>
   );
 }

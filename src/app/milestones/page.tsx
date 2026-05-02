@@ -1,34 +1,28 @@
 "use client";
 
-// 成長のめやす一覧ページ
-// フェーズごとにマイルストーンを表示する「場所」。
-// マイルストーンは課題・チェックリストではなく「これから来るもの／記録できるもの」として中立に見せる。
-// 達成率・%表示は使わない（ドキッとさせない設計）。
+// 成長のめやす一覧ページ — Bloom デザイン適用
+// 参照: design_handoff_bloom/dir-bloom.jsx の BloomMilestones
+// Sprout + 成長のめやす / 4フェーズタブ / 現フェーズカード（緑） / めやす項目リスト
+//
+// 設計鉄則: 達成率・%表示は使わない（ドキッとさせない）
+// 「これから来るもの／きろくできるもの」として中立に見せる
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { getChildrenByUser, getRecordsByChild, type GrowthRecord } from "@/lib/firestore";
 import { MILESTONES } from "@/lib/milestones-data";
 import { getPhase, PHASES } from "@/lib/phases";
-import BottomNav from "@/components/bottom-nav";
-import AppHeader from "@/components/app-header";
-import Twemoji from "@/components/twemoji";
-import { Check } from "lucide-react";
+import BloomBottomNav from "@/components/bloom-bottom-nav";
+import BloomCard from "@/components/bloom-card";
+import { PottedPlant, Sprout } from "@/components/illustrations";
 
-// マイルストーンカテゴリの色
-const MS_CATEGORY_COLORS: { [key: string]: string } = {
-  身体: "bg-blue-100 text-blue-700",
-  言語: "bg-purple-100 text-purple-700",
-  社会性: "bg-pink-100 text-pink-700",
-  認知: "bg-teal-100 text-teal-700",
-  人生節目: "bg-amber-100 text-amber-700",
-};
-
-// 根拠ラベルの表示
-const EVIDENCE_LABEL: { [key: string]: { text: string; style: string } } = {
-  who: { text: "WHO基準", style: "bg-emerald-100 text-emerald-700" },
-  research: { text: "発達研究", style: "bg-sky-100 text-sky-700" },
-  sodatelu: { text: "sodatelu", style: "bg-amber-100 text-amber-700" },
+// フェーズ番号 → タブ色（非アクティブ時の薄い帯背景）
+const PHASE_COLORS: { [key: number]: string } = {
+  1: "var(--bloom-primary-soft)",
+  2: "var(--bloom-primary)",
+  3: "var(--bloom-accent-soft)",
+  4: "var(--bloom-pink)",
 };
 
 export default function MilestonesPage() {
@@ -54,7 +48,7 @@ export default function MilestonesPage() {
       const phase = getPhase(child.birth_date.toDate());
       setCurrentPhase(phase.number);
 
-      // 記録済みマイルストーンを取得（記録にmilestone_idがあるもの）
+      // 記録済みマイルストーンを取得（記録に milestone_id があるもの）
       const records = await getRecordsByChild(child.id);
       const achieved = new Set<string>();
       records.forEach((rec: GrowthRecord & { id: string }) => {
@@ -72,164 +66,228 @@ export default function MilestonesPage() {
   // 選択中フェーズのマイルストーン
   const filteredMilestones = MILESTONES.filter((m) => m.phase === currentPhase);
   const phaseInfo = PHASES[currentPhase - 1];
-  // 「記録した数」のカウント（達成度・パーセントとしては使わない）
   const recordedCount = filteredMilestones.filter((m) => achievedIds.has(m.id)).length;
+  const remaining = filteredMilestones.length - recordedCount;
+  // プログレスバーの幅（最大40%程度に抑えてプレッシャーにならないように）
+  const progressPct = filteredMilestones.length > 0
+    ? Math.min(100, Math.round((recordedCount / filteredMilestones.length) * 100))
+    : 0;
 
   if (authLoading || loading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-slate-400">読み込み中...</p>
+      <div
+        className="flex h-full items-center justify-center"
+        style={{ background: "var(--bloom-bg)" }}
+      >
+        <Sprout size={42} color="var(--bloom-primary)" />
       </div>
     );
   }
 
   return (
-    <div className="flex h-full flex-col pb-16">
-      {/* ヘッダー: BottomNavタブ画面のため戻るボタンは出さない（履歴依存で挙動が不安定になる） */}
-      <AppHeader
-        title="成長のめやす"
-        subtitle={
-          childName ? `${childName}のこれから・きろく` : "これから・きろく"
-        }
-        subtitlePosition="below"
-      />
+    <div
+      className="flex h-full flex-col pb-24"
+      style={{ background: "var(--bloom-bg)" }}
+    >
+      {/* ヘッダー */}
+      <header
+        className="px-[18px] pt-3.5 pb-3"
+        style={{ borderBottom: "2px solid var(--bloom-line)" }}
+      >
+        <div className="flex items-center gap-2">
+          <Sprout size={20} color="var(--bloom-primary)" />
+          <h1
+            className="font-hand"
+            style={{ fontSize: 22, color: "var(--bloom-ink)" }}
+          >
+            成長のめやす
+          </h1>
+        </div>
+        <p
+          className="mt-0.5 text-[11px]"
+          style={{ color: "var(--bloom-ink-soft)", marginLeft: 28 }}
+        >
+          {childName ? `${childName}のこれから・きろく` : "これから・きろく"}
+        </p>
+      </header>
 
-      {/* フェーズタブ */}
-      <div className="overflow-x-auto border-b border-slate-200 bg-white">
-        <div className="flex min-w-max px-3">
-          {PHASES.map((phase) => (
+      {/* フェーズタブ（横スクロール） */}
+      <div
+        className="flex gap-1.5 overflow-x-auto px-3.5 py-2.5"
+        style={{ borderBottom: "2px solid var(--bloom-line)" }}
+      >
+        {PHASES.map((phase) => {
+          const active = currentPhase === phase.number;
+          const tabColor = PHASE_COLORS[phase.number] ?? "#fff";
+          return (
             <button
               key={phase.number}
+              type="button"
               onClick={() => setCurrentPhase(phase.number)}
-              className={`flex items-center gap-1.5 whitespace-nowrap px-4 py-3 text-sm font-medium transition-colors ${
-                currentPhase === phase.number
-                  ? "border-b-2 border-amber-500 text-amber-600"
-                  : "text-slate-400 hover:text-slate-600"
-              }`}
+              className="bloom-border font-hand whitespace-nowrap rounded-xl px-3.5 py-1.5"
+              style={{
+                fontSize: 12,
+                background: active ? tabColor : "#fff",
+                color: active ? "#fff" : "var(--bloom-ink)",
+                boxShadow: active ? "2px 2px 0 var(--bloom-line)" : "none",
+              }}
             >
-              <Twemoji emoji={phase.emoji} size={18} ariaLabel="" />
               {phase.ageRange}
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
-      {/* メインコンテンツ */}
-      <main className="flex-1 overflow-y-auto px-5 pb-10 pt-5">
-        {/* 「めやす」の趣旨説明（ドキッとさせない設計） */}
-        <p className="mb-3 text-xs leading-relaxed text-slate-500">
-          時期はあくまで目安です。早い・遅いではなく、うちの子のペースで進みます。
+      <main className="flex-1 overflow-y-auto px-4 pb-10 pt-3.5">
+        {/* 趣旨説明 */}
+        <p
+          className="font-hand mb-4 text-center"
+          style={{ fontSize: 12, color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
+        >
+          時期はあくまで目安。
+          <br />
+          うちの子のペースで、ゆっくり育ちます。
         </p>
 
-        {/* 凡例 */}
-        <div className="mb-4 flex flex-wrap gap-2">
-          {Object.entries(EVIDENCE_LABEL).map(([key, val]) => (
-            <span key={key} className={`rounded-full px-2.5 py-1 text-xs font-medium ${val.style}`}>
-              {val.text}
-            </span>
-          ))}
-        </div>
-
-        {/* フェーズ情報（達成度バー・%は表示しない） */}
+        {/* 現フェーズカード */}
         {phaseInfo && (
-          <div className="mb-5 rounded-2xl bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="flex items-center gap-2 text-lg font-bold text-slate-800">
-                  <Twemoji emoji={phaseInfo.emoji} size={22} ariaLabel="" />
-                  {phaseInfo.name}
-                </p>
-                <p className="text-sm text-slate-500">{phaseInfo.ageRange}</p>
+          <BloomCard
+            color="var(--bloom-primary)"
+            className="relative overflow-hidden p-4"
+          >
+            <div
+              className="absolute pointer-events-none"
+              style={{ right: -10, top: -10, opacity: 0.2 }}
+            >
+              <PottedPlant size={80} />
+            </div>
+            <div className="relative text-white">
+              <div className="font-hand" style={{ fontSize: 18 }}>
+                {phaseInfo.name}
               </div>
-              <div className="text-right">
-                <p className="text-sm text-slate-500">
-                  {recordedCount > 0 ? (
-                    <>
-                      <span className="text-base font-bold text-amber-500">{recordedCount}</span>
-                      <span className="ml-1">件 きろく済み</span>
-                    </>
-                  ) : (
-                    <span className="text-slate-400">これからのきろく</span>
-                  )}
-                </p>
+              <div className="text-[10px] mt-0.5 opacity-90">
+                {phaseInfo.ageRange}
+              </div>
+              <div
+                className="bloom-border font-hand mt-3 inline-block rounded-[10px] px-2.5 py-1"
+                style={{
+                  background: "#fff",
+                  color: "var(--bloom-ink)",
+                  fontSize: 11,
+                }}
+              >
+                {recordedCount}件 きろく ・ あと{remaining}つ
+              </div>
+              <div
+                className="mt-2.5 overflow-hidden rounded"
+                style={{ height: 5, background: "rgba(255,255,255,0.3)" }}
+              >
+                <div
+                  style={{
+                    width: `${progressPct}%`,
+                    height: "100%",
+                    background: "var(--bloom-yellow)",
+                    transition: "width 0.4s",
+                  }}
+                />
               </div>
             </div>
-          </div>
+          </BloomCard>
         )}
 
-        {/* マイルストーン一覧（タップでめやす詳細ページへ遷移） */}
-        <div className="space-y-3">
+        {/* めやす項目リスト */}
+        <div className="mt-3 space-y-2.5">
           {filteredMilestones.map((ms) => {
             const isRecorded = achievedIds.has(ms.id);
             return (
-              <button
+              <BloomCard
                 key={ms.id}
-                onClick={() => router.push(`/milestones/${ms.id}`)}
-                className={`w-full rounded-2xl p-4 text-left shadow-sm transition-colors hover:bg-slate-50 active:bg-slate-100 ${
-                  isRecorded ? "border border-amber-200 bg-amber-50" : "bg-white"
-                }`}
-                aria-label={`${ms.title}の詳細を見る`}
+                soft
+                color={isRecorded ? "var(--bloom-primary-soft)" : "#fff"}
+                className="cursor-pointer"
               >
-                <div className="flex items-start gap-3">
-                  {/* 状態アイコン: 記録あり=色付き丸 / 未記録=空の丸 */}
-                  <div
-                    className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${
-                      isRecorded
-                        ? "bg-amber-400 text-white"
-                        : "border-2 border-slate-200"
-                    }`}
-                    aria-label={isRecorded ? "記録あり" : "これから"}
-                  >
-                    {isRecorded && (
-                      <Check className="h-3.5 w-3.5" strokeWidth={3} aria-hidden="true" />
-                    )}
-                  </div>
-
-                  <div className="flex-1">
-                    <p className={`font-medium ${isRecorded ? "text-amber-900" : "text-slate-800"}`}>
-                      {ms.title}
-                    </p>
-                    <p className="mt-0.5 text-xs text-slate-400">
-                      {ms.title_en}
-                    </p>
-                    {/* 補足説明文 */}
-                    {ms.description && (
-                      <p className="mt-1.5 text-xs leading-relaxed text-slate-500">
-                        {ms.description}
-                      </p>
-                    )}
-                    <div className="mt-2 flex flex-wrap items-center gap-2">
-                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                        MS_CATEGORY_COLORS[ms.category] || "bg-slate-100 text-slate-600"
-                      }`}>
-                        {ms.category}
-                      </span>
-                      {/* 根拠ラベル */}
-                      {EVIDENCE_LABEL[ms.evidence] && (
-                        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                          EVIDENCE_LABEL[ms.evidence].style
-                        }`}>
-                          {EVIDENCE_LABEL[ms.evidence].text}
-                        </span>
+                <button
+                  type="button"
+                  onClick={() => router.push(`/milestones/${ms.id}`)}
+                  className="block w-full p-3 text-left"
+                >
+                  <div className="flex items-start gap-2.5">
+                    {/* 状態アイコン */}
+                    <div className="shrink-0" style={{ marginTop: 2 }}>
+                      {isRecorded ? (
+                        <div
+                          className="bloom-border font-hand flex items-center justify-center rounded-full"
+                          style={{
+                            width: 26,
+                            height: 26,
+                            background: "var(--bloom-primary)",
+                            color: "#fff",
+                            fontSize: 14,
+                          }}
+                        >
+                          ✓
+                        </div>
+                      ) : (
+                        <div
+                          className="rounded-full"
+                          style={{
+                            width: 26,
+                            height: 26,
+                            border: "2px dashed var(--bloom-line)",
+                            background: "#fff",
+                          }}
+                        />
                       )}
-                      <span className="text-xs text-slate-400">
-                        めやす: {ms.age_hint}
-                      </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div
+                        className="font-hand"
+                        style={{ fontSize: 15, color: "var(--bloom-ink)" }}
+                      >
+                        {ms.title}
+                      </div>
+                      {ms.description && (
+                        <div
+                          className="mt-1 text-[11px]"
+                          style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
+                        >
+                          {ms.description}
+                        </div>
+                      )}
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        <span
+                          className="font-hand inline-block rounded-lg px-2 py-0.5"
+                          style={{
+                            background: "var(--bloom-yellow)",
+                            color: "var(--bloom-ink)",
+                            fontSize: 10,
+                            border: "1.5px solid var(--bloom-line)",
+                          }}
+                        >
+                          {ms.category}
+                        </span>
+                        <span
+                          className="inline-block rounded-lg px-2 py-0.5"
+                          style={{
+                            background: "#fff",
+                            color: "var(--bloom-ink-soft)",
+                            fontSize: 10,
+                            border: "1.5px solid var(--bloom-line-soft)",
+                          }}
+                        >
+                          {ms.age_hint}
+                        </span>
+                      </div>
                     </div>
                   </div>
-
-                  {/* 詳細ページへの誘導アイコン */}
-                  <span className="mt-1 text-slate-300" aria-hidden>
-                    ›
-                  </span>
-                </div>
-              </button>
+                </button>
+              </BloomCard>
             );
           })}
         </div>
       </main>
 
-      <BottomNav current="milestones" />
+      <BloomBottomNav current="milestones" />
     </div>
   );
 }

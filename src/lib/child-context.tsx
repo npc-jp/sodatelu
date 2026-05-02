@@ -30,15 +30,23 @@ export function ChildProvider({ children: childrenProp }: { children: ReactNode 
 
   async function fetchChildren() {
     if (!user) return;
-    const result = await getChildrenByUser(user.uid);
-    // 生年月日順（上の子＝古い順が先）
-    result.sort((a, b) => a.birth_date.seconds - b.birth_date.seconds);
-    setKids(result);
-    // 選択中の子どもがいなければ1人目を選択
-    if (!selectedId || !result.find((k) => k.id === selectedId)) {
-      if (result.length > 0) setSelectedId(result[0].id);
+    try {
+      const result = await getChildrenByUser(user.uid);
+      // 生年月日順（上の子＝古い順が先）
+      result.sort((a, b) => a.birth_date.seconds - b.birth_date.seconds);
+      setKids(result);
+      // 選択中の子どもがいなければ1人目を選択
+      if (!selectedId || !result.find((k) => k.id === selectedId)) {
+        if (result.length > 0) setSelectedId(result[0].id);
+      }
+    } catch (e) {
+      // Firestore Rules で読めなかった等のエラーで loading が永遠に true にならないよう
+      // 必ず例外をログに残しつつ kids=[] で fallthrough させる
+      console.error("[child-context] 子ども一覧の取得失敗:", e);
+      setKids([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   useEffect(() => {

@@ -1,20 +1,76 @@
 @import "tailwindcss";
 
+/* Yusei Magic / Zen Kaku Gothic New は layout.tsx の <head> で読み込み（@import は使わない） */
+
+/* Bloom デザイントークン
+   参照: design_handoff_bloom/README.md
+   - Pop（クレヨン手書き調）と Garden（植物・自然モチーフ）の中間
+   - 太線アウトライン + Hard shadow（ぼかしなし）+ 手書き字体（見出し）
+*/
 :root {
-  --background: #f8fafc;
-  --foreground: #1e293b;
+  /* Bloom palette */
+  --bloom-primary: #7BA85F;       /* Sage green: メイン、CTA、達成 */
+  --bloom-primary-soft: #E8F0DD;  /* 達成済み背景 */
+  --bloom-accent: #F18A4C;        /* Warm orange: FAB、思い出、アクセント */
+  --bloom-accent-soft: #FCE4D2;   /* きょうだいカード背景 */
+  --bloom-yellow: #F5C44A;        /* タグ、めやすカード、星 */
+  --bloom-pink: #F2A9B8;          /* おめでとう、6-12歳タブ */
+  --bloom-bg: #FBF6E8;            /* ページ背景 cream paper */
+  --bloom-card: #FFFFFF;          /* カード白 */
+  --bloom-ink: #2E2A22;           /* 黒系インク・全アウトライン色 */
+  --bloom-ink-soft: #7A6F58;      /* セカンダリテキスト */
+  --bloom-line: #2E2A22;          /* メインボーダー */
+  --bloom-line-soft: #D8CFB6;     /* 細い区切り、点線、ロック済み入力 */
+
+  --background: var(--bloom-bg);
+  --foreground: var(--bloom-ink);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-bloom-primary: var(--bloom-primary);
+  --color-bloom-primary-soft: var(--bloom-primary-soft);
+  --color-bloom-accent: var(--bloom-accent);
+  --color-bloom-accent-soft: var(--bloom-accent-soft);
+  --color-bloom-yellow: var(--bloom-yellow);
+  --color-bloom-pink: var(--bloom-pink);
+  --color-bloom-bg: var(--bloom-bg);
+  --color-bloom-card: var(--bloom-card);
+  --color-bloom-ink: var(--bloom-ink);
+  --color-bloom-ink-soft: var(--bloom-ink-soft);
+  --color-bloom-line: var(--bloom-line);
+  --color-bloom-line-soft: var(--bloom-line-soft);
 }
+
+/* Google Fonts (見出し: Yusei Magic / 本文: Zen Kaku Gothic New) は冒頭で読み込み済み */
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-family: "Zen Kaku Gothic New", "Hiragino Sans", -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Bloom 用ヘルパー */
+.font-hand {
+  font-family: "Yusei Magic", "Kosugi Maru", -apple-system, sans-serif;
+}
+
+.bloom-shadow {
+  box-shadow: 3px 3px 0 var(--bloom-ink);
+}
+
+.bloom-shadow-soft {
+  box-shadow: 2px 2px 0 var(--bloom-ink);
+}
+
+.bloom-border {
+  border: 2px solid var(--bloom-ink);
+}
+
+.bloom-border-soft {
+  border: 1.5px solid var(--bloom-line-soft);
 }
 
 /* モバイルアプリ風のスクロール */

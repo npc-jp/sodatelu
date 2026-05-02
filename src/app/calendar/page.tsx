@@ -1,44 +1,33 @@
 "use client";
 
-// カレンダー画面: 月表示で記録がある日にドットを表示。子ども切り替え対応
+// カレンダー画面 — Bloom デザイン適用
+// 参照: design_handoff_bloom/dir-bloom-extra.jsx の BloomCalendar
+// Sprout + こよみ / 月送り「‹ 2026年5月 ›」/ グリッド7列 / 当日記録
+//
+// 既存ロジック維持: 月表示・記録ドット・子ども切替
+
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useChild } from "@/lib/child-context";
 import { getRecordsByChild, type GrowthRecord } from "@/lib/firestore";
-import BottomNav from "@/components/bottom-nav";
-import SodateluLogo from "@/components/sodatelu-logo";
-import Twemoji from "@/components/twemoji";
-
-const CATEGORY_ICONS: { [key: string]: string } = {
-  できた: "✨",
-  おめでとう: "🎉",
-  始めた: "🌱",
-  がんばった: "💪",
-  感じた: "💭",
-  言った: "💬",
-  行った: "🚀",
-  やめた: "🔖",
-  "あげた・もらった": "🎁",
-  のりこえた: "🏔️",
-  ありがとう: "🙏",
-};
-
-const CATEGORY_COLORS: { [key: string]: string } = {
-  できた: "bg-yellow-400",
-  おめでとう: "bg-green-500",
-  始めた: "bg-orange-400",
-  がんばった: "bg-red-500",
-  感じた: "bg-blue-500",
-  言った: "bg-purple-500",
-  行った: "bg-cyan-400",
-  やめた: "bg-gray-800",
-  "あげた・もらった": "bg-pink-400",
-  のりこえた: "bg-amber-700",
-  ありがとう: "bg-yellow-300",
-};
+import BloomBottomNav from "@/components/bloom-bottom-nav";
+import BloomCard from "@/components/bloom-card";
+import BloomFab from "@/components/bloom-fab";
+import { Sprout, WavyLine } from "@/components/illustrations";
 
 const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
+
+// カテゴリ → ドット色（できた=primary / はじめた=accent / その他=yellow）
+function categoryDotColor(category: string): string {
+  if (category === "できた" || category === "おめでとう") {
+    return "var(--bloom-primary)";
+  }
+  if (category === "始めた") {
+    return "var(--bloom-accent)";
+  }
+  return "var(--bloom-yellow)";
+}
 
 export default function CalendarPage() {
   const router = useRouter();
@@ -47,15 +36,12 @@ export default function CalendarPage() {
   const [records, setRecords] = useState<(GrowthRecord & { id: string })[]>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [recordsLoading, setRecordsLoading] = useState(true);
 
   // 選択中の子どもが変わったら記録を再取得
   useEffect(() => {
     if (!child) return;
-    setRecordsLoading(true);
     getRecordsByChild(child.id).then((recs) => {
       setRecords(recs);
-      setRecordsLoading(false);
     });
   }, [child]);
 
@@ -70,7 +56,7 @@ export default function CalendarPage() {
     return map;
   }, [records]);
 
-  // カレンダーの日付配列を生成
+  // カレンダーの日付配列を生成（月の初日まで null で埋める）
   const calendarDays = useMemo(() => {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
@@ -84,6 +70,10 @@ export default function CalendarPage() {
     for (let d = 1; d <= lastDay.getDate(); d++) {
       days.push(new Date(year, month, d));
     }
+    // 5週分（35マス）に揃える
+    while (days.length < 35) {
+      days.push(null);
+    }
     return days;
   }, [currentMonth]);
 
@@ -94,195 +84,270 @@ export default function CalendarPage() {
     setSelectedDate(null);
   }
 
+  const todayStr = new Date().toLocaleDateString("ja-JP");
   const selectedRecords = selectedDate ? recordsByDate[selectedDate] || [] : [];
+  // 表示日（選択中 or 今日）の記録セクション
+  const displayDateStr = selectedDate || todayStr;
+  const displayRecords = recordsByDate[displayDateStr] || [];
+  const displayDate = selectedDate
+    ? new Date(selectedDate.replace(/\//g, "-"))
+    : new Date();
 
   if (authLoading || childLoading || !child) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-slate-400">読み込み中...</p>
+      <div
+        className="flex h-full items-center justify-center"
+        style={{ background: "var(--bloom-bg)" }}
+      >
+        <Sprout size={42} color="var(--bloom-primary)" />
       </div>
     );
   }
 
   return (
-    <div className="flex h-full flex-col">
-      {/* ヘッダー: ブランドレビューに従い amber グラデーション統一。ロゴ + 月切替を載せる */}
-      <header className="bg-gradient-to-b from-amber-500 to-amber-400 px-5 pb-4 pt-6">
-        {/* 上段: ロゴ */}
-        <div className="flex items-center justify-between">
-          <SodateluLogo variant="white" layout="horizontal" height={40} />
-        </div>
-
-        {/* 子ども切り替え（2人以上） */}
-        {kids.length > 1 && (
-          <div className="mt-3 -mx-5 overflow-x-auto px-5">
-            <div className="flex gap-2 min-w-max">
-              {kids.map((kid) => (
-                <button
-                  key={kid.id}
-                  onClick={() => selectChild(kid.id)}
-                  className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                    child.id === kid.id
-                      ? "bg-white text-amber-600 shadow-sm"
-                      : "bg-amber-600/30 text-amber-100 hover:bg-amber-600/50"
-                  }`}
-                >
-                  {kid.photo_url ? (
-                    <img src={kid.photo_url} alt="" className="h-5 w-5 rounded-full object-cover" />
-                  ) : (
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-200 text-xs font-bold text-amber-700">
-                      {kid.name.charAt(0)}
-                    </span>
-                  )}
-                  {kid.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* 月切り替え */}
-        <div className="mt-3 flex items-center justify-between rounded-xl bg-white/15 px-2 py-1 backdrop-blur">
+    <div
+      className="relative flex h-full flex-col pb-24"
+      style={{ background: "var(--bloom-bg)" }}
+    >
+      {/* ヘッダー */}
+      <header className="flex items-center gap-2.5 px-[18px] pt-3.5 pb-2.5">
+        <Sprout size={18} color="var(--bloom-primary)" />
+        <h1
+          className="font-hand"
+          style={{ fontSize: 22, color: "var(--bloom-ink)" }}
+        >
+          こよみ
+        </h1>
+        <div className="ml-auto flex items-center gap-2">
           <button
+            type="button"
             onClick={() => changeMonth(-1)}
-            className="rounded-md p-2 text-amber-100 hover:bg-white/15 hover:text-white"
+            className="font-hand"
+            style={{ fontSize: 14, color: "var(--bloom-ink-soft)" }}
             aria-label="前の月"
           >
-            ◀
+            ‹
           </button>
-          <h1 className="text-lg font-bold text-white">
+          <span
+            className="font-hand"
+            style={{ fontSize: 16, color: "var(--bloom-ink)" }}
+          >
             {currentMonth.getFullYear()}年{currentMonth.getMonth() + 1}月
-          </h1>
+          </span>
           <button
+            type="button"
             onClick={() => changeMonth(1)}
-            className="rounded-md p-2 text-amber-100 hover:bg-white/15 hover:text-white"
+            className="font-hand"
+            style={{ fontSize: 14, color: "var(--bloom-ink-soft)" }}
             aria-label="次の月"
           >
-            ▶
+            ›
           </button>
         </div>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-5 pb-24">
-        {/* 曜日ヘッダー */}
-        <div className="grid grid-cols-7 text-center text-xs font-medium text-slate-400">
-          {WEEKDAYS.map((w) => (
-            <div key={w} className="py-2">{w}</div>
+      {/* 子ども切り替え */}
+      {kids.length > 1 && (
+        <div className="-mx-1 overflow-x-auto px-4 pb-2">
+          <div className="flex min-w-max gap-2">
+            {kids.map((kid) => {
+              const isActive = child.id === kid.id;
+              return (
+                <button
+                  key={kid.id}
+                  onClick={() => selectChild(kid.id)}
+                  className={`bloom-border flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 ${isActive ? "bloom-shadow-soft" : ""}`}
+                  style={{
+                    background: isActive ? "var(--bloom-primary)" : "#fff",
+                    color: isActive ? "#fff" : "var(--bloom-ink)",
+                    fontFamily: "Yusei Magic, sans-serif",
+                    fontSize: 12,
+                  }}
+                >
+                  <span
+                    className="flex h-5 w-5 items-center justify-center rounded-full font-hand"
+                    style={{ background: "var(--bloom-yellow)", fontSize: 11, color: "var(--bloom-ink)" }}
+                  >
+                    {kid.name.charAt(0)}
+                  </span>
+                  {kid.name}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <main className="flex-1 overflow-y-auto px-4 pb-10">
+        {/* カレンダーグリッド */}
+        <BloomCard soft className="p-3.5">
+          {/* 曜日ヘッダー */}
+          <div className="mb-2 grid grid-cols-7 gap-1">
+            {WEEKDAYS.map((d, i) => (
+              <div
+                key={d}
+                className="font-hand text-center"
+                style={{
+                  fontSize: 11,
+                  color:
+                    i === 0
+                      ? "var(--bloom-accent)"
+                      : i === 6
+                        ? "var(--bloom-primary)"
+                        : "var(--bloom-ink-soft)",
+                }}
+              >
+                {d}
+              </div>
+            ))}
+          </div>
+
+          {/* 日付グリッド */}
+          <div className="grid grid-cols-7 gap-1">
+            {calendarDays.map((date, i) => {
+              if (!date) {
+                return <div key={`empty-${i}`} style={{ aspectRatio: "1 / 1.1" }} />;
+              }
+              const dateStr = date.toLocaleDateString("ja-JP");
+              const dayRecords = recordsByDate[dateStr] || [];
+              const isToday = date.toDateString() === new Date().toDateString();
+              const isSelected = selectedDate === dateStr;
+              const showHighlight = isSelected || (isToday && !selectedDate);
+              return (
+                <button
+                  key={dateStr}
+                  type="button"
+                  onClick={() => setSelectedDate(dateStr)}
+                  className="flex flex-col items-center justify-center"
+                  style={{
+                    aspectRatio: "1 / 1.1",
+                    background: showHighlight ? "var(--bloom-primary)" : "transparent",
+                    border: showHighlight
+                      ? "2px solid var(--bloom-line)"
+                      : "1.5px solid transparent",
+                    borderRadius: 10,
+                    color: showHighlight ? "#fff" : "var(--bloom-ink)",
+                    fontFamily: "Zen Kaku Gothic New, sans-serif",
+                    fontSize: 12,
+                    fontWeight: showHighlight ? 700 : 400,
+                  }}
+                >
+                  <div>{date.getDate()}</div>
+                  {dayRecords.length > 0 && (
+                    <div
+                      className="mt-0.5 rounded-full"
+                      style={{
+                        width: 6,
+                        height: 6,
+                        background: categoryDotColor(dayRecords[0].category),
+                        border: showHighlight
+                          ? "1px solid #fff"
+                          : "1px solid var(--bloom-line)",
+                      }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </BloomCard>
+
+        {/* 凡例 */}
+        <div
+          className="mt-3.5 flex justify-center gap-3.5 text-[11px]"
+          style={{ color: "var(--bloom-ink-soft)" }}
+        >
+          {[
+            ["できた", "var(--bloom-primary)"],
+            ["はじめた", "var(--bloom-accent)"],
+            ["めやす", "var(--bloom-yellow)"],
+          ].map(([l, c]) => (
+            <div key={l} className="flex items-center gap-1.5">
+              <div
+                className="rounded-full"
+                style={{
+                  width: 8,
+                  height: 8,
+                  background: c,
+                  border: "1px solid var(--bloom-line)",
+                }}
+              />
+              {l}
+            </div>
           ))}
         </div>
 
-        {/* 日付グリッド */}
-        <div className="grid grid-cols-7 gap-1">
-          {calendarDays.map((date, i) => {
-            if (!date) {
-              return <div key={`empty-${i}`} className="h-12" />;
-            }
-
-            const dateStr = date.toLocaleDateString("ja-JP");
-            const dayRecords = recordsByDate[dateStr] || [];
-            const isToday = date.toDateString() === new Date().toDateString();
-            const isSelected = selectedDate === dateStr;
-
-            return (
-              <button
-                key={dateStr}
-                onClick={() => setSelectedDate(dateStr)}
-                className={`flex h-12 flex-col items-center justify-center rounded-lg text-sm transition-colors ${
-                  isSelected
-                    ? "bg-amber-500 text-white"
-                    : isToday
-                      ? "bg-amber-50 font-bold text-amber-600"
-                      : "text-slate-700 hover:bg-slate-100"
-                }`}
-              >
-                <span>{date.getDate()}</span>
-                {dayRecords.length > 0 && (
-                  <div className="flex items-center gap-px mt-0.5">
-                    {dayRecords.slice(0, 2).map((rec, j) =>
-                      CATEGORY_ICONS[rec.category] ? (
-                        <Twemoji
-                          key={j}
-                          emoji={CATEGORY_ICONS[rec.category]}
-                          size={10}
-                          ariaLabel={rec.category}
-                        />
-                      ) : (
-                        <span key={j} className="text-[8px] leading-none" aria-hidden>
-                          ⚪
-                        </span>
-                      )
-                    )}
-                    {dayRecords.length > 2 && (
-                      <span className={`text-[7px] leading-none ${isSelected ? "text-white" : "text-slate-400"}`}>
-                        +{dayRecords.length - 2}
-                      </span>
-                    )}
-                  </div>
-                )}
-              </button>
-            );
-          })}
+        {/* 当日 / 選択日の記録セクション */}
+        <div className="mt-5 mb-2.5 flex items-center gap-2.5">
+          <span
+            className="font-hand"
+            style={{ fontSize: 16, color: "var(--bloom-ink)" }}
+          >
+            {displayDate.getMonth() + 1}月{displayDate.getDate()}日 のきろく
+          </span>
+          <WavyLine width={70} color="var(--bloom-primary)" stroke={2} />
         </div>
 
-        {/* 選択日の記録リスト */}
-        {selectedDate && (
-          <div className="mt-6">
-            <h3 className="mb-3 text-sm font-bold text-slate-600">
-              {selectedDate} の記録
-            </h3>
-            {selectedRecords.length === 0 ? (
-              <div className="rounded-xl bg-white p-4 text-center text-sm text-slate-400 shadow-sm">
-                この日の記録はありません
-                <button
-                  onClick={() => router.push(`/write?childId=${child.id}`)}
-                  className="mt-2 block w-full text-amber-600 font-medium"
-                >
-                  + 記録をつける
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {selectedRecords.map((rec) => (
-                  <button
-                    key={rec.id}
-                    onClick={() => router.push(`/record?id=${rec.id}`)}
-                    className="flex w-full items-start gap-3 rounded-xl bg-white p-4 text-left shadow-sm hover:bg-slate-50 active:bg-slate-100"
-                  >
-                    <span className="mt-0.5">
-                      {CATEGORY_ICONS[rec.category] ? (
-                        <Twemoji
-                          emoji={CATEGORY_ICONS[rec.category]}
-                          size={18}
-                          ariaLabel={rec.category}
-                        />
-                      ) : (
-                        <span aria-hidden>⚪</span>
-                      )}
-                    </span>
-                    <div className="flex-1">
-                      <p className="font-medium text-slate-800">{rec.title}</p>
-                      {rec.memo && (
-                        <p className="mt-1 text-sm text-slate-500">{rec.memo}</p>
-                      )}
-                      {rec.photo_url && (
-                        <img
-                          src={rec.photo_url}
-                          alt=""
-                          className="mt-2 h-20 w-28 rounded-lg object-cover"
-                        />
-                      )}
-                      <p className="mt-1 text-xs text-slate-300">{rec.category}</p>
-                    </div>
-                    <span className="mt-1 text-slate-300">›</span>
-                  </button>
-                ))}
-              </div>
+        {displayRecords.length === 0 ? (
+          <BloomCard soft className="p-4 text-center">
+            <p className="text-xs" style={{ color: "var(--bloom-ink-soft)" }}>
+              この日の きろくは ありません
+            </p>
+            {selectedDate === null && (
+              <button
+                type="button"
+                onClick={() => router.push(`/write?childId=${child.id}`)}
+                className="font-hand mt-2 text-sm"
+                style={{ color: "var(--bloom-accent)" }}
+              >
+                ＋ きろくをつける
+              </button>
             )}
+          </BloomCard>
+        ) : (
+          <div className="space-y-2">
+            {displayRecords.concat(selectedRecords.length > 0 ? [] : []).map((rec) => (
+              <BloomCard key={rec.id} soft className="cursor-pointer">
+                <button
+                  type="button"
+                  onClick={() => router.push(`/record?id=${rec.id}`)}
+                  className="block w-full p-3 text-left"
+                >
+                  <div className="flex items-baseline gap-2">
+                    <span
+                      className="font-hand inline-block rounded-lg px-2 py-0.5 text-white"
+                      style={{
+                        background: categoryDotColor(rec.category),
+                        fontSize: 10,
+                        border: "1.5px solid var(--bloom-line)",
+                      }}
+                    >
+                      {rec.category}
+                    </span>
+                    <div
+                      className="font-hand truncate"
+                      style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                    >
+                      {rec.title}
+                    </div>
+                  </div>
+                  {rec.memo && (
+                    <p
+                      className="mt-1 line-clamp-2 text-[11px]"
+                      style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
+                    >
+                      {rec.memo}
+                    </p>
+                  )}
+                </button>
+              </BloomCard>
+            ))}
           </div>
         )}
       </main>
 
-      <BottomNav current="calendar" />
+      <BloomFab onClick={() => router.push(`/write?childId=${child.id}`)} />
+      <BloomBottomNav current="calendar" />
     </div>
   );
 }

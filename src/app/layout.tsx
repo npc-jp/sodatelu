@@ -108,7 +108,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" className="h-full">
-      <body className="h-full bg-slate-50 text-slate-900 antialiased">
+      <head>
+        {/* Bloom デザイン用フォント: 見出し=Yusei Magic / 本文=Zen Kaku Gothic New */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+        />
+      </head>
+      <body className="h-full antialiased" style={{ background: "var(--bloom-bg)", color: "var(--bloom-ink)" }}>
         <Providers>{children}</Providers>
       </body>
     </html>

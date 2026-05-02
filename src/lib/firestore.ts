@@ -138,6 +138,38 @@ export async function updateChildPhoto(childId: string, photoUrl: string) {
   });
 }
 
+// === 子ども情報を更新（名前・誕生日・性別・写真） ===
+// photo_url は undefined のとき更新しない（既存写真保持）
+// 引き渡し済（is_handed_over）状態は触らない
+
+export async function updateChild(
+  childId: string,
+  data: {
+    name: string;
+    birth_date: Date;
+    gender: Child["gender"];
+    photo_url?: string;
+  }
+) {
+  const update: Record<string, unknown> = {
+    name: data.name,
+    birth_date: Timestamp.fromDate(data.birth_date),
+    gender: data.gender,
+  };
+  if (data.photo_url !== undefined) {
+    update.photo_url = data.photo_url;
+  }
+  return updateDoc(doc(db, "children", childId), update);
+}
+
+// === 子どもを削除 ===
+// 注: 紐付く growth_records は残る。完全削除はバッチ処理で別途対応
+// （誤削除リカバリ余地を残す＋削除専用ジョブの方が安全）
+
+export async function deleteChild(childId: string) {
+  return deleteDoc(doc(db, "children", childId));
+}
+
 // === ファミリーの子どもを取得（family_idベース） ===
 // 同じファミリーのメンバー全員が同じ子ども一覧を見られる
 

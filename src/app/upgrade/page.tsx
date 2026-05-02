@@ -1,90 +1,57 @@
 "use client";
 
-// プレミアムアップグレード紹介画面 (/upgrade)
+// プレミアムアップグレード紹介画面 — Bloom デザイン適用
+// 参照: design_handoff_bloom/dir-bloom-extra2.jsx の BloomPremium
+// accent ヘッダー / PottedPlant / 特典4件 / そのうち 2列 / プランカード（accent + βピル） / CTA
 //
-// 役割:
-//   - 設定画面からの導線で、有料プラン（プレミアム）の特典を温かく紹介する
-//   - β期間中は実購入はせず、CTAタップ時にalertで「準備中」案内を返す
-//
-// セクション構成:
-//   1. ヒーロー（温かいキャッチ）
-//   2. 現在のプラン表示（無料 / プレミアム）
-//   3. 「いますぐ使える」特典 4項目（実装済み・ストア審査でも安全）
-//   4. 「これからの予定」4項目（未実装・将来予定。バッジで明確に「予定」表示）
-//   5. CTAボタン
-//   6. 末尾の約束事
-//
-// トーン:
-//   - 「ドキッとさせない」
-//   - 「アップグレードしないとできない」ではなく「アップグレードでできる」
-//   - 機能の説明は「便利」より「気持ち」「体験」に寄せる
+// 既存ロジック維持: β期間中は実購入なし、CTA タップで「準備中」alert
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import AppHeader from "@/components/app-header";
-import Twemoji from "@/components/twemoji";
+import BloomAppHeader from "@/components/bloom-app-header";
+import BloomCard from "@/components/bloom-card";
+import {
+  Cloud,
+  PottedPlant,
+  Sparkle,
+  Sprout,
+  Star,
+} from "@/components/illustrations";
 import { useAuth } from "@/lib/auth-context";
 import { usePlan } from "@/lib/plan-context";
 
-// 「いますぐ使える」特典リスト
-const AVAILABLE_BENEFITS: ReadonlyArray<{
-  emoji: string;
-  title: string;
-  body: string;
-  hint: string;
-}> = [
+const FEATURES: { glyph: string; title: string; body: string; color: string }[] = [
   {
-    emoji: "✨",
-    title: "カテゴリが11種類に",
-    body: "「できた・おめでとう・始めた」に加えて、「がんばった」「感じた」「言った」「行った」「やめた」「あげた、もらった」「のりこえた」「ありがとう」が使えます。",
-    hint: "感情の機微まで、丁寧に記録できる",
+    glyph: "✦",
+    title: "11カテゴリすべて",
+    body: "感じた・がんばった・行った・ありがと…",
+    color: "var(--bloom-primary)",
   },
   {
-    emoji: "👶",
-    title: "きょうだい無制限",
-    body: "無料は2人まで。3人目以降のきょうだいも、同じ年表に並べて成長を見比べられます。",
-    hint: "全員ぶんを、同じ場所で育てる",
+    glyph: "◐",
+    title: "年表のスナップショット",
+    body: "きょうだいを並べて画像で書き出し",
+    color: "var(--bloom-accent)",
   },
   {
-    emoji: "📷",
-    title: "写真 無制限",
-    body: "無料は月10枚まで。プレミアムなら、毎日の小さな瞬間も全部残せます。",
-    hint: "撮りたい時に、ためらわず",
+    glyph: "❀",
+    title: "無制限の写真添付",
+    body: "思い出をたっぷり残せます",
+    color: "var(--bloom-pink)",
   },
   {
-    emoji: "👨‍👩‍👧‍👦",
-    title: "家族共有 無制限",
-    body: "無料はパートナー1人まで。祖父母や、親しい友人にも記録を共有できます。",
-    hint: "離れていても、同じ景色を",
+    glyph: "✶",
+    title: "広告なし・優先サポート",
+    body: "βの間も最優先で対応",
+    color: "var(--bloom-yellow)",
   },
 ];
 
-// 「これから追加される機能」リスト
-const COMING_BENEFITS: ReadonlyArray<{
-  emoji: string;
-  title: string;
-  body: string;
-}> = [
-  {
-    emoji: "📖",
-    title: "思い出ページ卒業版",
-    body: "12歳の誕生日に、12年間の記録を集めた「特別な思い出ページ」が現れます。",
-  },
-  {
-    emoji: "🔔",
-    title: "発達の気づきアラート",
-    body: "お子さまの月齢から「気になるかもしれない」サインを、そっとお知らせ（オプトイン）。",
-  },
-  {
-    emoji: "🌍",
-    title: "sodateluみんなの統計",
-    body: "世界中のsodateluファミリーの記録から、お子さまのペースを優しく可視化。",
-  },
-  {
-    emoji: "👥",
-    title: "友達と共有",
-    body: "特定のきろくだけ、信頼できるお友達と共有できる。",
-  },
+const COMING_FEATURES = [
+  "思い出ブック印刷",
+  "AI 振り返り",
+  "声のきろく",
+  "家族チャット",
 ];
 
 export default function UpgradePage() {
@@ -92,7 +59,6 @@ export default function UpgradePage() {
   const { user, loading: authLoading } = useAuth();
   const { isPremium } = usePlan();
 
-  // 未ログインなら /login へ（proxy.ts でも保護するが、二重で安全側に倒す）
   useEffect(() => {
     if (authLoading) return;
     if (!user) {
@@ -108,161 +74,205 @@ export default function UpgradePage() {
 
   if (authLoading || !user) {
     return (
-      <div className="flex h-full items-center justify-center bg-slate-50">
-        <p className="text-slate-400">読み込み中...</p>
+      <div
+        className="flex h-full items-center justify-center"
+        style={{ background: "var(--bloom-bg)" }}
+      >
+        <Sprout size={42} color="var(--bloom-primary)" />
       </div>
     );
   }
 
   return (
-    <div className="flex h-full flex-col bg-slate-50">
-      <AppHeader
-        title="プレミアムプラン"
+    <div
+      className="relative flex h-full flex-col overflow-hidden"
+      style={{ background: "var(--bloom-bg)" }}
+    >
+      <BloomAppHeader
+        title="プレミアム"
         showBack
-        onBack={() => router.back()}
+        bgColor="var(--bloom-accent)"
+        textColor="#fff"
+        rightSlot={<Star size={16} color="var(--bloom-yellow)" />}
       />
 
-      <main className="flex-1 overflow-y-auto px-5 pb-10 pt-5">
-        <div className="mx-auto max-w-2xl space-y-6">
-          {/* 1. ヒーロー */}
-          <section className="rounded-2xl bg-gradient-to-br from-amber-50 to-amber-100/60 p-6 text-center shadow-sm">
-            <div className="flex justify-center">
-              <Twemoji emoji="🌟" size={56} ariaLabel="プレミアム" />
-            </div>
-            <h2 className="mt-3 text-lg font-bold text-slate-800">
-              お子さまの記録を、
-              <br />
-              もっと豊かに。
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-slate-600">
-              プレミアムにすると、毎日のささやかな一瞬を、
-              <br />
-              もっと丁寧に、もっと自由に残せます。
-            </p>
-          </section>
-
-          {/* 2. 現在のプラン */}
-          <section className="rounded-2xl bg-amber-50/70 p-4">
-            <p className="text-xs text-slate-500">現在のプラン</p>
-            <p className="mt-1 text-sm font-semibold text-slate-700">
-              {isPremium ? "プレミアムプラン" : "無料プラン"}
-            </p>
-            {isPremium && (
-              <p className="mt-1 text-xs text-slate-500">
-                すべての機能をご利用いただけます。ありがとうございます
-              </p>
-            )}
-          </section>
-
-          {/* 3. いますぐ使える特典 */}
-          <section>
-            <div className="mb-3 flex items-baseline justify-between">
-              <h3 className="text-base font-bold text-slate-800">
-                アップグレードでできること
-              </h3>
-              <span className="text-xs text-slate-400">いますぐ使える</span>
-            </div>
-
-            <div className="space-y-3">
-              {AVAILABLE_BENEFITS.map((b) => (
-                <article
-                  key={b.title}
-                  className="rounded-2xl border border-amber-100 bg-white p-5 shadow-sm"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 pt-0.5">
-                      <Twemoji emoji={b.emoji} size={28} ariaLabel={b.title} />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h4 className="text-sm font-bold text-slate-800">
-                        {b.title}
-                      </h4>
-                      <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
-                        {b.body}
-                      </p>
-                      <p className="mt-2 text-xs font-medium text-amber-700">
-                        {b.hint}
-                      </p>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          {/* 4. これから追加される機能（控えめ） */}
-          <section>
-            <div className="mb-3 flex items-baseline justify-between">
-              <h3 className="text-sm font-semibold text-slate-600">
-                これからの予定
-              </h3>
-              <span className="text-xs text-slate-400">Coming soon</span>
-            </div>
-
-            <div className="space-y-2.5">
-              {COMING_BENEFITS.map((b) => (
-                <article
-                  key={b.title}
-                  className="rounded-2xl border border-slate-100 bg-slate-50/60 p-4"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0 pt-0.5 opacity-70">
-                      <Twemoji emoji={b.emoji} size={22} ariaLabel={b.title} />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h4 className="text-sm font-semibold text-slate-700">
-                          {b.title}
-                        </h4>
-                        <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10px] font-medium text-slate-500 ring-1 ring-slate-200">
-                          <Twemoji emoji="🌱" size={10} />
-                          準備中
-                        </span>
-                      </div>
-                      <p className="mt-1 text-xs leading-relaxed text-slate-500">
-                        {b.body}
-                      </p>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          {/* 5. CTAボタン（プレミアムでない時だけ表示） */}
-          {!isPremium && (
-            <section className="pt-2">
-              <button
-                type="button"
-                onClick={handleUpgrade}
-                className="w-full rounded-2xl bg-amber-500 py-4 text-base font-bold text-white shadow-sm transition-colors hover:bg-amber-600 active:bg-amber-600"
-              >
-                プレミアムにアップグレード
-              </button>
-            </section>
-          )}
-
-          {/* 6. 末尾の約束事 */}
-          <section className="space-y-1 pt-2 text-center">
-            <p className="text-xs text-slate-400">
-              ※ 現在β版です。正式リリース時にご案内します
-            </p>
-            <p className="text-xs text-slate-400">
-              ※ プレミアムプランは月額/年額制を予定しています（価格未定）
-            </p>
-          </section>
-
-          {/* 戻る */}
-          <div className="pt-2">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="w-full rounded-xl border border-slate-200 bg-white py-3 text-sm font-medium text-slate-700 hover:bg-slate-50"
-            >
-              戻る
-            </button>
+      <main className="flex-1 overflow-y-auto px-[18px] pt-5 pb-10">
+        {/* ヒーロー */}
+        <div className="relative text-center">
+          <div className="absolute" style={{ top: 10, left: 6 }}>
+            <Sparkle size={14} color="var(--bloom-accent)" />
           </div>
+          <div className="absolute" style={{ top: 30, right: 10 }}>
+            <Star size={14} color="var(--bloom-yellow)" />
+          </div>
+          <div className="mb-2.5 flex justify-center">
+            <PottedPlant size={92} />
+          </div>
+          <h2
+            className="font-hand"
+            style={{ fontSize: 24, color: "var(--bloom-ink)", lineHeight: 1.4 }}
+          >
+            もっと、まいにちを
+            <br />
+            のこしませんか
+          </h2>
+          <p
+            className="mt-2.5 text-[12px]"
+            style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
+          >
+            プレミアムは、すべてのカテゴリを使えるようになるプラン。
+          </p>
         </div>
+
+        {/* 特典4件 */}
+        <div className="mb-2 mt-6 flex items-center gap-2">
+          <Sparkle size={14} color="var(--bloom-accent)" />
+          <h3
+            className="font-hand"
+            style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+          >
+            できるようになること
+          </h3>
+        </div>
+        {FEATURES.map((f) => (
+          <BloomCard
+            key={f.title}
+            soft
+            className="mb-2 flex items-start gap-3 p-3"
+          >
+            <div
+              className="bloom-border font-hand flex shrink-0 items-center justify-center rounded-full"
+              style={{
+                width: 36,
+                height: 36,
+                background: f.color,
+                color: f.color === "var(--bloom-yellow)" ? "var(--bloom-ink)" : "#fff",
+                fontSize: 16,
+              }}
+            >
+              {f.glyph}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div
+                className="font-hand"
+                style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+              >
+                {f.title}
+              </div>
+              <div
+                className="mt-1 text-[11px]"
+                style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
+              >
+                {f.body}
+              </div>
+            </div>
+          </BloomCard>
+        ))}
+
+        {/* そのうち */}
+        <div className="mb-2 mt-5 flex items-center gap-2">
+          <Cloud size={20} color="var(--bloom-line)" />
+          <h3
+            className="font-hand"
+            style={{ fontSize: 13, color: "var(--bloom-ink-soft)" }}
+          >
+            そのうち
+          </h3>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {COMING_FEATURES.map((c) => (
+            <div
+              key={c}
+              className="rounded-[14px] py-2.5 text-center"
+              style={{
+                background: "#fff",
+                border: "1.5px dashed var(--bloom-line-soft)",
+                color: "var(--bloom-ink-soft)",
+                fontFamily: "Yusei Magic, sans-serif",
+                fontSize: 11,
+                opacity: 0.85,
+              }}
+            >
+              {c}
+            </div>
+          ))}
+        </div>
+
+        {/* プランカード */}
+        <div className="relative mt-7">
+          <BloomCard
+            color="var(--bloom-accent)"
+            className="relative p-5 text-center text-white"
+          >
+            {/* β期間ピル（カード上部に被せる） */}
+            <div
+              className="bloom-border absolute"
+              style={{
+                top: -10,
+                left: "50%",
+                transform: "translateX(-50%)",
+                background: "var(--bloom-yellow)",
+                color: "var(--bloom-ink)",
+                padding: "3px 12px",
+                borderRadius: 10,
+                fontSize: 10,
+                fontFamily: "Yusei Magic, sans-serif",
+              }}
+            >
+              β期間 50%オフ
+            </div>
+            <div className="font-hand mt-1" style={{ fontSize: 14 }}>
+              プレミアム
+            </div>
+            <div className="font-hand mt-1.5" style={{ fontSize: 32 }}>
+              <span
+                style={{
+                  fontSize: 16,
+                  opacity: 0.7,
+                  textDecoration: "line-through",
+                  marginRight: 6,
+                }}
+              >
+                ¥980
+              </span>
+              ¥490
+              <span style={{ fontSize: 12, opacity: 0.95 }}> / 月</span>
+            </div>
+            <div className="text-[10px] opacity-95 mt-1">
+              いつでも解約できます
+            </div>
+          </BloomCard>
+        </div>
+
+        {/* CTA */}
+        {!isPremium && (
+          <button
+            type="button"
+            onClick={handleUpgrade}
+            className="bloom-border bloom-shadow font-hand mt-3.5 w-full rounded-[14px] py-4 text-white"
+            style={{
+              background: "var(--bloom-primary)",
+              fontSize: 17,
+              letterSpacing: "0.08em",
+            }}
+          >
+            はじめる ✦
+          </button>
+        )}
+
+        <p
+          className="mt-2 text-center text-[10px]"
+          style={{ color: "var(--bloom-ink-soft)" }}
+        >
+          β期間中の登録は、製品版でも価格を引き継ぎます
+        </p>
+
+        <p
+          className="mt-5 text-center text-[11px]"
+          style={{ color: "var(--bloom-ink-soft)" }}
+        >
+          ※ 現在β版です。正式リリース時にご案内します
+        </p>
       </main>
     </div>
   );

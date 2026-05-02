@@ -28,9 +28,11 @@ const PROTECTED_PATHS = [
   "/write",
   "/family",
   "/add-child",
+  "/edit-child",
   "/admin",
   "/settings",
   "/upgrade",
+  "/onboarding", // user 未ログインのまま到達すると handleSubmit が silent return してしまうため
 ];
 
 // 認証済みでアクセスすると /home へ飛ばすパス

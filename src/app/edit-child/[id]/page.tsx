@@ -1,22 +1,22 @@
 "use client";
 
-// 子ども追加画面 — Bloom デザイン適用
-// 参照: design_handoff_bloom/dir-bloom-extra.jsx の BloomAddChild
-// Sprout / PottedPlant / なまえ・生まれた日・性別カード3つ / primary CTA
-//
-// 既存ロジック維持: 2人目以降の子どもを追加。無料プランは2人まで制限
+// 子ども編集画面 — Bloom デザイン適用
+// 既存の add-child を編集モードに拡張。名前・生年月日・性別・写真を更新できる。
+// 削除は ConfirmModal で2段階確認（家族から外す。記録は残す）
 
-import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useChild } from "@/lib/child-context";
-import { usePlan } from "@/lib/plan-context";
-import { createChild, type Child } from "@/lib/firestore";
+import {
+  deleteChild,
+  updateChild,
+  type Child,
+} from "@/lib/firestore";
 import { uploadImage } from "@/lib/storage";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import BloomAppHeader from "@/components/bloom-app-header";
 import BloomCard from "@/components/bloom-card";
+import ConfirmModal from "@/components/confirm-modal";
 import { Heart, PottedPlant, Sprout } from "@/components/illustrations";
 
 const GENDER_OPTIONS: {
@@ -29,68 +29,133 @@ const GENDER_OPTIONS: {
   { value: "じぶんらしく", label: "じぶんらしく", color: "var(--bloom-yellow)" },
 ];
 
-export default function AddChildPage() {
+// Timestamp(ms) を <input type="date"> 用の "YYYY-MM-DD" に変換
+function toDateInputValue(ms: number): string {
+  const d = new Date(ms);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+export default function EditChildPage() {
+  const params = useParams<{ id: string }>();
+  const childId = params.id;
   const router = useRouter();
-  const { user } = useAuth();
-  const { children: existingKids, refreshChildren, selectChild } = useChild();
-  const { isPremium } = usePlan();
+  const { user, loading: authLoading } = useAuth();
+  const { children: existingKids, refreshChildren, selectChild, loading: childLoading } = useChild();
+
+  const target = existingKids.find((k) => k.id === childId);
+
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [gender, setGender] = useState<Child["gender"] | "">("");
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoCleared, setPhotoCleared] = useState(false);
   const photoInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [error, setError] = useState("");
+  const [hydrated, setHydrated] = useState(false);
+
+  // 認証ガード
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.replace("/login?next=/family");
+    }
+  }, [authLoading, user, router]);
+
+  // 子どもデータが読めたら初期値をセット
+  useEffect(() => {
+    if (childLoading || hydrated || !target) return;
+    setName(target.name);
+    setBirthDate(toDateInputValue(target.birth_date.toDate().getTime()));
+    setGender(target.gender);
+    setPhotoPreview(target.photo_url || null);
+    setHydrated(true);
+  }, [childLoading, target, hydrated]);
+
+  // 子どもが見つからない（kids読込済 & target なし）→ family へ戻す
+  useEffect(() => {
+    if (!childLoading && existingKids.length > 0 && !target) {
+      router.replace("/family");
+    }
+  }, [childLoading, existingKids, target, router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!user || !gender) return;
+    if (!user || !gender || !target) return;
 
     setLoading(true);
     setError("");
 
     try {
-      // 写真アップロード
-      let photoUrl = "";
+      // 写真の決定:
+      //   - photoFile があればアップロード
+      //   - photoCleared なら "" にする（削除）
+      //   - どちらでもなければ undefined（既存値維持）
+      let photoUrl: string | undefined;
       if (photoFile) {
         photoUrl = await uploadImage(
           photoFile,
           `children/${user.uid}/${Date.now()}_${photoFile.name}`
         );
+      } else if (photoCleared) {
+        photoUrl = "";
       }
 
-      // 既存ユーザーの family_id を取得
-      const userSnap = await getDoc(doc(db, "users", user.uid));
-      const userData = userSnap.data();
-      const familyRef = userData?.family_id;
-
-      if (!familyRef) {
-        setError("ファミリー情報が見つかりません");
-        return;
-      }
-
-      const childDoc = await createChild({
+      await updateChild(childId, {
         name,
         birth_date: new Date(birthDate),
         gender,
-        userId: user.uid,
-        familyId: familyRef.id,
-        photoUrl,
+        photo_url: photoUrl,
       });
 
-      // 新しい子どもを選択状態にする
       await refreshChildren();
-      selectChild(childDoc.id);
-      router.replace("/home");
-    } catch {
-      setError("登録に失敗しました。もう一度お試しください");
+      router.replace("/family");
+    } catch (err) {
+      console.error("[edit-child] 更新失敗:", err);
+      setError("更新に失敗しました");
     } finally {
       setLoading(false);
     }
   }
 
-  const limitReached = !isPremium && existingKids.length >= 2;
+  async function handleDelete() {
+    if (!target) return;
+    setDeleting(true);
+    setError("");
+    try {
+      await deleteChild(childId);
+      await refreshChildren();
+      // 残った子のうち先頭を選択（ChildContext内で自動的に選ばれる想定だが念のため）
+      const remaining = existingKids.filter((k) => k.id !== childId);
+      if (remaining.length > 0) {
+        selectChild(remaining[0].id);
+      }
+      router.replace("/family");
+    } catch (err) {
+      console.error("[edit-child] 削除失敗:", err);
+      setError("削除に失敗しました");
+      setShowDeleteConfirm(false);
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  // ローディング表示
+  if (authLoading || childLoading || !target || !hydrated) {
+    return (
+      <div
+        className="flex h-full items-center justify-center"
+        style={{ background: "var(--bloom-bg)" }}
+      >
+        <Sprout size={42} color="var(--bloom-primary)" />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -98,7 +163,7 @@ export default function AddChildPage() {
       style={{ background: "var(--bloom-bg)" }}
     >
       <BloomAppHeader
-        title="きょうだいを追加"
+        title="プロフィール編集"
         showBack
         rightSlot={<Sprout size={16} color="var(--bloom-primary)" />}
       />
@@ -113,23 +178,9 @@ export default function AddChildPage() {
             className="font-hand mt-2"
             style={{ fontSize: 13, color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
           >
-            あたらしい家族が、ふえました。
+            {target.name} のプロフィール
           </p>
         </div>
-
-        {/* 制限メッセージ */}
-        {limitReached && (
-          <BloomCard soft color="var(--bloom-yellow)" className="mb-4 p-3.5">
-            <p
-              className="text-center text-[12px]"
-              style={{ color: "var(--bloom-ink)", lineHeight: 1.6 }}
-            >
-              無料プランでは1人まで登録できます。
-              <br />
-              プレミアムにアップグレードすると、何人でも追加できます
-            </p>
-          </BloomCard>
-        )}
 
         <form onSubmit={handleSubmit}>
           {/* なまえ */}
@@ -218,7 +269,7 @@ export default function AddChildPage() {
             </p>
           </BloomCard>
 
-          {/* 写真（任意） */}
+          {/* 写真 */}
           <div
             className="font-hand mt-4 mb-1.5"
             style={{ fontSize: 13, color: "var(--bloom-ink)" }}
@@ -239,6 +290,7 @@ export default function AddChildPage() {
                   onClick={() => {
                     setPhotoFile(null);
                     setPhotoPreview(null);
+                    setPhotoCleared(true);
                   }}
                   className="bloom-border absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full"
                   style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: 13 }}
@@ -276,6 +328,7 @@ export default function AddChildPage() {
                   if (file) {
                     setPhotoFile(file);
                     setPhotoPreview(URL.createObjectURL(file));
+                    setPhotoCleared(false);
                   }
                 }}
               />
@@ -297,7 +350,7 @@ export default function AddChildPage() {
 
           <button
             type="submit"
-            disabled={loading || !gender || limitReached}
+            disabled={loading || !gender}
             className="bloom-border bloom-shadow font-hand mt-5 w-full rounded-[14px] py-3.5 text-white disabled:opacity-50"
             style={{
               background: "var(--bloom-primary)",
@@ -305,10 +358,33 @@ export default function AddChildPage() {
               letterSpacing: "0.08em",
             }}
           >
-            {loading ? "登録中…" : "追加する ✦"}
+            {loading ? "保存中…" : "保存する ✦"}
+          </button>
+
+          {/* 削除（破壊的アクション・分離して下部に配置） */}
+          <button
+            type="button"
+            onClick={() => setShowDeleteConfirm(true)}
+            disabled={loading || deleting}
+            className="mt-6 block w-full text-center text-[12px] disabled:opacity-50"
+            style={{ color: "#A8421B", textDecoration: "underline" }}
+          >
+            {target.name} のプロフィールを削除する
           </button>
         </form>
       </main>
+
+      <ConfirmModal
+        open={showDeleteConfirm}
+        title={`${target.name} を削除しますか？`}
+        description="家族から外れます。これまでの記録は残ります。元に戻せません。"
+        confirmLabel="削除する"
+        cancelLabel="キャンセル"
+        destructive
+        loading={deleting}
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
     </div>
   );
 }
