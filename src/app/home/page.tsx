@@ -148,7 +148,18 @@ export default function HomePage() {
             style={{ background: "#fff" }}
             aria-label="設定"
           >
-            <span className="font-hand" style={{ fontSize: 20, color: "var(--bloom-ink)" }}>⚙</span>
+            {/* 絵文字はベースラインがずれるので line-height: 1 で中央へ。
+                サイズも視覚的に Heart と揃える */}
+            <span
+              style={{
+                fontSize: 22,
+                lineHeight: 1,
+                color: "var(--bloom-ink)",
+                display: "block",
+              }}
+            >
+              ⚙
+            </span>
           </button>
         </div>
       </header>
