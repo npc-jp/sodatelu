@@ -60,12 +60,15 @@ export function PlanProvider({ children }: { children: ReactNode }) {
 
     (async () => {
       try {
+        console.log("[plan-context] start fetch for uid:", user.uid);
         const userSnap = await getDoc(doc(db, "users", user.uid));
         if (cancelled) return;
-        const familyRef = userSnap.exists()
-          ? (userSnap.data().family_id as DocumentReference<DocumentData> | null)
-          : null;
+        const userData = userSnap.exists() ? userSnap.data() : null;
+        console.log("[plan-context] user doc:", userData);
+        const familyRef = (userData?.family_id ?? null) as DocumentReference<DocumentData> | null;
+        console.log("[plan-context] family_id ref:", familyRef?.path);
         if (!familyRef) {
+          console.log("[plan-context] no family_id → free");
           setPlan("free");
           setLoading(false);
           return;
@@ -76,6 +79,7 @@ export function PlanProvider({ children }: { children: ReactNode }) {
           (snap: DocumentSnapshot<DocumentData>) => {
             if (cancelled) return;
             const data = snap.exists() ? (snap.data() as { plan?: string }) : null;
+            console.log("[plan-context] onSnapshot fired. plan field =", data?.plan);
             setPlan(data?.plan === "premium" ? "premium" : "free");
             setLoading(false);
           },
