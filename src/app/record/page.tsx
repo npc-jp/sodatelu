@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { usePlan } from "@/lib/plan-context";
+import { useChild } from "@/lib/child-context";
 import {
   updateRecord,
   deleteRecord,
@@ -63,6 +64,7 @@ function RecordDetail() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isPremium } = usePlan();
+  const { children: kids } = useChild();
   const recordId = searchParams.get("id") || "";
 
   const [record, setRecord] = useState<(GrowthRecord & { id: string }) | null>(null);
@@ -75,6 +77,7 @@ function RecordDetail() {
   const [category, setCategory] = useState<MilestoneCategory | "">("");
   const [memo, setMemo] = useState("");
   const [date, setDate] = useState("");
+  const [childId, setChildId] = useState<string>(""); // 兄弟取り違え修正用
   const [selectedMilestone, setSelectedMilestone] = useState<MilestoneData | null>(null);
   const [showMilestones, setShowMilestones] = useState(false);
   // この子どもの記録で既に紐付け済みのめやすID（ピッカーから除外する）
@@ -105,6 +108,7 @@ function RecordDetail() {
       setCategory(data.category);
       setMemo(data.memo || "");
       setDate(data.recorded_date.toDate().toISOString().split("T")[0]);
+      setChildId(data.child_id?.id || "");
       setExistingPhotoUrl(data.photo_url || "");
 
       // 紐付けられたマイルストーンを探す
@@ -174,6 +178,8 @@ function RecordDetail() {
         );
       }
 
+      // child_id が変更されている場合のみ更新（そうでなければ undefined で維持）
+      const childIdChanged = childId && childId !== record?.child_id?.id;
       await updateRecord(recordId, {
         title,
         category,
@@ -181,6 +187,7 @@ function RecordDetail() {
         memo,
         milestoneId: selectedMilestone?.id,
         photoUrl,
+        childId: childIdChanged ? childId : undefined,
       });
       // 表示を更新
       const snap = await getDoc(doc(db, "records", recordId));
@@ -267,6 +274,52 @@ function RecordDetail() {
         {isEditing ? (
           // === 編集モード ===
           <div>
+            {/* 対象の子ども（兄弟取り違え修正用）。きょうだい1人なら表示しない */}
+            {kids.length > 1 && (
+              <>
+                <div
+                  className="font-hand mb-2"
+                  style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                >
+                  ● だれの きろく？
+                </div>
+                <div className="-mx-1 mb-4 overflow-x-auto px-1">
+                  <div className="flex min-w-max gap-2">
+                    {kids.map((kid) => {
+                      const active = childId === kid.id;
+                      return (
+                        <button
+                          key={kid.id}
+                          type="button"
+                          onClick={() => setChildId(kid.id)}
+                          className={`bloom-border flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 ${active ? "bloom-shadow-soft" : ""}`}
+                          style={{
+                            background: active ? "var(--bloom-primary)" : "#fff",
+                            color: active ? "#fff" : "var(--bloom-ink)",
+                            fontFamily: "Yusei Magic, sans-serif",
+                            fontSize: 13,
+                          }}
+                        >
+                          {kid.photo_url ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={kid.photo_url} alt="" className="h-5 w-5 rounded-full object-cover" />
+                          ) : (
+                            <span
+                              className="flex h-5 w-5 items-center justify-center rounded-full"
+                              style={{ background: "var(--bloom-yellow)", fontSize: 11, color: "var(--bloom-ink)" }}
+                            >
+                              {kid.name.charAt(0)}
+                            </span>
+                          )}
+                          {kid.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+
             {/* カテゴリ選択 */}
             <div
               className="font-hand mb-2"
@@ -569,6 +622,7 @@ function RecordDetail() {
                   setCategory(record?.category || "");
                   setMemo(record?.memo || "");
                   setDate(record?.recorded_date.toDate().toISOString().split("T")[0] || "");
+                  setChildId(record?.child_id?.id || "");
                 }}
                 className="bloom-border bloom-shadow-soft font-hand flex-1 rounded-[14px] py-3.5"
                 style={{

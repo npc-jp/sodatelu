@@ -243,6 +243,8 @@ export async function updateRecord(
     memo: string;
     milestoneId?: string;
     photoUrl?: string;
+    /** 記録対象の子ども差し替え（兄弟取り違え修正用）。undefined なら維持 */
+    childId?: string;
   }
 ) {
   const updateData: Record<string, unknown> = {
@@ -254,6 +256,9 @@ export async function updateRecord(
   };
   if (data.photoUrl !== undefined) {
     updateData.photo_url = data.photoUrl;
+  }
+  if (data.childId !== undefined) {
+    updateData.child_id = doc(db, "children", data.childId);
   }
   return updateDoc(doc(db, "records", recordId), updateData);
 }
