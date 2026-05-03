@@ -66,6 +66,9 @@ export default function FamilyPage() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState("");
+  // 招待成功後に表示する「相手に送るメッセージ」（コピー用）
+  const [shareMessage, setShareMessage] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -118,15 +121,39 @@ export default function FamilyPage() {
         invitedByUid: user.uid,
         invitedByName: user.displayName || user.email || "",
       });
-      setStatus(`${inviteEmail} に招待を送りました`);
+      // 招待登録成功 → 相手に LINE 等で送ってもらうメッセージを生成
+      const inviterName = user.displayName || user.email || "";
+      const url = typeof window !== "undefined" ? window.location.origin : "https://sodatelu.vercel.app";
+      const message = `sodatelu の家族に招待しました🌱
+
+${inviterName} さんから招待が届いています。
+下のURLを開いて、メールアドレス
+${inviteEmail}
+でログインすると参加できます👇
+
+${url}`;
+      setShareMessage(message);
+      setStatus("");
       setInviteEmail("");
       const inv = await getPendingInvitations(familyId);
       setPendingInvitations(inv);
       setShowInviteForm(false);
     } catch {
-      setStatus("招待の送信に失敗しました");
+      setStatus("招待の登録に失敗しました");
     } finally {
       setSending(false);
+    }
+  }
+
+  async function handleCopyShareMessage() {
+    if (!shareMessage) return;
+    try {
+      await navigator.clipboard.writeText(shareMessage);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // クリップボード使えない場合のフォールバック（古いブラウザ等）
+      alert("コピーできませんでした。長押しで選択してコピーしてください");
     }
   }
 
@@ -428,6 +455,63 @@ export default function FamilyPage() {
           </div>
         )}
 
+        {/* 招待登録後に表示する「相手に送るメッセージ」 */}
+        {shareMessage && (
+          <BloomCard
+            soft
+            color="var(--bloom-primary-soft)"
+            className="mt-4 p-4"
+          >
+            <p
+              className="font-hand mb-2"
+              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+            >
+              ✦ 招待を登録しました
+            </p>
+            <p
+              className="text-[13px]"
+              style={{ color: "var(--bloom-ink)", lineHeight: 1.7 }}
+            >
+              下のメッセージを LINE などで相手に送ってください。
+              <br />
+              相手がリンクからログインすると、家族に参加できます。
+            </p>
+            <pre
+              className="mt-3 whitespace-pre-wrap rounded-xl p-3 text-[12px]"
+              style={{
+                background: "#fff",
+                border: "1.5px solid var(--bloom-line)",
+                color: "var(--bloom-ink)",
+                fontFamily: "Zen Kaku Gothic New, sans-serif",
+                lineHeight: 1.7,
+              }}
+            >
+              {shareMessage}
+            </pre>
+            <div className="mt-3 flex gap-2">
+              <button
+                type="button"
+                onClick={handleCopyShareMessage}
+                className="bloom-border bloom-shadow font-hand flex-1 rounded-xl py-2.5 text-white"
+                style={{
+                  background: "var(--bloom-primary)",
+                  fontSize: 13,
+                }}
+              >
+                {copied ? "✓ コピーしました" : "コピーする"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShareMessage(null)}
+                className="bloom-border bloom-shadow-soft flex-1 rounded-xl py-2.5 text-sm"
+                style={{ background: "#fff", color: "var(--bloom-ink)" }}
+              >
+                とじる
+              </button>
+            </div>
+          </BloomCard>
+        )}
+
         {/* 招待CTA */}
         {!showInviteForm ? (
           <button
@@ -491,9 +575,9 @@ export default function FamilyPage() {
           className="mt-3 text-center text-[12px]"
           style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
         >
-          招待コードを送ると、相手も
+          招待を登録すると、相手にお知らせする
           <br />
-          きろくに参加できます
+          メッセージが表示されます
         </p>
 
         {status && (
