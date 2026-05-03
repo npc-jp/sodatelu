@@ -16,7 +16,7 @@ import { getPhase } from "@/lib/phases";
 import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
 import BloomFab from "@/components/bloom-fab";
-import { Heart, OpenBook, PottedPlant, Sparkle, Sprout, Star, WavyLine } from "@/components/illustrations";
+import { Gear, Heart, OpenBook, PottedPlant, Sparkle, Sprout, Star, WavyLine } from "@/components/illustrations";
 
 // 月齢計算
 function calcAge(birthDate: Timestamp): string {
@@ -148,18 +148,7 @@ export default function HomePage() {
             style={{ background: "#fff" }}
             aria-label="設定"
           >
-            {/* 絵文字はベースラインがずれるので line-height: 1 で中央へ。
-                サイズも視覚的に Heart と揃える */}
-            <span
-              style={{
-                fontSize: 22,
-                lineHeight: 1,
-                color: "var(--bloom-ink)",
-                display: "block",
-              }}
-            >
-              ⚙
-            </span>
+            <Gear size={20} color="var(--bloom-ink)" />
           </button>
         </div>
       </header>

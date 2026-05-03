@@ -117,6 +117,29 @@ export const OpenBook = ({ size = 120 }: { size?: number }) => (
 );
 
 // 簡易バーチャート（年表 empty state）
+// 歯車（設定アイコン）。8本歯のシンプルな手書き風
+export const Gear = ({ size = 24, color = "currentColor", stroke = 2 }: IllustrationProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
+    {/* 8本の歯（短い長方形を回転） */}
+    {[0, 45, 90, 135, 180, 225, 270, 315].map((deg, i) => (
+      <rect
+        key={i}
+        x="10.5"
+        y="1.5"
+        width="3"
+        height="4"
+        rx="0.8"
+        fill={color}
+        transform={`rotate(${deg} 12 12)`}
+      />
+    ))}
+    {/* 外円 */}
+    <circle cx="12" cy="12" r="6.5" fill={color} />
+    {/* 中央の穴 */}
+    <circle cx="12" cy="12" r="2.4" fill="#fff" />
+  </svg>
+);
+
 export const TinyBars = ({ size = 80, color = "#F5B945" }: IllustrationProps) => (
   <svg width={size} height={size} viewBox="0 0 80 80" fill="none" aria-hidden>
     <rect x="10" y="40" width="14" height="30" rx="3" fill={color} opacity="0.5" />
