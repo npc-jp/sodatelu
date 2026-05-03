@@ -352,7 +352,7 @@ export default function ComparePage() {
                                   <span style={{ color: "var(--bloom-ink-soft)" }}>
                                     {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}
                                   </span>
-                                  <span style={{ color: "var(--bloom-primary)" }}>
+                                  <span style={{ color: "var(--bloom-primary)", fontWeight: 700 }}>
                                     {day}日目
                                   </span>
                                 </div>
