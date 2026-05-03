@@ -7,6 +7,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import {
   doc,
   getDoc,
+  getDocFromServer,
   onSnapshot,
   type DocumentData,
   type DocumentReference,
@@ -70,7 +71,10 @@ export function PlanProvider({ children }: { children: ReactNode }) {
     (async () => {
       setDebugStage("fetching-user");
       try {
-        const userSnap = await getDoc(doc(db, "users", user.uid));
+        // ローカルキャッシュをバイパスして必ずサーバーから取得。
+        // pending writes（最近の書き込みでまだサーバー未確定）に引きずられて
+        // family_id が見えなくなる問題を回避するため。
+        const userSnap = await getDocFromServer(doc(db, "users", user.uid));
         if (cancelled) return;
         if (!userSnap.exists()) {
           setDebugStage("user-not-exists");
