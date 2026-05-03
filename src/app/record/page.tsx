@@ -1,7 +1,11 @@
 "use client";
 
-// 記録の詳細・編集・削除画面
-import { useState, useEffect, Suspense } from "react";
+// 記録の詳細・編集・削除画面 — Bloom デザイン適用
+// 参照: write 画面（カテゴリ・めやす・タイトル・日付・メモ・写真の入力 UI を流用）
+// 表示モードと編集モードを切替。表示モードはタイトル＋カテゴリピル＋本文＋写真。
+// 編集モードは write 画面と同じ入力フォーム。
+
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -17,45 +21,43 @@ import { MILESTONES, type MilestoneData } from "@/lib/milestones-data";
 import { uploadImage } from "@/lib/storage";
 import { milestoneToAppCategory } from "@/lib/category-map";
 import ConfirmModal from "@/components/confirm-modal";
-import AppHeader from "@/components/app-header";
-import Twemoji from "@/components/twemoji";
+import BloomAppHeader from "@/components/bloom-app-header";
+import BloomCard from "@/components/bloom-card";
 import MilestonePicker from "@/components/milestone-picker";
-import { Camera, X, Lock } from "lucide-react";
-
-const CATEGORY_STYLE: { [key: string]: { emoji: string } } = {
-  できた: { emoji: "✨" },
-  おめでとう: { emoji: "🎉" },
-  始めた: { emoji: "🌱" },
-  がんばった: { emoji: "💪" },
-  感じた: { emoji: "💭" },
-  言った: { emoji: "💬" },
-  行った: { emoji: "🚀" },
-  やめた: { emoji: "🔖" },
-  "あげた・もらった": { emoji: "🎁" },
-  のりこえた: { emoji: "🏔️" },
-  ありがとう: { emoji: "🙏" },
-};
+import { Sparkle, Sprout, WavyLine } from "@/components/illustrations";
 
 type CategoryOption = {
   value: MilestoneCategory;
   label: string;
-  emoji: string;
+  // Bloom 用の手描き風グリフ（write 画面と統一）
+  glyph: string;
+  color: string;
   premium: boolean;
 };
 
 const ALL_CATEGORIES: CategoryOption[] = [
-  { value: "できた", label: "できた", emoji: "✨", premium: false },
-  { value: "おめでとう", label: "おめでとう", emoji: "🎉", premium: false },
-  { value: "始めた", label: "始めた", emoji: "🌱", premium: false },
-  { value: "がんばった", label: "がんばった", emoji: "💪", premium: true },
-  { value: "感じた", label: "感じた", emoji: "💭", premium: true },
-  { value: "言った", label: "言った", emoji: "💬", premium: true },
-  { value: "行った", label: "行った", emoji: "🚀", premium: true },
-  { value: "やめた", label: "やめた", emoji: "🔖", premium: true },
-  { value: "あげた・もらった", label: "あげた・もらった", emoji: "🎁", premium: true },
-  { value: "のりこえた", label: "のりこえた", emoji: "🏔️", premium: true },
-  { value: "ありがとう", label: "ありがとう", emoji: "🙏", premium: true },
+  { value: "できた", label: "できた", glyph: "✦", color: "var(--bloom-primary)", premium: false },
+  { value: "おめでとう", label: "おめでとう", glyph: "❀", color: "var(--bloom-pink)", premium: false },
+  { value: "始めた", label: "はじめた", glyph: "🌱", color: "var(--bloom-accent)", premium: false },
+  { value: "がんばった", label: "がんばった", glyph: "✿", color: "#D86464", premium: true },
+  { value: "感じた", label: "感じた", glyph: "♡", color: "#6B8FE8", premium: true },
+  { value: "言った", label: "言った", glyph: "❝", color: "#9B7FD9", premium: true },
+  { value: "行った", label: "行った", glyph: "▲", color: "#5FB8D9", premium: true },
+  { value: "やめた", label: "やめた", glyph: "□", color: "#7A6F58", premium: true },
+  { value: "あげた・もらった", label: "あげた", glyph: "♢", color: "var(--bloom-pink)", premium: true },
+  { value: "のりこえた", label: "のりこえた", glyph: "△", color: "#A86A3F", premium: true },
+  { value: "ありがとう", label: "ありがと", glyph: "✦", color: "var(--bloom-yellow)", premium: true },
 ];
+
+function categoryColor(category: string): string {
+  const found = ALL_CATEGORIES.find((c) => c.value === category);
+  return found?.color || "var(--bloom-ink-soft)";
+}
+
+function categoryLabel(category: string): string {
+  const found = ALL_CATEGORIES.find((c) => c.value === category);
+  return found?.label || category;
+}
 
 function RecordDetail() {
   const router = useRouter();
@@ -82,6 +84,7 @@ function RecordDetail() {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [existingPhotoUrl, setExistingPhotoUrl] = useState("");
+  const photoInputRef = useRef<HTMLInputElement>(null);
   // 削除確認モーダルの状態
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -127,14 +130,12 @@ function RecordDetail() {
     const childId = record.child_id?.id;
     if (!childId) return;
 
-    // 編集中の記録自身の milestone_id（あれば）
     const ownMilestoneId = record.milestone_id?.id;
 
     let cancelled = false;
     getLinkedMilestoneIds(childId)
       .then((ids) => {
         if (cancelled) return;
-        // 自分自身の紐付け先だけは除外しない
         const excluded = ownMilestoneId
           ? ids.filter((id) => id !== ownMilestoneId)
           : ids;
@@ -186,32 +187,28 @@ function RecordDetail() {
       if (snap.exists()) {
         const data = { id: snap.id, ...snap.data() } as GrowthRecord & { id: string };
         setRecord(data);
-        if (selectedMilestone) {
-          setMilestone(selectedMilestone);
-        } else {
-          setMilestone(null);
-        }
+        setMilestone(selectedMilestone || null);
       }
       setIsEditing(false);
-    } catch {
+    } catch (err) {
+      console.error("[record] 保存失敗:", err);
       alert("保存に失敗しました");
     } finally {
       setSaving(false);
     }
   }
 
-  // 削除確認モーダルを開く
   function handleDeleteRequest() {
     setShowDeleteConfirm(true);
   }
 
-  // 確認モーダルで「削除する」を押された時に走る
   async function handleDeleteConfirm() {
     setDeleting(true);
     try {
       await deleteRecord(recordId);
       router.replace("/home");
-    } catch {
+    } catch (err) {
+      console.error("[record] 削除失敗:", err);
       setDeleting(false);
       setShowDeleteConfirm(false);
       alert("削除に失敗しました");
@@ -220,329 +217,472 @@ function RecordDetail() {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-slate-400">読み込み中...</p>
+      <div
+        className="flex h-full items-center justify-center"
+        style={{ background: "var(--bloom-bg)" }}
+      >
+        <Sprout size={42} color="var(--bloom-primary)" />
       </div>
     );
   }
 
   if (!record) return null;
 
+  const freeCats = ALL_CATEGORIES.filter((c) => !c.premium);
+  const premiumCats = ALL_CATEGORIES.filter((c) => c.premium);
+
   return (
-    <div className="flex h-full flex-col">
-      <AppHeader
+    <div
+      className="flex h-full flex-col"
+      style={{ background: "var(--bloom-bg)" }}
+    >
+      <BloomAppHeader
         title={isEditing ? "きろくを編集" : "きろくの詳細"}
         showBack
-        onBack={() => router.back()}
+        bgColor={isEditing ? "var(--bloom-yellow)" : undefined}
         rightSlot={
           !isEditing ? (
             <button
+              type="button"
               onClick={() => setIsEditing(true)}
-              className="rounded-full px-3 py-1.5 text-sm font-medium text-white hover:bg-white/15"
+              className="font-hand"
+              style={{
+                fontSize: 12,
+                color: "var(--bloom-ink)",
+                padding: "4px 12px",
+                border: "1.5px solid var(--bloom-line)",
+                borderRadius: 10,
+                background: "#fff",
+              }}
             >
               編集
             </button>
-          ) : undefined
+          ) : (
+            <Sparkle size={16} color="var(--bloom-accent)" />
+          )
         }
       />
 
-      <main className="flex-1 overflow-y-auto px-5 pb-10 pt-5">
+      <main className="flex-1 overflow-y-auto px-4 pt-4 pb-10">
         {isEditing ? (
           // === 編集モード ===
-          <div className="space-y-6">
+          <div>
             {/* カテゴリ選択 */}
-            <div>
-              <label className="mb-2 block text-sm font-bold text-slate-600">カテゴリ</label>
-              {/* 無料カテゴリ（上段） */}
-              <div className="flex gap-2">
-                {ALL_CATEGORIES.filter((c) => !c.premium).map((cat) => (
+            <div
+              className="font-hand mb-2"
+              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            >
+              ● どんなこと？
+            </div>
+
+            {/* 無料カテゴリ（3カラム） */}
+            <div className="grid grid-cols-3 gap-2">
+              {freeCats.map((cat) => {
+                const active = category === cat.value;
+                return (
+                  <BloomCard
+                    key={cat.value}
+                    soft={!active}
+                    color={active ? cat.color : "#fff"}
+                    className="cursor-pointer"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setCategory(cat.value)}
+                      className="block w-full px-1 py-3.5 text-center"
+                      style={{ color: active ? "#fff" : "var(--bloom-ink)" }}
+                    >
+                      <div className="mb-0.5" style={{ fontSize: 22 }}>
+                        {cat.glyph}
+                      </div>
+                      <div className="font-hand" style={{ fontSize: 12 }}>
+                        {cat.label}
+                      </div>
+                    </button>
+                  </BloomCard>
+                );
+              })}
+            </div>
+
+            {/* 有料カテゴリ（4カラム × 2段、ロック表示） */}
+            <div className="mt-2 grid grid-cols-4 gap-1.5">
+              {premiumCats.map((cat) => {
+                const locked = !isPremium;
+                const active = category === cat.value;
+                return (
                   <button
                     key={cat.value}
                     type="button"
-                    onClick={() => setCategory(cat.value)}
-                    className={`flex-1 rounded-2xl border-2 py-3 text-center transition-all ${
-                      category === cat.value
-                        ? "border-amber-500 bg-amber-50 shadow-sm"
-                        : "border-slate-100 bg-white hover:border-slate-200"
-                    }`}
+                    onClick={() => {
+                      if (locked) return;
+                      setCategory(cat.value);
+                    }}
+                    className="relative rounded-[10px] px-1 py-2.5 text-center"
+                    style={{
+                      background: active && !locked ? cat.color : "#fff",
+                      color: active && !locked ? "#fff" : "var(--bloom-ink-soft)",
+                      border: locked
+                        ? "1.5px dashed var(--bloom-line-soft)"
+                        : "1.5px solid var(--bloom-line)",
+                      opacity: locked ? 0.7 : 1,
+                    }}
                   >
-                    <span className="flex justify-center">
-                      <Twemoji emoji={cat.emoji} size={24} ariaLabel={cat.label} />
-                    </span>
-                    <span className={`mt-0.5 block text-xs font-medium ${
-                      category === cat.value ? "text-amber-700" : "text-slate-600"
-                    }`}>
+                    {locked && (
+                      <span className="absolute" style={{ top: 3, right: 4, fontSize: 9 }}>
+                        🔒
+                      </span>
+                    )}
+                    <div className="font-hand" style={{ fontSize: 10 }}>
                       {cat.label}
-                    </span>
+                    </div>
                   </button>
-                ))}
-              </div>
-              {/* 有料カテゴリ（下段） */}
-              <div className="mt-2 grid grid-cols-4 gap-2">
-                {ALL_CATEGORIES.filter((c) => c.premium).map((cat) => {
-                  const locked = !isPremium;
-                  return (
-                    <button
-                      key={cat.value}
-                      type="button"
-                      onClick={() => {
-                        if (locked) return;
-                        setCategory(cat.value);
-                      }}
-                      className={`relative rounded-xl border-2 py-2.5 text-center transition-all ${
-                        locked
-                          ? "border-slate-100 bg-slate-50 opacity-50"
-                          : category === cat.value
-                            ? "border-amber-500 bg-amber-50 shadow-sm"
-                            : "border-slate-100 bg-white hover:border-slate-200"
-                      }`}
-                    >
-                      <span className="flex justify-center">
-                        <Twemoji emoji={cat.emoji} size={20} ariaLabel={cat.label} />
-                      </span>
-                      <span className={`mt-0.5 block text-xs font-medium ${
-                        locked
-                          ? "text-slate-400"
-                          : category === cat.value
-                            ? "text-amber-700"
-                            : "text-slate-600"
-                      }`}>
-                        {cat.label}
-                      </span>
-                      {locked && (
-                        <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-slate-300 text-white">
-                          <Lock className="h-2.5 w-2.5" strokeWidth={2.5} aria-hidden="true" />
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-              {!isPremium && (
-                <p className="mt-2 flex items-center justify-center gap-1 text-center text-xs text-slate-400">
-                  <Lock className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
-                  のカテゴリはプレミアムプランで使えます
-                </p>
-              )}
+                );
+              })}
             </div>
 
-            {/* 成長のめやす紐付け編集（全フェーズ表示・紐付け済みは非表示・自分自身は除外しない） */}
-            <div>
+            {!isPremium && (
+              <p
+                className="mt-1.5 text-center text-[10px]"
+                style={{ color: "var(--bloom-ink-soft)" }}
+              >
+                🔒 のカテゴリはプレミアムで使えます
+              </p>
+            )}
+
+            {/* めやす紐付け */}
+            <div className="mt-4">
               {selectedMilestone ? (
-                <div className="flex items-center gap-2 rounded-xl bg-green-50 px-4 py-3">
-                  <span className="text-green-600">✓</span>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-green-800">{selectedMilestone.title}</p>
-                    <p className="text-xs text-green-600">{selectedMilestone.age_hint} ・ {selectedMilestone.category}</p>
+                <BloomCard soft color="var(--bloom-primary-soft)" className="p-3">
+                  <div className="flex items-center gap-2">
+                    <Sprout size={16} color="var(--bloom-primary)" />
+                    <div className="flex-1">
+                      <div
+                        className="font-hand"
+                        style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                      >
+                        {selectedMilestone.title}
+                      </div>
+                      <div className="text-[10px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                        {selectedMilestone.age_hint} ・ {selectedMilestone.category}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={clearMilestone}
+                      className="font-hand"
+                      style={{ fontSize: 14, color: "var(--bloom-ink-soft)" }}
+                      aria-label="めやすの紐付けを外す"
+                    >
+                      ✕
+                    </button>
                   </div>
+                </BloomCard>
+              ) : (
+                <BloomCard
+                  soft
+                  color="var(--bloom-primary-soft)"
+                  className="cursor-pointer"
+                >
                   <button
                     type="button"
-                    onClick={clearMilestone}
-                    className="text-sm text-green-400 hover:text-green-600"
+                    onClick={() => setShowMilestones(!showMilestones)}
+                    className="flex w-full items-center gap-2 px-3.5 py-3"
                   >
-                    ✕
+                    <Sprout size={18} color="var(--bloom-primary)" />
+                    <span
+                      className="font-hand flex-1 text-left"
+                      style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                    >
+                      めやすに ひもづける（任意）
+                    </span>
+                    <span style={{ color: "var(--bloom-ink-soft)" }}>
+                      {showMilestones ? "▲" : "▼"}
+                    </span>
                   </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setShowMilestones(!showMilestones)}
-                  className="flex w-full items-center justify-between rounded-xl bg-amber-50 px-4 py-3 text-sm font-medium text-amber-700 hover:bg-amber-100"
-                >
-                  <span className="flex items-center gap-1.5">
-                    <Twemoji emoji="📋" size={18} ariaLabel="" />
-                    成長のめやすに紐付ける（任意）
-                  </span>
-                  <span>{showMilestones ? "▲" : "▼"}</span>
-                </button>
+                </BloomCard>
               )}
 
               {showMilestones && !selectedMilestone && (
-                <MilestonePicker
-                  excludedMilestoneIds={linkedMilestoneIds}
-                  onSelect={selectMilestone}
-                />
+                <div className="mt-2">
+                  <MilestonePicker
+                    excludedMilestoneIds={linkedMilestoneIds}
+                    onSelect={selectMilestone}
+                  />
+                </div>
               )}
             </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-bold text-slate-600">タイトル</label>
+            {/* タイトル */}
+            <div
+              className="font-hand mt-4 mb-1.5"
+              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            >
+              ● タイトル
+            </div>
+            <BloomCard soft className="px-3.5 py-3">
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="block w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-base focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                placeholder="はじめて歩いた！"
+                className="font-hand block w-full bg-transparent focus:outline-none"
+                style={{ fontSize: 16, color: "var(--bloom-ink)" }}
               />
-            </div>
+            </BloomCard>
 
-            <div>
-              <label className="mb-2 block text-sm font-bold text-slate-600">いつ？</label>
+            {/* 日付 */}
+            <div
+              className="font-hand mt-4 mb-1.5"
+              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            >
+              ● いつ？
+            </div>
+            <BloomCard soft className="px-3.5 py-3">
               <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="block w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-base focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="font-hand block w-full bg-transparent focus:outline-none"
+                style={{ fontSize: 14, color: "var(--bloom-ink)" }}
               />
-            </div>
+            </BloomCard>
 
-            <div>
-              <label className="mb-2 block text-sm font-bold text-slate-600">メモ</label>
+            {/* メモ */}
+            <div
+              className="font-hand mt-4 mb-1.5"
+              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            >
+              ● そのときのこと
+            </div>
+            <BloomCard soft className="px-3.5 py-3.5" style={{ minHeight: 80 }}>
               <textarea
                 value={memo}
                 onChange={(e) => setMemo(e.target.value)}
                 rows={4}
-                className="block w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-base focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                placeholder="そのときの様子を、ゆっくり書いてください…"
+                className="block w-full resize-none bg-transparent text-[12px] focus:outline-none"
+                style={{
+                  color: "var(--bloom-ink)",
+                  lineHeight: 1.7,
+                }}
               />
-            </div>
+            </BloomCard>
 
             {/* 写真 */}
-            <div>
-              <label className="mb-2 block text-sm font-bold text-slate-600">写真</label>
-              {(photoPreview || existingPhotoUrl) ? (
-                <div className="relative">
-                  <img
-                    src={photoPreview || existingPhotoUrl}
-                    alt="プレビュー"
-                    className="w-full rounded-xl object-cover"
-                    style={{ maxHeight: "240px" }}
-                  />
-                  <div className="absolute right-2 top-2 flex gap-2">
-                    <label className="flex h-8 cursor-pointer items-center rounded-full bg-black/50 px-3 text-xs text-white hover:bg-black/70">
-                      変更
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            setPhotoFile(file);
-                            setPhotoPreview(URL.createObjectURL(file));
-                          }
-                        }}
-                      />
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPhotoFile(null);
-                        setPhotoPreview(null);
-                        setExistingPhotoUrl("");
-                      }}
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white hover:bg-black/70"
-                      aria-label="写真を削除"
-                    >
-                      <X className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-slate-200 bg-white py-8 text-center hover:border-amber-400 hover:bg-amber-50">
-                  <Camera className="h-8 w-8 text-slate-400" strokeWidth={1.5} aria-hidden="true" />
-                  <span className="text-sm text-slate-500">タップして写真を選ぶ</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        setPhotoFile(file);
-                        setPhotoPreview(URL.createObjectURL(file));
-                      }
-                    }}
-                  />
-                </label>
-              )}
+            <div
+              className="font-hand mt-4 mb-1.5"
+              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            >
+              ● 写真
             </div>
+            {(photoPreview || existingPhotoUrl) ? (
+              <div className="relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={photoPreview || existingPhotoUrl}
+                  alt="プレビュー"
+                  className="bloom-border w-full rounded-[14px] object-cover"
+                  style={{ maxHeight: 240 }}
+                />
+                <div className="absolute right-2 top-2 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => photoInputRef.current?.click()}
+                    className="bloom-border font-hand flex h-8 items-center rounded-full px-3"
+                    style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: 11 }}
+                  >
+                    変更
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPhotoFile(null);
+                      setPhotoPreview(null);
+                      setExistingPhotoUrl("");
+                    }}
+                    className="bloom-border flex h-8 w-8 items-center justify-center rounded-full"
+                    style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: 14 }}
+                    aria-label="写真を削除"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setPhotoFile(file);
+                      setPhotoPreview(URL.createObjectURL(file));
+                    }
+                  }}
+                />
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => photoInputRef.current?.click()}
+                  className="block w-full cursor-pointer rounded-[14px] py-6 text-center"
+                  style={{
+                    background: "#fff",
+                    border: "2px dashed var(--bloom-line)",
+                  }}
+                >
+                  <span
+                    className="font-hand"
+                    style={{ fontSize: 13, color: "var(--bloom-ink-soft)" }}
+                  >
+                    ＋ 写真をえらぶ
+                  </span>
+                </button>
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setPhotoFile(file);
+                      setPhotoPreview(URL.createObjectURL(file));
+                    }
+                  }}
+                />
+              </>
+            )}
 
-            <div className="flex gap-3">
+            {/* キャンセル + 保存ボタン */}
+            <div className="mt-5 flex gap-2">
               <button
+                type="button"
                 onClick={() => {
                   setIsEditing(false);
                   setSelectedMilestone(milestone);
                   setPhotoFile(null);
                   setPhotoPreview(null);
                   setExistingPhotoUrl(record?.photo_url || "");
+                  setTitle(record?.title || "");
+                  setCategory(record?.category || "");
+                  setMemo(record?.memo || "");
+                  setDate(record?.recorded_date.toDate().toISOString().split("T")[0] || "");
                 }}
-                className="flex-1 rounded-xl border border-slate-200 py-3.5 text-sm font-medium text-slate-600 hover:bg-slate-50"
+                className="bloom-border bloom-shadow-soft font-hand flex-1 rounded-[14px] py-3.5"
+                style={{
+                  background: "#fff",
+                  color: "var(--bloom-ink)",
+                  fontSize: 14,
+                }}
               >
                 キャンセル
               </button>
               <button
+                type="button"
                 onClick={handleSave}
-                disabled={saving}
-                className="flex-1 rounded-xl bg-amber-500 py-3.5 text-sm font-semibold text-white hover:bg-amber-600 disabled:opacity-50"
+                disabled={saving || !category}
+                className="bloom-border bloom-shadow font-hand flex-1 rounded-[14px] py-3.5 text-white disabled:opacity-50"
+                style={{
+                  background: "var(--bloom-primary)",
+                  fontSize: 14,
+                  letterSpacing: "0.05em",
+                }}
               >
-                {saving ? "保存中..." : "保存する"}
+                {saving ? "保存中…" : "保存する ✦"}
               </button>
             </div>
           </div>
         ) : (
           // === 表示モード ===
-          <div className="space-y-5">
-            <div className="rounded-2xl bg-white p-5 shadow-sm">
-              <div className="flex items-start gap-3">
-                {CATEGORY_STYLE[record.category]?.emoji ? (
-                  <Twemoji
-                    emoji={CATEGORY_STYLE[record.category].emoji}
-                    size={28}
-                    ariaLabel={record.category}
-                  />
-                ) : (
-                  <span className="text-2xl" aria-hidden>⚪</span>
-                )}
-                <div>
-                  <h2 className="text-xl font-bold text-slate-800">{record.title}</h2>
-                  <p className="mt-1 text-sm text-slate-500">
-                    {record.recorded_date.toDate().toLocaleDateString("ja-JP", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                  <span className="mt-2 inline-block rounded-full bg-slate-100 px-3 py-0.5 text-xs font-medium text-slate-600">
-                    {record.category}
-                  </span>
+          <div>
+            {/* タイトル＋カテゴリ＋日付 */}
+            <BloomCard className="p-5">
+              <div className="flex items-baseline gap-2">
+                <span
+                  className="font-hand inline-block rounded-lg px-2 py-0.5 text-white"
+                  style={{
+                    background: categoryColor(record.category),
+                    fontSize: 10,
+                    border: "1.5px solid var(--bloom-line)",
+                  }}
+                >
+                  {categoryLabel(record.category)}
+                </span>
+                <div className="text-[10px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                  {record.recorded_date.toDate().toLocaleDateString("ja-JP", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
                 </div>
+              </div>
+              <h2
+                className="font-hand mt-2"
+                style={{ fontSize: 22, color: "var(--bloom-ink)", lineHeight: 1.4 }}
+              >
+                {record.title}
+              </h2>
+              <div className="mt-2">
+                <WavyLine width={80} color="var(--bloom-accent)" stroke={2} />
               </div>
 
               {/* 成長のめやす紐付け */}
               {milestone && (
-                <div className="mt-4 flex items-center gap-2 rounded-xl bg-green-50 px-4 py-3">
-                  <Twemoji emoji="🏆" size={20} ariaLabel="成長のめやす" />
-                  <div>
-                    <p className="text-xs font-medium text-green-600">成長のめやす</p>
-                    <p className="text-sm font-medium text-green-800">{milestone.title}</p>
-                    <p className="text-xs text-green-600">{milestone.age_hint} ・ {milestone.category}</p>
+                <BloomCard
+                  soft
+                  color="var(--bloom-primary-soft)"
+                  className="mt-4 flex items-center gap-2.5 p-3"
+                >
+                  <Sprout size={18} color="var(--bloom-primary)" />
+                  <div className="flex-1">
+                    <div className="text-[10px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                      成長のめやす
+                    </div>
+                    <div
+                      className="font-hand"
+                      style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                    >
+                      {milestone.title}
+                    </div>
+                    <div className="text-[10px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                      {milestone.age_hint} ・ {milestone.category}
+                    </div>
                   </div>
-                </div>
+                </BloomCard>
               )}
 
+              {/* メモ */}
               {record.memo && (
-                <div className="mt-4 rounded-xl bg-slate-50 p-4">
-                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">
-                    {record.memo}
-                  </p>
+                <div
+                  className="mt-4 whitespace-pre-wrap text-[13px]"
+                  style={{ color: "var(--bloom-ink)", lineHeight: 1.8 }}
+                >
+                  {record.memo}
                 </div>
               )}
 
               {/* 写真 */}
               {record.photo_url && (
                 <div className="mt-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={record.photo_url}
                     alt=""
-                    className="w-full rounded-xl object-cover"
-                    style={{ maxHeight: "300px" }}
+                    className="bloom-border w-full rounded-[14px] object-cover"
+                    style={{ maxHeight: 320 }}
                   />
                 </div>
               )}
-            </div>
+            </BloomCard>
 
+            {/* 削除リンク */}
             <button
+              type="button"
               onClick={handleDeleteRequest}
-              className="w-full rounded-xl border border-red-200 py-3 text-sm font-medium text-red-500 hover:bg-red-50"
+              className="mt-6 block w-full text-center text-[12px]"
+              style={{ color: "#A8421B", textDecoration: "underline" }}
             >
               この記録を削除する
             </button>
@@ -570,7 +710,16 @@ function RecordDetail() {
 
 export default function RecordPage() {
   return (
-    <Suspense fallback={<div className="flex h-full items-center justify-center"><p className="text-slate-400">読み込み中...</p></div>}>
+    <Suspense
+      fallback={
+        <div
+          className="flex h-full items-center justify-center"
+          style={{ background: "var(--bloom-bg)" }}
+        >
+          <Sprout size={42} color="var(--bloom-primary)" />
+        </div>
+      }
+    >
       <RecordDetail />
     </Suspense>
   );
