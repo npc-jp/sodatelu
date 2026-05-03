@@ -18,12 +18,13 @@ import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
 import { PottedPlant, Sprout } from "@/components/illustrations";
 
-// フェーズ番号 → タブ色（非アクティブ時の薄い帯背景）
+// フェーズ番号 → アクティブ時の背景色
+// 以前は 1, 3 が *-soft（薄色）だったが、白文字が読めなくなるため濃色に統一
 const PHASE_COLORS: { [key: number]: string } = {
-  1: "var(--bloom-primary-soft)",
-  2: "var(--bloom-primary)",
-  3: "var(--bloom-accent-soft)",
-  4: "var(--bloom-pink)",
+  1: "var(--bloom-primary)",
+  2: "var(--bloom-accent)",
+  3: "var(--bloom-pink)",
+  4: "var(--bloom-yellow)",
 };
 
 export default function MilestonesPage() {
@@ -126,9 +127,14 @@ export default function MilestonesPage() {
               onClick={() => setCurrentPhase(phase.number)}
               className="bloom-border font-hand whitespace-nowrap rounded-xl px-3.5 py-1.5"
               style={{
-                fontSize: 13,
+                fontSize: 14,
+                fontWeight: 700,
                 background: active ? tabColor : "#fff",
-                color: active ? "#fff" : "var(--bloom-ink)",
+                color: active
+                  ? tabColor === "var(--bloom-yellow)"
+                    ? "var(--bloom-ink)"
+                    : "#fff"
+                  : "var(--bloom-ink)",
                 boxShadow: active ? "2px 2px 0 var(--bloom-line)" : "none",
               }}
             >
