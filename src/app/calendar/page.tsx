@@ -235,14 +235,14 @@ export default function CalendarPage() {
                   <div>{date.getDate()}</div>
                   {dayRecords.length > 0 && (
                     <div
-                      className="mt-0.5 rounded-full"
+                      className="mt-1 rounded-full"
                       style={{
-                        width: 6,
-                        height: 6,
+                        width: 10,
+                        height: 10,
                         background: categoryDotColor(dayRecords[0].category),
                         border: showHighlight
-                          ? "1px solid #fff"
-                          : "1px solid var(--bloom-line)",
+                          ? "1.5px solid #fff"
+                          : "1.5px solid var(--bloom-line)",
                       }}
                     />
                   )}
@@ -254,22 +254,22 @@ export default function CalendarPage() {
 
         {/* 凡例 */}
         <div
-          className="mt-3.5 flex justify-center gap-3.5 text-[12px]"
-          style={{ color: "var(--bloom-ink-soft)" }}
+          className="mt-4 flex justify-center gap-4 text-[13px]"
+          style={{ color: "var(--bloom-ink)" }}
         >
           {[
             ["できた", "var(--bloom-primary)"],
             ["はじめた", "var(--bloom-accent)"],
             ["めやす", "var(--bloom-yellow)"],
           ].map(([l, c]) => (
-            <div key={l} className="flex items-center gap-1.5">
+            <div key={l} className="flex items-center gap-2">
               <div
                 className="rounded-full"
                 style={{
-                  width: 8,
-                  height: 8,
+                  width: 14,
+                  height: 14,
                   background: c,
-                  border: "1px solid var(--bloom-line)",
+                  border: "1.5px solid var(--bloom-line)",
                 }}
               />
               {l}
