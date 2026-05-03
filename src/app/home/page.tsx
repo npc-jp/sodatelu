@@ -144,6 +144,8 @@ export default function HomePage() {
         familyPath={familyPath || "(null)"}
         <br />
         stage={debugStage}
+        <br />
+        projectId={process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "(undefined)"}
       </div>
 
       {/* ヘッダー */}
