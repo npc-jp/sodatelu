@@ -9,6 +9,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BloomAppHeader from "@/components/bloom-app-header";
+import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
 import {
   Cloud,
@@ -96,7 +97,7 @@ export default function UpgradePage() {
         rightSlot={<Star size={16} color="var(--bloom-yellow)" />}
       />
 
-      <main className="flex-1 overflow-y-auto px-[18px] pt-5 pb-10">
+      <main className="flex-1 overflow-y-auto px-[18px] pt-5 pb-28">
         {/* ヒーロー */}
         <div className="relative text-center">
           <div className="absolute" style={{ top: 10, left: 6 }}>
@@ -274,6 +275,8 @@ export default function UpgradePage() {
           ※ 現在β版です。正式リリース時にご案内します
         </p>
       </main>
+
+      <BloomBottomNav current="upgrade" />
     </div>
   );
 }

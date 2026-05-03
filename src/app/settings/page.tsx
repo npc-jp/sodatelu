@@ -25,6 +25,7 @@ import {
 import { deleteOwnAccount, type AccountDeletionResult } from "@/lib/account-delete";
 import ConfirmModal from "@/components/confirm-modal";
 import BloomAppHeader from "@/components/bloom-app-header";
+import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
 import {
   Cloud,
@@ -223,7 +224,7 @@ export default function SettingsPage() {
         rightSlot={<Sparkle size={16} color="var(--bloom-accent)" />}
       />
 
-      <main className="flex-1 overflow-y-auto px-4 pt-4 pb-10">
+      <main className="flex-1 overflow-y-auto px-4 pt-4 pb-28">
         {/* プロフィールカード（緑） */}
         <BloomCard
           color="var(--bloom-primary)"
@@ -426,6 +427,8 @@ export default function SettingsPage() {
           ご質問は sodatelu.app@gmail.com まで
         </p>
       </main>
+
+      <BloomBottomNav current="settings" />
 
       {/* 削除確認モーダル（既存コンポーネント維持） */}
       <ConfirmModal

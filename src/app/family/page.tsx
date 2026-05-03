@@ -25,6 +25,7 @@ import {
 } from "@/lib/firestore";
 import { useChild } from "@/lib/child-context";
 import BloomAppHeader from "@/components/bloom-app-header";
+import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
 import { Heart, Sparkle, Sprout, Star } from "@/components/illustrations";
 
@@ -200,7 +201,7 @@ ${url}`;
         rightSlot={<Heart size={16} color="var(--bloom-accent)" />}
       />
 
-      <main className="flex-1 overflow-y-auto px-4 pt-4 pb-10">
+      <main className="flex-1 overflow-y-auto px-4 pt-4 pb-28">
         {/* 自分宛招待 */}
         {myInvitations.length > 0 && (
           <div className="mb-5">
@@ -589,6 +590,8 @@ ${url}`;
           </p>
         )}
       </main>
+
+      <BloomBottomNav current="family" />
     </div>
   );
 }

@@ -9,6 +9,7 @@
 
 import Link from "next/link";
 import BloomAppHeader from "@/components/bloom-app-header";
+import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
 import { Heart } from "@/components/illustrations";
 
@@ -30,7 +31,7 @@ export default function PrivacyPage() {
         showBack
       />
 
-      <main className="flex-1 overflow-y-auto px-5 pb-10 pt-5">
+      <main className="flex-1 overflow-y-auto px-5 pb-28 pt-5">
         {/* 3つのお約束（冒頭） */}
         <BloomCard soft color="var(--bloom-primary-soft)" className="p-3.5">
           <div className="flex items-center gap-2">
@@ -353,6 +354,8 @@ export default function PrivacyPage() {
           </Link>
         </div>
       </main>
+
+      <BloomBottomNav current="privacy" />
     </div>
   );
 }

@@ -329,8 +329,27 @@ export async function sendInvitation(data: {
   invitedByUid: string;
   invitedByName: string;
 }) {
+  // 同じ家族・同じメールで pending な招待が既にあれば、新規作成せず再送扱いに
+  // （二度押し・LINE再送等で重複ドキュメントが生まれないように）
+  const familyRef = doc(db, "families", data.familyId);
+  const existingQ = query(
+    invitationsRef,
+    where("family_id", "==", familyRef),
+    where("invited_email", "==", data.invitedEmail),
+    where("status", "==", "pending")
+  );
+  const existing = await getDocs(existingQ);
+  if (!existing.empty) {
+    const existingDoc = existing.docs[0];
+    await updateDoc(existingDoc.ref, {
+      created_at: serverTimestamp(),
+      invited_by_uid: data.invitedByUid,
+      invited_by_name: data.invitedByName,
+    });
+    return existingDoc;
+  }
   return addDoc(invitationsRef, {
-    family_id: doc(db, "families", data.familyId),
+    family_id: familyRef,
     invited_email: data.invitedEmail,
     invited_by_uid: data.invitedByUid,
     invited_by_name: data.invitedByName,

@@ -17,6 +17,7 @@ import { useChild } from "@/lib/child-context";
 import { getRecordsByChild, type GrowthRecord } from "@/lib/firestore";
 import { Timestamp } from "firebase/firestore";
 import BloomAppHeader from "@/components/bloom-app-header";
+import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
 import { Heart, OpenBook, Sprout, WavyLine } from "@/components/illustrations";
 
@@ -110,7 +111,7 @@ export default function MemoryPage() {
         rightSlot={<Heart size={16} color="#fff" />}
       />
 
-      <main className="flex-1 overflow-y-auto px-[18px] pt-5 pb-10">
+      <main className="flex-1 overflow-y-auto px-[18px] pt-5 pb-28">
         {/* ヒーロー */}
         <div className="mb-6 text-center">
           <div className="mb-3 flex justify-center">
@@ -247,6 +248,8 @@ export default function MemoryPage() {
           </>
         )}
       </main>
+
+      <BloomBottomNav current="memory" />
     </div>
   );
 }
