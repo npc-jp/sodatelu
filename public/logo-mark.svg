@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   sodatelu ロゴマーク（円 + 白い芽）
-  - 円形 amber-500 (#f59e0b) 背景
+  - 円形 amber-500 (#7BA85F) 背景
   - 中央に白い芽（双葉＋茎）
   - 512x512 ベース
   - favicon / アプリアイコン / マーク単独使用向け
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="sodatelu">
   <!-- 背景円 -->
-  <circle cx="256" cy="256" r="256" fill="#f59e0b"/>
+  <circle cx="256" cy="256" r="256" fill="#7BA85F"/>
 
   <!-- 茎 -->
   <path d="M256 360 L256 250"
@@ -27,5 +27,5 @@
         fill="#ffffff"/>
 
   <!-- 葉の中心の小さなくぼみ（茎との接続を自然に） -->
-  <circle cx="256" cy="270" r="8" fill="#f59e0b"/>
+  <circle cx="256" cy="270" r="8" fill="#7BA85F"/>
 </svg>
