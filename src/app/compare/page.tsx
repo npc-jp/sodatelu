@@ -38,6 +38,17 @@ function monthsFromBirth(birthDate: Timestamp, recordDate: Timestamp): number {
   return Math.floor(diffMs / (30.44 * 24 * 60 * 60 * 1000));
 }
 
+// 生まれてから何日目か（生まれた日 = 1日目）
+function daysFromBirth(birthDate: Timestamp, recordDate: Timestamp): number {
+  // 時刻成分を 00:00 に揃えて純粋な日付差で計算（時刻によるズレを防ぐ）
+  const birth = birthDate.toDate();
+  const record = recordDate.toDate();
+  const b = new Date(birth.getFullYear(), birth.getMonth(), birth.getDate()).getTime();
+  const r = new Date(record.getFullYear(), record.getMonth(), record.getDate()).getTime();
+  const days = Math.floor((r - b) / (1000 * 60 * 60 * 24));
+  return days + 1; // 生まれた日を1日目とする
+}
+
 function formatMonths(months: number): string {
   if (months < 0) return "";
   if (months === 0) return "0ヶ月";
@@ -310,32 +321,38 @@ export default function ComparePage() {
                     }
                     return (
                       <div key={kid.id} className="flex flex-col gap-1.5">
-                        {recs.map(({ record: rec }) => (
-                          <BloomCard
-                            key={rec.id}
-                            soft
-                            className="cursor-pointer p-2.5"
-                          >
-                            <button
-                              type="button"
-                              onClick={() => router.push(`/record?id=${rec.id}`)}
-                              className="block w-full text-left"
+                        {recs.map(({ child, record: rec }) => {
+                          const day = daysFromBirth(child.birth_date, rec.recorded_date);
+                          return (
+                            <BloomCard
+                              key={rec.id}
+                              soft
+                              className="cursor-pointer p-2.5"
                             >
-                              <div
-                                className="font-hand line-clamp-2"
-                                style={{ fontSize: 13, color: "var(--bloom-ink)", lineHeight: 1.4 }}
+                              <button
+                                type="button"
+                                onClick={() => router.push(`/record?id=${rec.id}`)}
+                                className="block w-full text-left"
                               >
-                                {rec.title}
-                              </div>
-                              <div
-                                className="mt-0.5 text-[12px]"
-                                style={{ color: "var(--bloom-ink-soft)" }}
-                              >
-                                {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}
-                              </div>
-                            </button>
-                          </BloomCard>
-                        ))}
+                                <div
+                                  className="font-hand line-clamp-2"
+                                  style={{ fontSize: 13, color: "var(--bloom-ink)", lineHeight: 1.4 }}
+                                >
+                                  {rec.title}
+                                </div>
+                                <div
+                                  className="mt-0.5 text-[12px]"
+                                  style={{ color: "var(--bloom-ink-soft)" }}
+                                >
+                                  {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}
+                                  <span className="ml-1.5" style={{ color: "var(--bloom-primary)" }}>
+                                    {day}日目
+                                  </span>
+                                </div>
+                              </button>
+                            </BloomCard>
+                          );
+                        })}
                       </div>
                     );
                   })}
