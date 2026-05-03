@@ -82,7 +82,14 @@ export function PlanProvider({ children }: { children: ReactNode }) {
         const userData = userSnap.data();
         const rawFamilyId = userData.family_id;
         const isRef = rawFamilyId && typeof rawFamilyId === "object" && "path" in rawFamilyId;
-        setDebugStage(`user-ok rawType=${typeof rawFamilyId} isRef=${isRef} keys=${Object.keys(userData).join(",")}`);
+        // 全フィールドを JSON 化して debug に出す（reference は path だけ抜く）
+        const dump = Object.entries(userData).map(([k, v]) => {
+          if (v && typeof v === "object" && "path" in v) {
+            return `${k}=ref:${(v as DocumentReference).path}`;
+          }
+          return `${k}=${typeof v}:${JSON.stringify(v).slice(0, 30)}`;
+        }).join(" / ");
+        setDebugStage(`user-ok ${dump}`);
         const familyRef = isRef ? (rawFamilyId as DocumentReference<DocumentData>) : null;
         if (!familyRef) {
           setPlan("free");
