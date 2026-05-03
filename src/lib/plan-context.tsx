@@ -70,10 +70,25 @@ export function PlanProvider({ children }: { children: ReactNode }) {
 
     (async () => {
       setDebugStage("fetching-user");
+      // SDK と REST API 両方で取って比較するデバッグ
       try {
-        // ローカルキャッシュをバイパスして必ずサーバーから取得。
-        // pending writes（最近の書き込みでまだサーバー未確定）に引きずられて
-        // family_id が見えなくなる問題を回避するため。
+        const idToken = await user.getIdToken();
+        const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+        const restRes = await fetch(
+          `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${user.uid}`,
+          { headers: { Authorization: `Bearer ${idToken}` } }
+        );
+        const restJson = await restRes.json();
+        const restKeys = restJson.fields ? Object.keys(restJson.fields).join(",") : "(no fields)";
+        console.log("[plan-context] REST API result:", restJson);
+        setDebugStage(`REST keys=${restKeys}`);
+        // 数秒見せるためにわざと待ってからSDK経由
+        await new Promise((r) => setTimeout(r, 1000));
+      } catch (err) {
+        console.error("[plan-context] REST API失敗:", err);
+      }
+
+      try {
         const userSnap = await getDocFromServer(doc(db, "users", user.uid));
         if (cancelled) return;
         if (!userSnap.exists()) {
