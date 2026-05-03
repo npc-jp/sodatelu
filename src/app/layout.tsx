@@ -96,8 +96,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  // PWA テーマカラー（amber-500）。ブラウザのアドレスバー・ステータスバーに反映される
-  themeColor: "#f59e0b",
+  // PWA テーマカラー（sage-green = bloom-primary）。ブラウザのアドレスバー・ステータスバーに反映される
+  themeColor: "#7BA85F",
   // ブラウザ既定のカラースキーム（明るめ）
   colorScheme: "light",
 };
