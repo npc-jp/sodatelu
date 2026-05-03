@@ -295,34 +295,48 @@ export default function ComparePage() {
                     style={{ height: 1, background: "var(--bloom-line-soft)" }}
                   />
                 </div>
-                {/* N列のカード */}
+                {/* N列のカード（同じ月齢に同じ子の記録が複数あれば縦積み） */}
                 <div
-                  className="grid gap-2"
+                  className="grid items-start gap-2"
                   style={{
                     gridTemplateColumns: `repeat(${kids.length}, ${COL_WIDTH}px)`,
                   }}
                 >
                   {kids.map((kid) => {
-                    const rec = row.records.find((r) => r.child.id === kid.id);
-                    if (!rec) {
+                    const recs = row.records.filter((r) => r.child.id === kid.id);
+                    if (recs.length === 0) {
                       // 空のセル（同じ月齢に他の子の記録だけある場合のスペーサー）
                       return <div key={kid.id} />;
                     }
                     return (
-                      <BloomCard key={kid.id} soft className="p-2.5">
-                        <div
-                          className="font-hand line-clamp-2"
-                          style={{ fontSize: 13, color: "var(--bloom-ink)", lineHeight: 1.4 }}
-                        >
-                          {rec.record.title}
-                        </div>
-                        <div
-                          className="mt-0.5 text-[12px]"
-                          style={{ color: "var(--bloom-ink-soft)" }}
-                        >
-                          {rec.record.recorded_date.toDate().toLocaleDateString("ja-JP")}
-                        </div>
-                      </BloomCard>
+                      <div key={kid.id} className="flex flex-col gap-1.5">
+                        {recs.map(({ record: rec }) => (
+                          <BloomCard
+                            key={rec.id}
+                            soft
+                            className="cursor-pointer p-2.5"
+                          >
+                            <button
+                              type="button"
+                              onClick={() => router.push(`/record?id=${rec.id}`)}
+                              className="block w-full text-left"
+                            >
+                              <div
+                                className="font-hand line-clamp-2"
+                                style={{ fontSize: 13, color: "var(--bloom-ink)", lineHeight: 1.4 }}
+                              >
+                                {rec.title}
+                              </div>
+                              <div
+                                className="mt-0.5 text-[12px]"
+                                style={{ color: "var(--bloom-ink-soft)" }}
+                              >
+                                {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}
+                              </div>
+                            </button>
+                          </BloomCard>
+                        ))}
+                      </div>
                     );
                   })}
                 </div>
