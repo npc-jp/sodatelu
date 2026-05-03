@@ -182,7 +182,7 @@ export default function MilestonesPage() {
                   fontSize: 12,
                 }}
               >
-                {recordedCount}件 きろく ・ あと{remaining}つ
+                {recordedCount}件 きろく ・ あと{remaining}件
               </div>
               <div
                 className="mt-2.5 overflow-hidden rounded"
