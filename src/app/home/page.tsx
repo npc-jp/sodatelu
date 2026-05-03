@@ -53,7 +53,8 @@ const CATEGORY_TAG_COLOR: { [key: string]: string } = {
 export default function HomePage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  const { plan, isPremium, loading: planLoading, familyPath, debugStage } = usePlan();
+  // プラン状態は将来のためフックは残すが、現状の home では参照しない
+  usePlan();
   const { children: kids, selectedChild: child, selectChild, refreshChildren, loading: childLoading } = useChild();
   const [records, setRecords] = useState<(GrowthRecord & { id: string })[]>([]);
   const [invitations, setInvitations] = useState<(Invitation & { id: string })[]>([]);
@@ -124,30 +125,6 @@ export default function HomePage() {
 
   return (
     <div className="flex h-full flex-col relative" style={{ background: "var(--bloom-bg)" }}>
-      {/* DEBUG: プラン状態表示（後で削除） */}
-      <div
-        style={{
-          background: isPremium ? "#7BA85F" : "#F18A4C",
-          color: "#fff",
-          padding: "4px 8px",
-          fontSize: 10,
-          fontFamily: "monospace",
-          textAlign: "left",
-          lineHeight: 1.5,
-          wordBreak: "break-all",
-        }}
-      >
-        DEBUG plan={plan} loading={String(planLoading)}
-        <br />
-        uid={user?.uid}
-        <br />
-        familyPath={familyPath || "(null)"}
-        <br />
-        stage={debugStage}
-        <br />
-        projectId={process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "(undefined)"}
-      </div>
-
       {/* ヘッダー */}
       <header className="flex items-center justify-between px-5 pt-3.5 pb-2">
         <div className="flex items-center gap-2">
