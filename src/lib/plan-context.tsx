@@ -25,6 +25,8 @@ type PlanContextType = {
   loading: boolean;
   /** 現在 onSnapshot で監視している family ドキュメントのパス（debug用） */
   familyPath: string | null;
+  /** debug用: PlanProviderで起きたステージ */
+  debugStage: string;
 };
 
 const PlanContext = createContext<PlanContextType>({
@@ -33,6 +35,7 @@ const PlanContext = createContext<PlanContextType>({
   refreshPlan: async () => {},
   loading: true,
   familyPath: null,
+  debugStage: "init",
 });
 
 export function PlanProvider({ children }: { children: ReactNode }) {
@@ -40,6 +43,8 @@ export function PlanProvider({ children }: { children: ReactNode }) {
   const [plan, setPlan] = useState<Plan>("free");
   const [loading, setLoading] = useState(true);
   const [familyPath, setFamilyPath] = useState<string | null>(null);
+  // debug用: PlanProviderで何が起きたか UI に出す
+  const [debugStage, setDebugStage] = useState<string>("init");
 
   // 手動更新用（admin画面の togglePlan が成功した直後など）
   async function fetchPlan() {
@@ -63,39 +68,50 @@ export function PlanProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
 
     (async () => {
+      setDebugStage("fetching-user");
       try {
-        console.log("[plan-context] start fetch for uid:", user.uid);
         const userSnap = await getDoc(doc(db, "users", user.uid));
         if (cancelled) return;
-        const userData = userSnap.exists() ? userSnap.data() : null;
-        console.log("[plan-context] user doc:", userData);
-        const familyRef = (userData?.family_id ?? null) as DocumentReference<DocumentData> | null;
-        console.log("[plan-context] family_id ref:", familyRef?.path);
+        if (!userSnap.exists()) {
+          setDebugStage("user-not-exists");
+          setPlan("free");
+          setFamilyPath(null);
+          setLoading(false);
+          return;
+        }
+        const userData = userSnap.data();
+        const rawFamilyId = userData.family_id;
+        const isRef = rawFamilyId && typeof rawFamilyId === "object" && "path" in rawFamilyId;
+        setDebugStage(`user-ok rawType=${typeof rawFamilyId} isRef=${isRef} keys=${Object.keys(userData).join(",")}`);
+        const familyRef = isRef ? (rawFamilyId as DocumentReference<DocumentData>) : null;
         if (!familyRef) {
-          console.log("[plan-context] no family_id → free");
           setPlan("free");
           setFamilyPath(null);
           setLoading(false);
           return;
         }
         setFamilyPath(familyRef.path);
+        setDebugStage(`watching ${familyRef.path}`);
         // families リアルタイム監視
         unsubscribe = onSnapshot(
           familyRef,
           (snap: DocumentSnapshot<DocumentData>) => {
             if (cancelled) return;
             const data = snap.exists() ? (snap.data() as { plan?: string }) : null;
-            console.log("[plan-context] onSnapshot fired. plan field =", data?.plan);
             setPlan(data?.plan === "premium" ? "premium" : "free");
+            setDebugStage(`snap plan=${data?.plan}`);
             setLoading(false);
           },
           (err: FirestoreError) => {
             console.error("[plan-context] onSnapshot失敗:", err);
+            setDebugStage(`snap-error ${err.code}`);
             setLoading(false);
           }
         );
       } catch (err) {
         console.error("[plan-context] users取得失敗:", err);
+        const code = (err as { code?: string })?.code || "unknown";
+        setDebugStage(`fetch-error ${code}`);
         setLoading(false);
       }
     })();
@@ -114,6 +130,7 @@ export function PlanProvider({ children }: { children: ReactNode }) {
         refreshPlan: fetchPlan,
         loading,
         familyPath,
+        debugStage,
       }}
     >
       {children}

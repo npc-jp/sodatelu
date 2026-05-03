@@ -53,7 +53,7 @@ const CATEGORY_TAG_COLOR: { [key: string]: string } = {
 export default function HomePage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  const { plan, isPremium, loading: planLoading, familyPath } = usePlan();
+  const { plan, isPremium, loading: planLoading, familyPath, debugStage } = usePlan();
   const { children: kids, selectedChild: child, selectChild, refreshChildren, loading: childLoading } = useChild();
   const [records, setRecords] = useState<(GrowthRecord & { id: string })[]>([]);
   const [invitations, setInvitations] = useState<(Invitation & { id: string })[]>([]);
@@ -142,6 +142,8 @@ export default function HomePage() {
         uid={user?.uid}
         <br />
         familyPath={familyPath || "(null)"}
+        <br />
+        stage={debugStage}
       </div>
 
       {/* ヘッダー */}
