@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  sodatelu アイコン（Bloom デザイン）
-  - 円形 sage-green (#7BA85F) 背景
+  sodatelu アイコン（Bloom デザイン・全面塗り）
+  - 全面 sage-green (#7BA85F) 背景
   - 中央に白い芽（双葉＋茎）
-  - 512x512 ベース、ViewBox で柔軟にスケール
+  - apple-touch-icon の透明黒塗り問題を回避するため全面塗り
 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="sodatelu">
-  <!-- 背景円 -->
-  <circle cx="256" cy="256" r="256" fill="#7BA85F"/>
-
-  <!-- 茎 -->
+  <rect width="512" height="512" fill="#7BA85F"/>
   <path d="M256 360 L256 250"
         stroke="#ffffff" stroke-width="14" stroke-linecap="round" fill="none"/>
-
-  <!-- 左の葉（双葉） -->
   <path d="M256 270
            C 256 230, 220 200, 170 200
            C 170 240, 210 270, 256 270 Z"
         fill="#ffffff"/>
-
-  <!-- 右の葉（双葉） -->
   <path d="M256 270
            C 256 230, 292 200, 342 200
            C 342 240, 302 270, 256 270 Z"
         fill="#ffffff"/>
-
-  <!-- 葉の中心の小さなくぼみ（茎との接続を自然に） -->
   <circle cx="256" cy="270" r="8" fill="#7BA85F"/>
 </svg>
