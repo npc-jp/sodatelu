@@ -118,7 +118,11 @@ export default function RootLayout({
         />
       </head>
       <body className="h-full antialiased" style={{ background: "var(--bloom-bg)", color: "var(--bloom-ink)" }}>
-        <Providers>{children}</Providers>
+        {/* モバイル前提アプリ。タブレット/PCでは max-w-md で中央配置し、
+            横長ビューポートでカレンダー等のレイアウトが崩れるのを防ぐ */}
+        <div className="mx-auto h-full w-full max-w-md">
+          <Providers>{children}</Providers>
+        </div>
       </body>
     </html>
   );

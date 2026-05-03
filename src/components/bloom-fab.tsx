@@ -33,7 +33,9 @@ export default function BloomFab({
         background: color,
         fontSize: 26,
         bottom: 100,
-        right: 20,
+        // ワイドビューでは max-w-md コンテナの右下に表示するため、
+        // 50vw から max-w-md の半分 (224px) を引いて 20px 内側に置く
+        right: "max(20px, calc(50vw - 204px))",
         zIndex: 5,
       }}
       aria-label={ariaLabel}

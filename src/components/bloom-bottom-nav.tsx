@@ -40,7 +40,7 @@ export default function BloomBottomNav({ current }: Props) {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 flex items-center justify-around bg-white pb-safe"
+      className="fixed bottom-0 left-1/2 flex w-full max-w-md -translate-x-1/2 items-center justify-around bg-white pb-safe"
       style={{
         borderTop: "2px solid var(--bloom-line)",
         padding: "10px 6px max(12px, env(safe-area-inset-bottom))",
