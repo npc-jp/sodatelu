@@ -113,14 +113,33 @@ export default function HomePage() {
   // フェーズ番号 → 「SEASON N」「よちよち期」のような表示
   const seasonLabel = `SEASON ${phase.number}`;
 
-  // 直近7件の記録を mini bar chart として表現（最新を accent 色）
+  // 直近7ヶ月の月別記録件数を mini bar chart として表現
+  // - 最新月が右端
+  // - 各棒の高さは件数に比例（最大件数=フルハイト、件数0でも6px は残して棒の存在感を保つ）
   const recentBars = (() => {
-    const bars: number[] = [];
-    const baseline = [10, 16, 8, 20, 28, 12, 24];
-    for (let i = 0; i < 7; i++) {
-      bars.push(records[i] ? baseline[i] : 6);
+    const now = new Date();
+    const months: { count: number }[] = [];
+    for (let i = 6; i >= 0; i--) {
+      months.push({ count: 0 });
     }
-    return bars;
+    // ym (year-month) で月を識別
+    const ymKeys: string[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      ymKeys.push(`${d.getFullYear()}-${d.getMonth()}`);
+    }
+    records.forEach((rec) => {
+      const d = rec.recorded_date.toDate();
+      const ym = `${d.getFullYear()}-${d.getMonth()}`;
+      const idx = ymKeys.indexOf(ym);
+      if (idx >= 0) months[idx].count++;
+    });
+    const max = Math.max(1, ...months.map((m) => m.count));
+    // 高さ: 件数0は 6px、最大件数は 32px に正規化
+    return months.map((m) => ({
+      height: m.count > 0 ? Math.max(8, Math.round((m.count / max) * 32)) : 6,
+      count: m.count,
+    }));
   })();
 
   return (
@@ -328,18 +347,34 @@ export default function HomePage() {
               </span>
             </div>
           </div>
-          <div className="mt-2.5 flex h-8 items-end gap-1.5">
-            {recentBars.map((h, i) => (
+          {/* 直近7ヶ月の月別件数。最新月（右端）はaccent色で強調 */}
+          <div className="mt-2.5 flex h-9 items-end gap-1.5">
+            {recentBars.map((bar, i) => (
               <div
                 key={i}
                 className="flex-1 rounded"
                 style={{
-                  height: h,
-                  background: i === 6 && records[6] ? "var(--bloom-accent)" : "var(--bloom-primary-soft)",
+                  height: bar.height,
+                  background:
+                    i === 6
+                      ? bar.count > 0
+                        ? "var(--bloom-accent)"
+                        : "var(--bloom-primary-soft)"
+                      : bar.count > 0
+                        ? "var(--bloom-primary)"
+                        : "var(--bloom-primary-soft)",
                   border: "1.5px solid var(--bloom-line)",
                 }}
+                title={`${bar.count}件`}
               />
             ))}
+          </div>
+          <div
+            className="mt-1.5 flex justify-between text-[10px]"
+            style={{ color: "var(--bloom-ink-soft)" }}
+          >
+            <span>6ヶ月前</span>
+            <span>今月</span>
           </div>
         </BloomCard>
 
