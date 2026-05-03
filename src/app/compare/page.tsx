@@ -17,13 +17,18 @@ import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
 import { Sprout, Star, TinyBars } from "@/components/illustrations";
 
-// 子どもごとのカラー（最大2人で primary / accent、3人以上は pink, yellow を追加）
+// 子どもごとのカラー（5人以上いる場合は色を循環）
 const CHILD_COLORS = [
   "var(--bloom-primary)",
   "var(--bloom-accent)",
   "var(--bloom-pink)",
   "var(--bloom-yellow)",
+  "#6B8FE8", // 青（5人目以降）
+  "#9B7FD9", // 紫（6人目以降）
 ];
+
+// 1列の幅（px）。5人くらいまでは画面に収まる、それ以上は横スクロール
+const COL_WIDTH = 140;
 
 // 記録日と生年月日から生後月齢を計算
 function monthsFromBirth(birthDate: Timestamp, recordDate: Timestamp): number {
@@ -193,138 +198,137 @@ export default function ComparePage() {
         </div>
       </header>
 
-      {/* きょうだいカラーチップ（最大2人を横並び表示、3人以上は折返し） */}
-      <div className="grid grid-cols-2 gap-2 px-3.5 pb-2 pt-1">
-        {kids.slice(0, 4).map((kid, i) => {
-          const color = CHILD_COLORS[i % CHILD_COLORS.length];
-          return (
-            <BloomCard
-              key={kid.id}
-              soft
-              color={color}
-              className="flex items-center gap-2 px-3 py-2.5 text-white"
-            >
-              <span
-                className="bloom-border flex items-center justify-center rounded-full"
-                style={{
-                  width: 30,
-                  height: 30,
-                  background: "var(--bloom-yellow)",
-                  fontFamily: "Yusei Magic, sans-serif",
-                  fontSize: 14,
-                  color: "var(--bloom-ink)",
-                }}
-              >
-                {kid.name.charAt(0)}
-              </span>
-              <div>
-                <div className="font-hand" style={{ fontSize: 13 }}>
-                  {kid.name}
-                </div>
-                <div className="text-[12px] opacity-95">
-                  {compactAge(kid.birth_date)}
-                </div>
-              </div>
-            </BloomCard>
-          );
-        })}
-      </div>
+      {/* 案内: スマホ横向きで見やすい */}
+      {kids.length >= 3 && (
+        <p
+          className="px-[18px] pb-1 text-[12px]"
+          style={{ color: "var(--bloom-ink-soft)" }}
+        >
+          ↔ よこにスクロール／スマホは横向きが見やすいです
+        </p>
+      )}
 
-      <main className="flex-1 overflow-y-auto px-3.5 pb-10 pt-3">
+      {/* タイムライン本体: 横スクロール領域。
+          ヘッダー（子ども名チップ）と各月齢行を同じ列幅で揃え、横方向に一緒にスクロールさせる */}
+      <main className="flex-1 overflow-x-auto overflow-y-auto pb-10">
         {timeline.length === 0 ? (
-          <BloomCard soft className="p-6 text-center">
-            <Sprout size={36} color="var(--bloom-primary)" />
-            <p
-              className="font-hand mt-3"
-              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
-            >
-              きろくをつけると 年表に ならびます
-            </p>
-          </BloomCard>
+          <div className="px-3.5 pt-3">
+            <BloomCard soft className="p-6 text-center">
+              <Sprout size={36} color="var(--bloom-primary)" />
+              <p
+                className="font-hand mt-3"
+                style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+              >
+                きろくをつけると 年表に ならびます
+              </p>
+            </BloomCard>
+          </div>
         ) : (
-          <>
-            {timeline.map((row, i) => {
-              // 左カラムは最初の子、右カラムは2番目以降の子（簡易: 最初の2人で分ける）
-              const firstKidId = kids[0]?.id;
-              const left = row.records.find((r) => r.child.id === firstKidId);
-              const right = row.records.find((r) => r.child.id !== firstKidId);
-              return (
-                <div
-                  key={i}
-                  className="grid items-center gap-1.5"
-                  style={{
-                    gridTemplateColumns: "1fr 60px 1fr",
-                    minHeight: 70,
-                    marginBottom: 4,
-                  }}
-                >
-                  {/* 左カラム */}
-                  <div>
-                    {left && (
-                      <BloomCard soft className="p-2.5">
-                        <div
-                          className="font-hand"
-                          style={{ fontSize: 13, color: "var(--bloom-ink)" }}
-                        >
-                          {left.record.title}
-                        </div>
-                        <div
-                          className="mt-0.5 text-[12px]"
-                          style={{ color: "var(--bloom-ink-soft)" }}
-                        >
-                          {left.record.recorded_date.toDate().toLocaleDateString("ja-JP")}
-                        </div>
-                      </BloomCard>
-                    )}
-                  </div>
-                  {/* 中央: 月齢ラベル + 縦線 */}
-                  <div className="relative text-center">
-                    <div
-                      className="absolute"
+          <div
+            className="min-w-max px-3.5 pt-1"
+            style={{ minWidth: kids.length * COL_WIDTH + 60 }}
+          >
+            {/* ヘッダー: きょうだいカラーチップを N列横並び */}
+            <div
+              className="sticky top-0 z-10 mb-2 grid gap-2 pb-2 pt-1"
+              style={{
+                gridTemplateColumns: `repeat(${kids.length}, ${COL_WIDTH}px)`,
+                background: "var(--bloom-bg)",
+              }}
+            >
+              {kids.map((kid, i) => {
+                const color = CHILD_COLORS[i % CHILD_COLORS.length];
+                return (
+                  <BloomCard
+                    key={kid.id}
+                    soft
+                    color={color}
+                    className="flex items-center gap-2 px-2.5 py-2 text-white"
+                  >
+                    <span
+                      className="bloom-border flex shrink-0 items-center justify-center rounded-full"
                       style={{
-                        left: "50%",
-                        top: -20,
-                        bottom: -20,
-                        width: 2,
-                        background: "var(--bloom-line-soft)",
-                        transform: "translateX(-50%)",
-                      }}
-                    />
-                    <div
-                      className="font-hand relative inline-block rounded-[10px] px-2 py-1"
-                      style={{
-                        background: "var(--bloom-bg)",
-                        fontSize: 12,
-                        color: "var(--bloom-ink-soft)",
-                        border: "1.5px solid var(--bloom-line-soft)",
+                        width: 28,
+                        height: 28,
+                        background: "var(--bloom-yellow)",
+                        fontFamily: "Yusei Magic, sans-serif",
+                        fontSize: 13,
+                        color: "var(--bloom-ink)",
                       }}
                     >
-                      {formatMonths(row.months)}
+                      {kid.name.charAt(0)}
+                    </span>
+                    <div className="min-w-0">
+                      <div
+                        className="font-hand truncate"
+                        style={{ fontSize: 13 }}
+                      >
+                        {kid.name}
+                      </div>
+                      <div className="text-[12px] opacity-95">
+                        {compactAge(kid.birth_date)}
+                      </div>
                     </div>
+                  </BloomCard>
+                );
+              })}
+            </div>
+
+            {/* 各月齢行: 月齢ラベル + N列のカード */}
+            {timeline.map((row, i) => (
+              <div key={i} className="mb-3">
+                {/* 月齢ラベル（行の上に小さく） */}
+                <div className="mb-1.5 flex items-center gap-2">
+                  <div
+                    className="font-hand inline-block rounded-[10px] px-2 py-0.5"
+                    style={{
+                      background: "var(--bloom-bg)",
+                      fontSize: 12,
+                      color: "var(--bloom-ink-soft)",
+                      border: "1.5px solid var(--bloom-line-soft)",
+                    }}
+                  >
+                    {formatMonths(row.months)}
                   </div>
-                  {/* 右カラム */}
-                  <div>
-                    {right && (
-                      <BloomCard soft className="p-2.5">
+                  <div
+                    className="flex-1"
+                    style={{ height: 1, background: "var(--bloom-line-soft)" }}
+                  />
+                </div>
+                {/* N列のカード */}
+                <div
+                  className="grid gap-2"
+                  style={{
+                    gridTemplateColumns: `repeat(${kids.length}, ${COL_WIDTH}px)`,
+                  }}
+                >
+                  {kids.map((kid) => {
+                    const rec = row.records.find((r) => r.child.id === kid.id);
+                    if (!rec) {
+                      // 空のセル（同じ月齢に他の子の記録だけある場合のスペーサー）
+                      return <div key={kid.id} />;
+                    }
+                    return (
+                      <BloomCard key={kid.id} soft className="p-2.5">
                         <div
-                          className="font-hand"
-                          style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                          className="font-hand line-clamp-2"
+                          style={{ fontSize: 13, color: "var(--bloom-ink)", lineHeight: 1.4 }}
                         >
-                          {right.record.title}
+                          {rec.record.title}
                         </div>
                         <div
                           className="mt-0.5 text-[12px]"
                           style={{ color: "var(--bloom-ink-soft)" }}
                         >
-                          {right.record.recorded_date.toDate().toLocaleDateString("ja-JP")}
+                          {rec.record.recorded_date.toDate().toLocaleDateString("ja-JP")}
                         </div>
                       </BloomCard>
-                    )}
-                  </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </>
+              </div>
+            ))}
+          </div>
         )}
       </main>
 

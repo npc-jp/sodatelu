@@ -29,6 +29,8 @@ const PROTECTED_PATHS = [
   "/family",
   "/add-child",
   "/edit-child",
+  "/edit-profile",
+  "/edit-email",
   "/admin",
   "/settings",
   "/upgrade",

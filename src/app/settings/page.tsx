@@ -313,10 +313,12 @@ export default function SettingsPage() {
         <Row
           label="ニックネーム"
           value={user.displayName || "未設定"}
+          onClick={() => router.push("/edit-profile")}
         />
         <Row
           label="メールアドレス"
           value={user.email || "未登録"}
+          onClick={() => router.push("/edit-email")}
         />
 
         {/* プライバシー */}

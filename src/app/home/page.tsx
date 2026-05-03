@@ -140,7 +140,7 @@ export default function HomePage() {
             style={{ background: "var(--bloom-yellow)" }}
             aria-label="ファミリー"
           >
-            <Heart size={14} color="var(--bloom-ink)" />
+            <Heart size={20} color="var(--bloom-ink)" />
           </button>
           <button
             onClick={() => router.push("/settings")}
@@ -148,7 +148,7 @@ export default function HomePage() {
             style={{ background: "#fff" }}
             aria-label="設定"
           >
-            <span className="font-hand" style={{ fontSize: 14, color: "var(--bloom-ink)" }}>⚙</span>
+            <span className="font-hand" style={{ fontSize: 20, color: "var(--bloom-ink)" }}>⚙</span>
           </button>
         </div>
       </header>

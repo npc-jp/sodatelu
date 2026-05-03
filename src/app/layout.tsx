@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Providers } from "@/components/providers";
+import AppShell from "@/components/app-shell";
 import "./globals.css";
 
 // 本番URL（ストア申請・OG展開で参照される）
@@ -118,11 +119,12 @@ export default function RootLayout({
         />
       </head>
       <body className="h-full antialiased" style={{ background: "var(--bloom-bg)", color: "var(--bloom-ink)" }}>
-        {/* モバイル前提アプリ。タブレット/PCでは max-w-md で中央配置し、
-            横長ビューポートでカレンダー等のレイアウトが崩れるのを防ぐ */}
-        <div className="mx-auto h-full w-full max-w-md">
-          <Providers>{children}</Providers>
-        </div>
+        {/* モバイル前提アプリ。AppShell が pathname を見て:
+            - 通常画面: max-w-md で中央配置
+            - /compare: 全幅に開放（N人横並び＋横スクロール用） */}
+        <Providers>
+          <AppShell>{children}</AppShell>
+        </Providers>
       </body>
     </html>
   );
