@@ -7,6 +7,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { usePlan } from "@/lib/plan-context";
 import { getRecordsByChild, updateChildPhoto, getInvitationsForEmail, type GrowthRecord, type Invitation } from "@/lib/firestore";
 import { useChild } from "@/lib/child-context";
 import { uploadImage } from "@/lib/storage";
@@ -52,6 +53,7 @@ const CATEGORY_TAG_COLOR: { [key: string]: string } = {
 export default function HomePage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
+  const { plan, isPremium, loading: planLoading } = usePlan();
   const { children: kids, selectedChild: child, selectChild, refreshChildren, loading: childLoading } = useChild();
   const [records, setRecords] = useState<(GrowthRecord & { id: string })[]>([]);
   const [invitations, setInvitations] = useState<(Invitation & { id: string })[]>([]);
@@ -122,6 +124,20 @@ export default function HomePage() {
 
   return (
     <div className="flex h-full flex-col relative" style={{ background: "var(--bloom-bg)" }}>
+      {/* DEBUG: プラン状態表示（後で削除） */}
+      <div
+        style={{
+          background: isPremium ? "#7BA85F" : "#F18A4C",
+          color: "#fff",
+          padding: "4px 8px",
+          fontSize: 11,
+          fontFamily: "monospace",
+          textAlign: "center",
+        }}
+      >
+        DEBUG: plan={plan} | isPremium={String(isPremium)} | planLoading={String(planLoading)} | uid={user?.uid?.slice(0, 8)}
+      </div>
+
       {/* ヘッダー */}
       <header className="flex items-center justify-between px-5 pt-3.5 pb-2">
         <div className="flex items-center gap-2">
