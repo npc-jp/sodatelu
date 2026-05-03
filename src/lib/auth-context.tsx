@@ -8,7 +8,7 @@
 // 軽量に検知するための印で、本物のセキュリティ境界は Firestore Rules で担保している。
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
 type AuthContextType = {
@@ -49,20 +49,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // proxy.ts 用の認証印 cookie を更新
       if (user) {
         setAuthCookie();
-        // users ドキュメントに displayName/email を保存（merge でドキュメント無くても作成）
-        // これがないと /family のメンバー一覧で「?」表示になる
+        // users ドキュメントを必要時のみ初期化:
+        //   - ドキュメントが無い → 初回ログインなので作成（display_name/email を設定）
+        //   - 既存 → 何もしない（family_id 等が既に設定されているので、毎回 setDoc すると
+        //     pending writes でPlanProvider 等の getDoc が一時的に古い状態を返す問題があった）
+        // last_login_at の更新は今は省略（必要なら別タイミングで実装）
         try {
-          await setDoc(
-            doc(db, "users", user.uid),
-            {
+          const userRef = doc(db, "users", user.uid);
+          const snap = await getDoc(userRef);
+          if (!snap.exists()) {
+            await setDoc(userRef, {
               email: user.email,
               display_name: user.displayName || user.email,
+              created_at: serverTimestamp(),
               last_login_at: serverTimestamp(),
-            },
-            { merge: true }
-          );
+            });
+          }
         } catch (e) {
-          // ログイン直後の権限エラーなどは無視（家族未所属時など）
           console.error("[auth-context] users 同期失敗:", e);
         }
       } else {
