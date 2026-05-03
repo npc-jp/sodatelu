@@ -53,7 +53,7 @@ const CATEGORY_TAG_COLOR: { [key: string]: string } = {
 export default function HomePage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
-  const { plan, isPremium, loading: planLoading } = usePlan();
+  const { plan, isPremium, loading: planLoading, familyPath } = usePlan();
   const { children: kids, selectedChild: child, selectChild, refreshChildren, loading: childLoading } = useChild();
   const [records, setRecords] = useState<(GrowthRecord & { id: string })[]>([]);
   const [invitations, setInvitations] = useState<(Invitation & { id: string })[]>([]);
@@ -130,12 +130,18 @@ export default function HomePage() {
           background: isPremium ? "#7BA85F" : "#F18A4C",
           color: "#fff",
           padding: "4px 8px",
-          fontSize: 11,
+          fontSize: 10,
           fontFamily: "monospace",
-          textAlign: "center",
+          textAlign: "left",
+          lineHeight: 1.5,
+          wordBreak: "break-all",
         }}
       >
-        DEBUG: plan={plan} | isPremium={String(isPremium)} | planLoading={String(planLoading)} | uid={user?.uid?.slice(0, 8)}
+        DEBUG plan={plan} loading={String(planLoading)}
+        <br />
+        uid={user?.uid}
+        <br />
+        familyPath={familyPath || "(null)"}
       </div>
 
       {/* ヘッダー */}

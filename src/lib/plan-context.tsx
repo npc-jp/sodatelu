@@ -23,6 +23,8 @@ type PlanContextType = {
   isPremium: boolean;
   refreshPlan: () => Promise<void>;
   loading: boolean;
+  /** 現在 onSnapshot で監視している family ドキュメントのパス（debug用） */
+  familyPath: string | null;
 };
 
 const PlanContext = createContext<PlanContextType>({
@@ -30,12 +32,14 @@ const PlanContext = createContext<PlanContextType>({
   isPremium: false,
   refreshPlan: async () => {},
   loading: true,
+  familyPath: null,
 });
 
 export function PlanProvider({ children }: { children: ReactNode }) {
   const { user, loading: authLoading } = useAuth();
   const [plan, setPlan] = useState<Plan>("free");
   const [loading, setLoading] = useState(true);
+  const [familyPath, setFamilyPath] = useState<string | null>(null);
 
   // 手動更新用（admin画面の togglePlan が成功した直後など）
   async function fetchPlan() {
@@ -70,9 +74,11 @@ export function PlanProvider({ children }: { children: ReactNode }) {
         if (!familyRef) {
           console.log("[plan-context] no family_id → free");
           setPlan("free");
+          setFamilyPath(null);
           setLoading(false);
           return;
         }
+        setFamilyPath(familyRef.path);
         // families リアルタイム監視
         unsubscribe = onSnapshot(
           familyRef,
@@ -107,6 +113,7 @@ export function PlanProvider({ children }: { children: ReactNode }) {
         isPremium: plan === "premium",
         refreshPlan: fetchPlan,
         loading,
+        familyPath,
       }}
     >
       {children}
