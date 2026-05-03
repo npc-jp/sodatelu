@@ -1,15 +1,19 @@
 // プラン判定ユーティリティ
-// families.plan フィールドで無料/有料を判定する
+// families.plan フィールドで無料/有料を判定する。
+// users.beta_tester === true のユーザーは永久にプレミアム扱い（βテスター特典）
 import { doc, getDoc, type DocumentReference } from "firebase/firestore";
 import { db } from "./firebase";
 import type { Family } from "./firestore";
 
 export type Plan = "free" | "premium";
 
-// ユーザーのプランを取得
+// ユーザーのプランを取得（βテスターはpremium扱い）
 export async function getUserPlan(userId: string): Promise<Plan> {
   const userSnap = await getDoc(doc(db, "users", userId));
   if (!userSnap.exists()) return "free";
+
+  // βテスターは永久プレミアム
+  if (userSnap.data().beta_tester === true) return "premium";
 
   // family_id は DocumentReference<Family> として扱う
   const familyRef = userSnap.data().family_id as DocumentReference<Family> | null;

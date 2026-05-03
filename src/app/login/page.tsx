@@ -45,6 +45,9 @@ export default function LoginPage() {
     try {
       if (isSignUp) {
         const result = await createUserWithEmailAndPassword(auth, email, password);
+        // β期間中（NEXT_PUBLIC_IS_BETA=1）に登録したユーザーは
+        // 永久プレミアムの特典付与（テスター感謝＋実用フィードバック向上のため）
+        const isBetaPeriod = process.env.NEXT_PUBLIC_IS_BETA === "1";
         await setDoc(doc(db, "users", result.user.uid), {
           email: result.user.email,
           display_name: "",
@@ -55,6 +58,7 @@ export default function LoginPage() {
           family_id: null,
           role: "parent",
           is_handed_over: false,
+          beta_tester: isBetaPeriod,
         });
       } else {
         await signInWithEmailAndPassword(auth, email, password);

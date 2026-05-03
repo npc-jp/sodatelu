@@ -36,6 +36,8 @@ export function PlanProvider({ children }: { children: ReactNode }) {
   const { user, loading: authLoading } = useAuth();
   const [plan, setPlan] = useState<Plan>("free");
   const [loading, setLoading] = useState(true);
+  // βテスター特典（永久プレミアム）。users.beta_tester=true で有効化される
+  const [isBetaTester, setIsBetaTester] = useState(false);
 
   // 手動更新用（admin画面の togglePlan が成功した直後など）
   async function fetchPlan() {
@@ -49,6 +51,7 @@ export function PlanProvider({ children }: { children: ReactNode }) {
     if (authLoading) return;
     if (!user) {
       setPlan("free");
+      setIsBetaTester(false);
       setLoading(false);
       return;
     }
@@ -66,10 +69,13 @@ export function PlanProvider({ children }: { children: ReactNode }) {
         if (cancelled) return;
         if (!userSnap.exists()) {
           setPlan("free");
+          setIsBetaTester(false);
           setLoading(false);
           return;
         }
         const userData = userSnap.data();
+        // βテスター特典フラグを反映
+        setIsBetaTester(userData.beta_tester === true);
         const rawFamilyId = userData.family_id;
         const isRef = rawFamilyId && typeof rawFamilyId === "object" && "path" in rawFamilyId;
         const familyRef = isRef ? (rawFamilyId as DocumentReference<DocumentData>) : null;
@@ -108,7 +114,8 @@ export function PlanProvider({ children }: { children: ReactNode }) {
     <PlanContext.Provider
       value={{
         plan,
-        isPremium: plan === "premium",
+        // βテスターは永久プレミアム扱い
+        isPremium: plan === "premium" || isBetaTester,
         refreshPlan: fetchPlan,
         loading,
       }}
