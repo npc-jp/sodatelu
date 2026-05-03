@@ -44,19 +44,19 @@ function formatMonths(months: number): string {
   if (months < 12) return `${months}ヶ月`;
   const y = Math.floor(months / 12);
   const m = months % 12;
-  return m > 0 ? `${y}歳${m}m` : `${y}歳`;
+  return m > 0 ? `${y}歳${m}ヶ月` : `${y}歳`;
 }
 
-// 年齢「○y○m」形式（チップ用）
+// 年齢チップ用: 「11歳7ヶ月」フル日本語表記
 function compactAge(birthDate: Timestamp): string {
   const birth = birthDate.toDate();
   const now = new Date();
   const diffMs = now.getTime() - birth.getTime();
   const totalMonths = Math.floor(diffMs / (30.44 * 24 * 60 * 60 * 1000));
-  if (totalMonths < 12) return `${totalMonths}m`;
+  if (totalMonths < 12) return `${totalMonths}ヶ月`;
   const y = Math.floor(totalMonths / 12);
   const m = totalMonths % 12;
-  return m > 0 ? `${y}y${m}m` : `${y}y`;
+  return m > 0 ? `${y}歳${m}ヶ月` : `${y}歳`;
 }
 
 type TimelineRow = {
