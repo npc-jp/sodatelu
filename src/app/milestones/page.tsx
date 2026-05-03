@@ -10,7 +10,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { getChildrenByUser, getRecordsByChild, type GrowthRecord } from "@/lib/firestore";
+import { useChild } from "@/lib/child-context";
+import { getRecordsByChild, type GrowthRecord } from "@/lib/firestore";
 import { MILESTONES } from "@/lib/milestones-data";
 import { getPhase, PHASES } from "@/lib/phases";
 import BloomBottomNav from "@/components/bloom-bottom-nav";
@@ -28,28 +29,27 @@ const PHASE_COLORS: { [key: number]: string } = {
 export default function MilestonesPage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
+  // ChildContext の selectedChild に追従。home で選んだ子のめやすが見える
+  const { selectedChild, loading: childLoading } = useChild();
   const [currentPhase, setCurrentPhase] = useState(1);
   const [achievedIds, setAchievedIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
-  const [childName, setChildName] = useState("");
+  const childName = selectedChild?.name ?? "";
 
   useEffect(() => {
-    if (authLoading || !user) return;
+    if (authLoading || childLoading || !user) return;
+    if (!selectedChild) {
+      setLoading(false);
+      return;
+    }
 
     async function fetchData() {
-      const kids = await getChildrenByUser(user!.uid);
-      if (kids.length === 0) {
-        setLoading(false);
-        return;
-      }
-
-      const child = kids[0];
-      setChildName(child.name);
-      const phase = getPhase(child.birth_date.toDate());
+      if (!selectedChild) return;
+      const phase = getPhase(selectedChild.birth_date.toDate());
       setCurrentPhase(phase.number);
 
       // 記録済みマイルストーンを取得（記録に milestone_id があるもの）
-      const records = await getRecordsByChild(child.id);
+      const records = await getRecordsByChild(selectedChild.id);
       const achieved = new Set<string>();
       records.forEach((rec: GrowthRecord & { id: string }) => {
         if (rec.milestone_id) {
@@ -61,7 +61,7 @@ export default function MilestonesPage() {
     }
 
     fetchData();
-  }, [user, authLoading]);
+  }, [user, authLoading, childLoading, selectedChild]);
 
   // 選択中フェーズのマイルストーン
   const filteredMilestones = MILESTONES.filter((m) => m.phase === currentPhase);
