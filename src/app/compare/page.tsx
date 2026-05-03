@@ -314,7 +314,14 @@ export default function ComparePage() {
                   }}
                 >
                   {kids.map((kid) => {
-                    const recs = row.records.filter((r) => r.child.id === kid.id);
+                    // 同月齢内の記録を「日付古い順」でソート（上から下へ時系列）
+                    const recs = row.records
+                      .filter((r) => r.child.id === kid.id)
+                      .slice()
+                      .sort(
+                        (a, b) =>
+                          a.record.recorded_date.toMillis() - b.record.recorded_date.toMillis()
+                      );
                     if (recs.length === 0) {
                       // 空のセル（同じ月齢に他の子の記録だけある場合のスペーサー）
                       return <div key={kid.id} />;
@@ -340,12 +347,12 @@ export default function ComparePage() {
                                 >
                                   {rec.title}
                                 </div>
-                                <div
-                                  className="mt-0.5 text-[12px]"
-                                  style={{ color: "var(--bloom-ink-soft)" }}
-                                >
-                                  {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}
-                                  <span className="ml-1.5" style={{ color: "var(--bloom-primary)" }}>
+                                {/* 日付は左、N日目は右に寄せる */}
+                                <div className="mt-0.5 flex items-center justify-between gap-1.5 text-[12px]">
+                                  <span style={{ color: "var(--bloom-ink-soft)" }}>
+                                    {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}
+                                  </span>
+                                  <span style={{ color: "var(--bloom-primary)" }}>
                                     {day}日目
                                   </span>
                                 </div>
