@@ -5,6 +5,7 @@ import {
   doc,
   addDoc,
   getDoc,
+  getDocFromServer,
   getDocs,
   updateDoc,
   deleteDoc,
@@ -186,8 +187,11 @@ export async function getChildrenByFamily(familyId: string) {
 // === ユーザーのchildren取得（後方互換 + family_id対応） ===
 
 export async function getChildrenByUser(userId: string) {
-  // まずユーザーのfamily_idを取得
-  const userSnap = await getDoc(doc(db, "users", userId));
+  // まずユーザーのfamily_idを取得。
+  // getDocFromServer を使うのは pending writes に引きずられて family_id が
+  // 一時的に見えなくなる問題（PlanProvider と同じ）を回避するため。
+  // 別端末初回ログイン時に「子どもがいない」と誤判定されるのを防ぐ。
+  const userSnap = await getDocFromServer(doc(db, "users", userId));
   if (!userSnap.exists()) return [];
 
   const familyRef = userSnap.data().family_id;

@@ -11,7 +11,7 @@ import { usePlan } from "@/lib/plan-context";
 import { getRecordsByChild, updateChildPhoto, getInvitationsForEmail, type GrowthRecord, type Invitation } from "@/lib/firestore";
 import { useChild } from "@/lib/child-context";
 import { uploadImage } from "@/lib/storage";
-import { doc, getDoc, Timestamp } from "firebase/firestore";
+import { doc, getDocFromServer, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getPhase } from "@/lib/phases";
 import BloomBottomNav from "@/components/bloom-bottom-nav";
@@ -71,7 +71,7 @@ export default function HomePage() {
       //   - family_id なし → 初回ユーザー → /onboarding（家族から作る）
       //   - family_id あり → 全削除済の既存ユーザー → /add-child（家族はあるので子だけ追加）
       // これがないと既存家族が孤児化したり、onboarding ループになったりする
-      getDoc(doc(db, "users", user.uid))
+      getDocFromServer(doc(db, "users", user.uid))
         .then((snap) => {
           const fam = snap.exists() ? snap.data().family_id : null;
           router.replace(fam ? "/add-child" : "/onboarding");
