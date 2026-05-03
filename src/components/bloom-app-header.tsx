@@ -95,7 +95,7 @@ export default function BloomAppHeader({
             )}
             {subtitle && (
               <p
-                className="mt-0.5 truncate text-[11px]"
+                className="mt-0.5 truncate text-[12px]"
                 style={{
                   color: textColor === "var(--bloom-ink)" ? "var(--bloom-ink-soft)" : textColor,
                   opacity: textColor === "var(--bloom-ink)" ? 1 : 0.9,

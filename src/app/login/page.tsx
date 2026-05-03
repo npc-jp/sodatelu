@@ -223,7 +223,7 @@ export default function LoginPage() {
 
             {error && (
               <div
-                className="rounded-lg px-3 py-2 text-xs"
+                className="rounded-lg px-3 py-2 text-[13px]"
                 style={{ background: "#FCE4D2", color: "#A8421B" }}
               >
                 {error}
@@ -243,7 +243,7 @@ export default function LoginPage() {
               {loading ? "処理中…" : isSignUp ? "登録してはじめる" : "はじめる"}
             </button>
 
-            <p className="pt-2 text-center text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
+            <p className="pt-2 text-center text-[13px]" style={{ color: "var(--bloom-ink-soft)" }}>
               {isSignUp ? "すでにアカウントをお持ちですか？" : "アカウントをお持ちでないですか？"}
               <button
                 type="button"
@@ -259,7 +259,7 @@ export default function LoginPage() {
             </p>
           </form>
 
-          <p className="mt-4 text-center text-[11px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
+          <p className="mt-4 text-center text-[12px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
             登録することで
             <Link
               href="/privacy"

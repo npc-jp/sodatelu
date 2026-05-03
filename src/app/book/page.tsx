@@ -115,7 +115,7 @@ export default function BookPage() {
           アルバム
         </h1>
         <div
-          className="ml-auto text-[11px]"
+          className="ml-auto text-[12px]"
           style={{ color: "var(--bloom-ink-soft)" }}
         >
           {records.length}件
@@ -137,12 +137,12 @@ export default function BookPage() {
                     background: isActive ? "var(--bloom-primary)" : "#fff",
                     color: isActive ? "#fff" : "var(--bloom-ink)",
                     fontFamily: "Yusei Magic, sans-serif",
-                    fontSize: 12,
+                    fontSize: 13,
                   }}
                 >
                   <span
                     className="flex h-5 w-5 items-center justify-center rounded-full font-hand"
-                    style={{ background: "var(--bloom-yellow)", fontSize: 11, color: "var(--bloom-ink)" }}
+                    style={{ background: "var(--bloom-yellow)", fontSize: 12, color: "var(--bloom-ink)" }}
                   >
                     {kid.name.charAt(0)}
                   </span>
@@ -169,7 +169,7 @@ export default function BookPage() {
                 color: active ? "#fff" : "var(--bloom-ink)",
                 border: "1.5px solid var(--bloom-line)",
                 boxShadow: active ? "2px 2px 0 var(--bloom-line)" : "none",
-                fontSize: 11,
+                fontSize: 12,
               }}
             >
               {f.label}
@@ -219,7 +219,7 @@ export default function BookPage() {
                   style={{ height: 1, background: "var(--bloom-line-soft)" }}
                 />
                 <span
-                  className="text-[10px]"
+                  className="text-[12px]"
                   style={{ color: "var(--bloom-ink-soft)" }}
                 >
                   {recs.length}件
@@ -262,7 +262,7 @@ export default function BookPage() {
                               className="font-hand inline-block rounded-lg px-2 py-0.5 text-white"
                               style={{
                                 background: categoryColor(rec.category),
-                                fontSize: 10,
+                                fontSize: 12,
                                 border: "1.5px solid var(--bloom-line)",
                               }}
                             >
@@ -276,7 +276,7 @@ export default function BookPage() {
                             </span>
                           </div>
                           <span
-                            className="ml-2 shrink-0 text-[10px]"
+                            className="ml-2 shrink-0 text-[12px]"
                             style={{ color: "var(--bloom-ink-soft)" }}
                           >
                             {`${rec.recorded_date.toDate().getMonth() + 1}/${rec.recorded_date.toDate().getDate()}`}
@@ -284,14 +284,14 @@ export default function BookPage() {
                         </div>
                         {rec.memo && (
                           <p
-                            className="mt-1 line-clamp-2 text-[11px]"
+                            className="mt-1 line-clamp-2 text-[12px]"
                             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
                           >
                             {rec.memo}
                           </p>
                         )}
                         <div
-                          className="mt-2 inline-block rounded-full px-2 py-0.5 text-[10px]"
+                          className="mt-2 inline-block rounded-full px-2 py-0.5 text-[12px]"
                           style={{
                             background: "var(--bloom-primary-soft)",
                             color: "var(--bloom-ink)",

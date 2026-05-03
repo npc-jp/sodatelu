@@ -270,7 +270,7 @@ export default function FamilyPage() {
                     {kid.name}
                   </div>
                   <div
-                    className="mt-0.5 text-[11px]"
+                    className="mt-0.5 text-[12px]"
                     style={{ color: "var(--bloom-ink-soft)" }}
                   >
                     {compactAge(kid.birth_date.toDate().getTime())}
@@ -314,7 +314,7 @@ export default function FamilyPage() {
               きょうだいを追加
             </div>
             <div
-              className="mt-0.5 text-[10px]"
+              className="mt-0.5 text-[12px]"
               style={{ color: "var(--bloom-ink-soft)" }}
             >
               2人目から年表が並びます
@@ -363,14 +363,14 @@ export default function FamilyPage() {
                   {isMe ? "あなた" : member.display_name || member.email}
                 </div>
                 <div
-                  className="text-[10px] truncate"
+                  className="text-[12px] truncate"
                   style={{ color: "var(--bloom-ink-soft)" }}
                 >
                   {member.email}
                 </div>
               </div>
               <span
-                className="rounded-md px-2 py-0.5 text-[9px]"
+                className="rounded-md px-2 py-0.5 text-[12px]"
                 style={{
                   background: "var(--bloom-bg)",
                   border: "1.5px solid var(--bloom-line-soft)",
@@ -387,7 +387,7 @@ export default function FamilyPage() {
         {pendingInvitations.length > 0 && (
           <div className="mt-4">
             <div
-              className="mb-2 text-[11px]"
+              className="mb-2 text-[12px]"
               style={{ color: "var(--bloom-ink-soft)" }}
             >
               招待中…
@@ -411,13 +411,13 @@ export default function FamilyPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div
-                    className="truncate text-[12px]"
+                    className="truncate text-[13px]"
                     style={{ color: "var(--bloom-ink)" }}
                   >
                     {inv.invited_email}
                   </div>
                   <div
-                    className="text-[10px]"
+                    className="text-[12px]"
                     style={{ color: "var(--bloom-ink-soft)" }}
                   >
                     承認待ち
@@ -488,7 +488,7 @@ export default function FamilyPage() {
         )}
 
         <p
-          className="mt-3 text-center text-[10px]"
+          className="mt-3 text-center text-[12px]"
           style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
         >
           招待コードを送ると、相手も
@@ -498,7 +498,7 @@ export default function FamilyPage() {
 
         {status && (
           <p
-            className="mt-3 text-center text-[12px]"
+            className="mt-3 text-center text-[13px]"
             style={{ color: "var(--bloom-ink)" }}
           >
             {status}

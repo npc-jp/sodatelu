@@ -142,7 +142,7 @@ export default function ComparePage() {
             >
               きょうだいの 成長を ならべて見よう
             </p>
-            <p className="mt-2 text-[11px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
+            <p className="mt-2 text-[12px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
               {kids.length === 0
                 ? "まずは お子さまを 追加してください"
                 : "もう一人 追加すると 年表が 並びます"}
@@ -185,7 +185,7 @@ export default function ComparePage() {
         <div className="ml-auto flex items-center gap-1.5">
           <Star size={14} color="var(--bloom-yellow)" />
           <span
-            className="text-[11px]"
+            className="text-[12px]"
             style={{ color: "var(--bloom-ink-soft)" }}
           >
             月齢ぞろえ
@@ -221,7 +221,7 @@ export default function ComparePage() {
                 <div className="font-hand" style={{ fontSize: 13 }}>
                   {kid.name}
                 </div>
-                <div className="text-[10px] opacity-95">
+                <div className="text-[12px] opacity-95">
                   {compactAge(kid.birth_date)}
                 </div>
               </div>
@@ -264,12 +264,12 @@ export default function ComparePage() {
                       <BloomCard soft className="p-2.5">
                         <div
                           className="font-hand"
-                          style={{ fontSize: 12, color: "var(--bloom-ink)" }}
+                          style={{ fontSize: 13, color: "var(--bloom-ink)" }}
                         >
                           {left.record.title}
                         </div>
                         <div
-                          className="mt-0.5 text-[10px]"
+                          className="mt-0.5 text-[12px]"
                           style={{ color: "var(--bloom-ink-soft)" }}
                         >
                           {left.record.recorded_date.toDate().toLocaleDateString("ja-JP")}
@@ -294,7 +294,7 @@ export default function ComparePage() {
                       className="font-hand relative inline-block rounded-[10px] px-2 py-1"
                       style={{
                         background: "var(--bloom-bg)",
-                        fontSize: 11,
+                        fontSize: 12,
                         color: "var(--bloom-ink-soft)",
                         border: "1.5px solid var(--bloom-line-soft)",
                       }}
@@ -308,12 +308,12 @@ export default function ComparePage() {
                       <BloomCard soft className="p-2.5">
                         <div
                           className="font-hand"
-                          style={{ fontSize: 12, color: "var(--bloom-ink)" }}
+                          style={{ fontSize: 13, color: "var(--bloom-ink)" }}
                         >
                           {right.record.title}
                         </div>
                         <div
-                          className="mt-0.5 text-[10px]"
+                          className="mt-0.5 text-[12px]"
                           style={{ color: "var(--bloom-ink-soft)" }}
                         >
                           {right.record.recorded_date.toDate().toLocaleDateString("ja-JP")}

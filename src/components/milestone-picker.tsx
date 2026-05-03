@@ -52,14 +52,14 @@ export default function MilestonePicker({
             {/* フェーズ見出し */}
             <header className="sticky top-0 z-10 flex items-center gap-2 bg-amber-50/95 px-4 py-2 backdrop-blur-sm">
               <Twemoji emoji={phase.emoji} size={16} ariaLabel="" />
-              <h3 className="text-xs font-bold text-amber-700">
+              <h3 className="text-[13px] font-bold text-amber-700">
                 {phase.ageRange}（{phase.name}）
               </h3>
             </header>
 
             {/* 中身: 残っている項目があれば一覧、なければ温かいメッセージ */}
             {available.length === 0 ? (
-              <div className="flex items-center justify-center gap-2 px-4 py-4 text-xs text-slate-400">
+              <div className="flex items-center justify-center gap-2 px-4 py-4 text-[13px] text-slate-400">
                 <Twemoji emoji="🌱" size={14} ariaLabel="" />
                 <span>すべてきろく済み</span>
               </div>
@@ -72,14 +72,14 @@ export default function MilestonePicker({
                       onClick={() => onSelect(ms)}
                       className="flex w-full items-start gap-3 border-t border-slate-50 px-4 py-3 text-left transition-colors first:border-t-0 hover:bg-amber-50"
                     >
-                      <span className="mt-0.5 font-mono text-xs text-slate-400">
+                      <span className="mt-0.5 font-mono text-[13px] text-slate-400">
                         {ms.id}
                       </span>
                       <div className="flex-1">
                         <p className="text-sm font-medium text-slate-800">
                           {ms.title}
                         </p>
-                        <p className="text-xs text-slate-400">
+                        <p className="text-[13px] text-slate-400">
                           {ms.age_hint} ・ {ms.category}
                         </p>
                       </div>

@@ -76,7 +76,7 @@ export default function AppHeader({
           ) : (
             <div className="min-w-0">
               {subtitle && subtitlePosition === "above" && (
-                <p className="text-xs text-amber-100">{subtitle}</p>
+                <p className="text-[13px] text-amber-100">{subtitle}</p>
               )}
               {title && (
                 <h1 className="truncate text-xl font-bold text-white">

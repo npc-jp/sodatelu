@@ -57,7 +57,7 @@ export default function MilestoneStats({ ageHint, evidence, currentMonths }: Pro
     <section className="space-y-4">
       <div>
         <h2 className="text-base font-bold text-slate-700">めやす範囲</h2>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="mt-1 text-[13px] text-slate-500">
           時期はあくまで参考です。お子さまのペースで大丈夫。
         </p>
       </div>
@@ -74,12 +74,12 @@ export default function MilestoneStats({ ageHint, evidence, currentMonths }: Pro
         {range ? (
           <>
             <MilestoneRangeBar range={range} currentMonths={currentMonths} />
-            <p className="mt-3 text-[11px] leading-relaxed text-slate-400">
+            <p className="mt-3 text-[12px] leading-relaxed text-slate-400">
               {evidenceInfo.sources}
             </p>
           </>
         ) : (
-          <p className="text-xs leading-relaxed text-slate-500">
+          <p className="text-[13px] leading-relaxed text-slate-500">
             このマイルストーンは「{ageHint}」を目安にしています。
             個人差が大きいので、お子さまのペースを見守りましょう。
           </p>
@@ -93,18 +93,18 @@ export default function MilestoneStats({ ageHint, evidence, currentMonths }: Pro
           <h3 className="text-sm font-bold text-slate-600">
             sodateluみんなの記録
           </h3>
-          <span className="ml-auto rounded-full bg-white px-2 py-0.5 text-[10px] font-medium text-slate-500">
+          <span className="ml-auto rounded-full bg-white px-2 py-0.5 text-[12px] font-medium text-slate-500">
             準備中
           </span>
         </div>
-        <p className="text-xs leading-relaxed text-slate-500">
+        <p className="text-[13px] leading-relaxed text-slate-500">
           sodateluを使っているご家族の記録から、
           みんなのペースをまもなくお届けする予定です。
         </p>
       </div>
 
       {/* 末尾の安心フッター（NGワード回避と「ペース」言語の徹底） */}
-      <p className="px-1 text-[11px] leading-relaxed text-slate-400">
+      <p className="px-1 text-[12px] leading-relaxed text-slate-400">
         ※ 範囲はあくまで目安です。個人差があるので、
         お子さまのペースで大丈夫。気になることがあれば、
         かかりつけの先生に相談してみてくださいね。

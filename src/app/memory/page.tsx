@@ -128,7 +128,7 @@ export default function MemoryPage() {
             <WavyLine width={120} color="var(--bloom-accent)" stroke={2} />
           </div>
           <div
-            className="mt-2.5 text-[11px]"
+            className="mt-2.5 text-[12px]"
             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
           >
             きみが まだ ちいさかった ころの
@@ -140,7 +140,7 @@ export default function MemoryPage() {
         {/* メモリー */}
         {recordsLoading ? (
           <BloomCard soft className="p-4 text-center">
-            <p className="text-xs" style={{ color: "var(--bloom-ink-soft)" }}>
+            <p className="text-[13px]" style={{ color: "var(--bloom-ink-soft)" }}>
               読み込み中…
             </p>
           </BloomCard>
@@ -154,7 +154,7 @@ export default function MemoryPage() {
               写真付きの きろくが まだありません
             </p>
             <p
-              className="mt-2 text-[11px]"
+              className="mt-2 text-[12px]"
               style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
             >
               {child.name}の 毎日を 写真と一緒に きろくすると
@@ -174,7 +174,7 @@ export default function MemoryPage() {
                     <span
                       className="font-hand"
                       style={{
-                        fontSize: 11,
+                        fontSize: 12,
                         color: "var(--bloom-accent)",
                         letterSpacing: "0.1em",
                       }}
@@ -182,7 +182,7 @@ export default function MemoryPage() {
                       ● {age}
                     </span>
                     <span
-                      className="text-[10px]"
+                      className="text-[12px]"
                       style={{ color: "var(--bloom-ink-soft)" }}
                     >
                       {dateStr}
@@ -213,7 +213,7 @@ export default function MemoryPage() {
                         </div>
                         {rec.memo && (
                           <p
-                            className="mt-1 text-[11px]"
+                            className="mt-1 text-[12px]"
                             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
                           >
                             {rec.memo}

@@ -218,7 +218,7 @@ export default function OnboardingPage() {
           <button
             type="button"
             onClick={() => setStep(2)}
-            className="text-[12px]"
+            className="text-[13px]"
             style={{
               color: "var(--bloom-ink-soft)",
               padding: "4px 10px",
@@ -270,7 +270,7 @@ export default function OnboardingPage() {
                   className="bloom-border-soft font-hand inline-block rounded-lg px-2 py-0.5 text-white"
                   style={{
                     background: "var(--bloom-primary)",
-                    fontSize: 10,
+                    fontSize: 12,
                     borderColor: "var(--bloom-line)",
                     borderWidth: 1.5,
                     borderStyle: "solid",
@@ -281,11 +281,11 @@ export default function OnboardingPage() {
                 <div className="font-hand" style={{ fontSize: 13, color: "var(--bloom-ink)" }}>
                   はじめての一歩
                 </div>
-                <div className="ml-auto text-[10px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                <div className="ml-auto text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
                   1y3m
                 </div>
               </div>
-              <div className="mt-1 text-[11px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}>
+              <div className="mt-1 text-[12px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}>
                 リビングで、急に。
               </div>
             </div>
@@ -303,7 +303,7 @@ export default function OnboardingPage() {
             >
               はじめまして！
             </h2>
-            <p className="mt-2 text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
+            <p className="mt-2 text-[13px]" style={{ color: "var(--bloom-ink-soft)" }}>
               お子さまのことを すこし おしえてください
             </p>
 
@@ -403,7 +403,7 @@ export default function OnboardingPage() {
             >
               せいべつ を おしえてね
             </h2>
-            <p className="mt-2 text-[12px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
+            <p className="mt-2 text-[13px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
               いつでも変えられます。
               <br />
               「じぶんらしく」を選ぶと、表示はなまえだけになります。
@@ -433,7 +433,7 @@ export default function OnboardingPage() {
 
             {error && (
               <div
-                className="bloom-border-soft mt-4 rounded-xl px-3 py-2 text-xs"
+                className="bloom-border-soft mt-4 rounded-xl px-3 py-2 text-[13px]"
                 style={{ background: "#FCE4D2", color: "#A8421B" }}
               >
                 {error}

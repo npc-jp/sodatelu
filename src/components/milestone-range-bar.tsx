@@ -15,7 +15,7 @@
 // 色設計（既存テーマと整合）:
 //   - 範囲ハイライト: amber-200/40（うっすら）
 //   - 子ども位置の縦線: slate-400（控えめ）
-//   - 軸ラベル: slate-400 の text-[10px]
+//   - 軸ラベル: slate-400 の text-[12px]
 
 import { MAX_SCOPE_MONTHS, formatMonthsAsAge, type AgeRange } from "@/lib/age-range";
 
@@ -84,7 +84,7 @@ export default function MilestoneRangeBar({
           return (
             <span
               key={tick.months}
-              className="absolute text-[10px] text-slate-400"
+              className="absolute text-[12px] text-slate-400"
               style={{ left: `${pct}%`, transform: "translateX(-50%)" }}
             >
               {tick.label}
@@ -94,7 +94,7 @@ export default function MilestoneRangeBar({
       </div>
 
       {/* 範囲の文字説明 */}
-      <p className="mt-3 text-xs leading-relaxed text-slate-600">
+      <p className="mt-3 text-[13px] leading-relaxed text-slate-600">
         {range.lowerMonths === range.upperMonths ? (
           <>
             <span className="font-bold text-amber-700">

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>sodatelu フォントサイズ比較 — A / B / C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Yusei+Magic&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --bloom-bg: #FBF6E8;
+    --bloom-ink: #2E2A22;
+    --bloom-ink-soft: #7A6F58;
+    --bloom-line: #2E2A22;
+    --bloom-line-soft: #C9BFA6;
+    --bloom-primary: #7BA85F;
+    --bloom-primary-soft: #DDE9D0;
+    --bloom-accent: #F18A4C;
+    --bloom-yellow: #F5C44A;
+    --bloom-pink: #E89AB1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Zen Kaku Gothic New", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #efefef;
+    color: var(--bloom-ink);
+    padding: 16px;
+  }
+  .font-hand { font-family: "Yusei Magic", "Zen Kaku Gothic New", sans-serif; }
+  .lead {
+    max-width: 1200px;
+    margin: 0 auto 16px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .lead h1 { font-size: 18px; margin-bottom: 8px; font-family: "Yusei Magic", sans-serif; color: var(--bloom-primary); }
+  .lead p { color: #555; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .col {
+    background: var(--bloom-bg);
+    border: 2px solid var(--bloom-line);
+    border-radius: 18px;
+    box-shadow: 3px 3px 0 var(--bloom-line);
+    overflow: hidden;
+  }
+  .col-header {
+    padding: 12px;
+    background: #fff;
+    border-bottom: 2px solid var(--bloom-line);
+    text-align: center;
+  }
+  .col-header h2 {
+    font-family: "Yusei Magic", sans-serif;
+    font-size: 16px;
+    color: var(--bloom-ink);
+  }
+  .col-header .badge {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 8px;
+    background: var(--bloom-yellow);
+    border: 1.5px solid var(--bloom-line);
+    border-radius: 6px;
+    font-size: 10px;
+  }
+  .col-body { padding: 14px; }
+
+  /* Bloom card 共通 */
+  .bcard {
+    background: #fff;
+    border: 1.5px solid var(--bloom-line);
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+  .bcard.soft { border-color: var(--bloom-line-soft); }
+  .row { display: flex; align-items: center; gap: 10px; }
+  .avatar {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid var(--bloom-line);
+    background: var(--bloom-primary);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Yusei Magic", sans-serif;
+    font-size: 14px;
+  }
+  .pill {
+    display: inline-block;
+    padding: 1px 8px;
+    background: var(--bloom-primary);
+    color: #fff;
+    border: 1.5px solid var(--bloom-line);
+    border-radius: 8px;
+    font-family: "Yusei Magic", sans-serif;
+  }
+  .grow { flex: 1; min-width: 0; }
+  .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .right-meta {
+    background: var(--bloom-bg);
+    border: 1.5px solid var(--bloom-line-soft);
+    color: var(--bloom-ink-soft);
+    padding: 1px 6px;
+    border-radius: 6px;
+  }
+
+  /* セクション見出し */
+  .section-title {
+    display: flex; align-items: center; gap: 6px;
+    margin: 14px 0 6px;
+  }
+  .section-title .dot {
+    width: 16px; height: 16px;
+    background: var(--bloom-primary);
+    border-radius: 50%;
+    border: 1.5px solid var(--bloom-line);
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="lead">
+  <h1>🔍 フォントサイズ比較 — sodatelu /family 画面相当</h1>
+  <p>
+    A案: 最小12px統一（9-11px → 12px）<br>
+    B案: 1段階上げ（9→11 / 10→12 / 11→13 / 12→13）<br>
+    C案: ハイブリッド（9-11→12 / 12→13）<br>
+    <strong>スマホで見て、最も読みやすい列を教えてください。</strong>
+  </p>
+</div>
+
+<div class="grid">
+
+  <!-- ===== A案 ===== -->
+  <div class="col">
+    <div class="col-header">
+      <h2>A案: 最小12px</h2>
+      <div class="badge">9-11→12 / 12+はそのまま</div>
+    </div>
+    <div class="col-body">
+
+      <!-- 子どもセクション見出し -->
+      <div class="section-title">
+        <div class="dot"></div>
+        <h3 class="font-hand" style="font-size: 14px; color: var(--bloom-ink);">こども</h3>
+      </div>
+
+      <div class="bcard soft">
+        <div class="row">
+          <div class="avatar" style="width: 44px; height: 44px; font-size: 18px;">さ</div>
+          <div class="grow">
+            <div class="font-hand truncate" style="font-size: 15px;">さくら</div>
+            <div style="font-size: 12px; color: var(--bloom-ink-soft); margin-top: 2px;">11歳7ヶ月</div>
+          </div>
+          <span style="color: var(--bloom-ink-soft);">›</span>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <div class="dot" style="background: var(--bloom-yellow);"></div>
+        <h3 class="font-hand" style="font-size: 14px;">記録できるひと</h3>
+      </div>
+
+      <div class="bcard soft">
+        <div class="row">
+          <div class="avatar" style="background: var(--bloom-accent); font-size: 13px;">A</div>
+          <div class="grow">
+            <div class="font-hand truncate" style="font-size: 13px;">あなた</div>
+            <div class="truncate" style="font-size: 12px; color: var(--bloom-ink-soft);">azusa-y@n-pc.jp</div>
+          </div>
+          <span class="right-meta" style="font-size: 12px;">オーナー</span>
+        </div>
+      </div>
+
+      <!-- 招待中 -->
+      <div style="font-size: 12px; color: var(--bloom-ink-soft); margin: 12px 0 6px;">招待中…</div>
+      <div class="bcard soft">
+        <div class="row">
+          <div class="avatar" style="background: var(--bloom-bg); border-color: var(--bloom-line-soft); color: var(--bloom-ink); font-size: 14px;">✉</div>
+          <div class="grow">
+            <div class="truncate" style="font-size: 12px; color: var(--bloom-ink);">friend@example.com</div>
+            <div style="font-size: 12px; color: var(--bloom-ink-soft);">承認待ち</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 招待CTA下のキャプション -->
+      <p style="margin-top: 12px; text-align: center; font-size: 12px; color: var(--bloom-ink-soft); line-height: 1.6;">
+        招待コードを送ると、相手も<br>きろくに参加できます
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== B案 ===== -->
+  <div class="col">
+    <div class="col-header">
+      <h2>B案: 1段階上げ</h2>
+      <div class="badge" style="background: var(--bloom-accent); color: #fff;">9→11 / 10→12 / 11→13 / 12→13</div>
+    </div>
+    <div class="col-body">
+
+      <div class="section-title">
+        <div class="dot"></div>
+        <h3 class="font-hand" style="font-size: 14px; color: var(--bloom-ink);">こども</h3>
+      </div>
+
+      <div class="bcard soft">
+        <div class="row">
+          <div class="avatar" style="width: 44px; height: 44px; font-size: 18px;">さ</div>
+          <div class="grow">
+            <div class="font-hand truncate" style="font-size: 15px;">さくら</div>
+            <div style="font-size: 13px; color: var(--bloom-ink-soft); margin-top: 2px;">11歳7ヶ月</div>
+          </div>
+          <span style="color: var(--bloom-ink-soft);">›</span>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <div class="dot" style="background: var(--bloom-yellow);"></div>
+        <h3 class="font-hand" style="font-size: 14px;">記録できるひと</h3>
+      </div>
+
+      <div class="bcard soft">
+        <div class="row">
+          <div class="avatar" style="background: var(--bloom-accent); font-size: 13px;">A</div>
+          <div class="grow">
+            <div class="font-hand truncate" style="font-size: 13px;">あなた</div>
+            <div class="truncate" style="font-size: 12px; color: var(--bloom-ink-soft);">azusa-y@n-pc.jp</div>
+          </div>
+          <span class="right-meta" style="font-size: 11px;">オーナー</span>
+        </div>
+      </div>
+
+      <div style="font-size: 13px; color: var(--bloom-ink-soft); margin: 12px 0 6px;">招待中…</div>
+      <div class="bcard soft">
+        <div class="row">
+          <div class="avatar" style="background: var(--bloom-bg); border-color: var(--bloom-line-soft); color: var(--bloom-ink); font-size: 14px;">✉</div>
+          <div class="grow">
+            <div class="truncate" style="font-size: 13px; color: var(--bloom-ink);">friend@example.com</div>
+            <div style="font-size: 12px; color: var(--bloom-ink-soft);">承認待ち</div>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: 12px; text-align: center; font-size: 12px; color: var(--bloom-ink-soft); line-height: 1.6;">
+        招待コードを送ると、相手も<br>きろくに参加できます
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== C案 ===== -->
+  <div class="col">
+    <div class="col-header">
+      <h2>C案: ハイブリッド</h2>
+      <div class="badge" style="background: var(--bloom-primary); color: #fff;">9-11→12 / 12→13</div>
+    </div>
+    <div class="col-body">
+
+      <div class="section-title">
+        <div class="dot"></div>
+        <h3 class="font-hand" style="font-size: 14px; color: var(--bloom-ink);">こども</h3>
+      </div>
+
+      <div class="bcard soft">
+        <div class="row">
+          <div class="avatar" style="width: 44px; height: 44px; font-size: 18px;">さ</div>
+          <div class="grow">
+            <div class="font-hand truncate" style="font-size: 15px;">さくら</div>
+            <div style="font-size: 12px; color: var(--bloom-ink-soft); margin-top: 2px;">11歳7ヶ月</div>
+          </div>
+          <span style="color: var(--bloom-ink-soft);">›</span>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <div class="dot" style="background: var(--bloom-yellow);"></div>
+        <h3 class="font-hand" style="font-size: 14px;">記録できるひと</h3>
+      </div>
+
+      <div class="bcard soft">
+        <div class="row">
+          <div class="avatar" style="background: var(--bloom-accent); font-size: 13px;">A</div>
+          <div class="grow">
+            <div class="font-hand truncate" style="font-size: 13px;">あなた</div>
+            <div class="truncate" style="font-size: 13px; color: var(--bloom-ink-soft);">azusa-y@n-pc.jp</div>
+          </div>
+          <span class="right-meta" style="font-size: 12px;">オーナー</span>
+        </div>
+      </div>
+
+      <div style="font-size: 12px; color: var(--bloom-ink-soft); margin: 12px 0 6px;">招待中…</div>
+      <div class="bcard soft">
+        <div class="row">
+          <div class="avatar" style="background: var(--bloom-bg); border-color: var(--bloom-line-soft); color: var(--bloom-ink); font-size: 14px;">✉</div>
+          <div class="grow">
+            <div class="truncate" style="font-size: 13px; color: var(--bloom-ink);">friend@example.com</div>
+            <div style="font-size: 12px; color: var(--bloom-ink-soft);">承認待ち</div>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: 12px; text-align: center; font-size: 12px; color: var(--bloom-ink-soft); line-height: 1.6;">
+        招待コードを送ると、相手も<br>きろくに参加できます
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div class="lead" style="margin-top: 24px;">
+  <p>
+    <strong>📱 スマホで見るには:</strong> ターミナルで <code>open docs/font-comparison.html</code> もしくは Mac の Finder からダブルクリック →
+    Safari で開いて iCloud Tab か AirDrop でスマホへ送る。<br>
+    あるいは dev server の public/ にコピーすれば <code>http://localhost:3000/font-comparison.html</code> でアクセス可。
+  </p>
+</div>
+
+</body>
+</html>

@@ -260,7 +260,7 @@ export default function EditChildPage() {
           >
             <Heart size={18} color="var(--bloom-accent)" />
             <p
-              className="flex-1 text-[11px]"
+              className="flex-1 text-[12px]"
               style={{ color: "var(--bloom-ink)", lineHeight: 1.6 }}
             >
               性別はいつでも変更できます。
@@ -337,7 +337,7 @@ export default function EditChildPage() {
 
           {error && (
             <div
-              className="mt-4 rounded-xl px-3.5 py-2.5 text-xs"
+              className="mt-4 rounded-xl px-3.5 py-2.5 text-[13px]"
               style={{
                 background: "#FCE4D2",
                 color: "#A8421B",
@@ -366,7 +366,7 @@ export default function EditChildPage() {
             type="button"
             onClick={() => setShowDeleteConfirm(true)}
             disabled={loading || deleting}
-            className="mt-6 block w-full text-center text-[12px] disabled:opacity-50"
+            className="mt-6 block w-full text-center text-[13px] disabled:opacity-50"
             style={{ color: "#A8421B", textDecoration: "underline" }}
           >
             {target.name} のプロフィールを削除する

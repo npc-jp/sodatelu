@@ -104,7 +104,7 @@ export default function MilestonesPage() {
           </h1>
         </div>
         <p
-          className="mt-0.5 text-[11px]"
+          className="mt-0.5 text-[12px]"
           style={{ color: "var(--bloom-ink-soft)", marginLeft: 28 }}
         >
           {childName ? `${childName}のこれから・きろく` : "これから・きろく"}
@@ -126,7 +126,7 @@ export default function MilestonesPage() {
               onClick={() => setCurrentPhase(phase.number)}
               className="bloom-border font-hand whitespace-nowrap rounded-xl px-3.5 py-1.5"
               style={{
-                fontSize: 12,
+                fontSize: 13,
                 background: active ? tabColor : "#fff",
                 color: active ? "#fff" : "var(--bloom-ink)",
                 boxShadow: active ? "2px 2px 0 var(--bloom-line)" : "none",
@@ -142,7 +142,7 @@ export default function MilestonesPage() {
         {/* 趣旨説明 */}
         <p
           className="font-hand mb-4 text-center"
-          style={{ fontSize: 12, color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
+          style={{ fontSize: 13, color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
         >
           時期はあくまで目安。
           <br />
@@ -165,7 +165,7 @@ export default function MilestonesPage() {
               <div className="font-hand" style={{ fontSize: 18 }}>
                 {phaseInfo.name}
               </div>
-              <div className="text-[10px] mt-0.5 opacity-90">
+              <div className="text-[12px] mt-0.5 opacity-90">
                 {phaseInfo.ageRange}
               </div>
               <div
@@ -173,7 +173,7 @@ export default function MilestonesPage() {
                 style={{
                   background: "#fff",
                   color: "var(--bloom-ink)",
-                  fontSize: 11,
+                  fontSize: 12,
                 }}
               >
                 {recordedCount}件 きろく ・ あと{remaining}つ
@@ -248,7 +248,7 @@ export default function MilestonesPage() {
                       </div>
                       {ms.description && (
                         <div
-                          className="mt-1 text-[11px]"
+                          className="mt-1 text-[12px]"
                           style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
                         >
                           {ms.description}
@@ -260,7 +260,7 @@ export default function MilestonesPage() {
                           style={{
                             background: "var(--bloom-yellow)",
                             color: "var(--bloom-ink)",
-                            fontSize: 10,
+                            fontSize: 12,
                             border: "1.5px solid var(--bloom-line)",
                           }}
                         >
@@ -271,7 +271,7 @@ export default function MilestonesPage() {
                           style={{
                             background: "#fff",
                             color: "var(--bloom-ink-soft)",
-                            fontSize: 10,
+                            fontSize: 12,
                             border: "1.5px solid var(--bloom-line-soft)",
                           }}
                         >

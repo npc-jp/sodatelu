@@ -117,7 +117,7 @@ export default function UpgradePage() {
             のこしませんか
           </h2>
           <p
-            className="mt-2.5 text-[12px]"
+            className="mt-2.5 text-[13px]"
             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
           >
             プレミアムは、すべてのカテゴリを使えるようになるプラン。
@@ -160,7 +160,7 @@ export default function UpgradePage() {
                 {f.title}
               </div>
               <div
-                className="mt-1 text-[11px]"
+                className="mt-1 text-[12px]"
                 style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
               >
                 {f.body}
@@ -189,7 +189,7 @@ export default function UpgradePage() {
                 border: "1.5px dashed var(--bloom-line-soft)",
                 color: "var(--bloom-ink-soft)",
                 fontFamily: "Yusei Magic, sans-serif",
-                fontSize: 11,
+                fontSize: 12,
                 opacity: 0.85,
               }}
             >
@@ -215,7 +215,7 @@ export default function UpgradePage() {
                 color: "var(--bloom-ink)",
                 padding: "3px 12px",
                 borderRadius: 10,
-                fontSize: 10,
+                fontSize: 12,
                 fontFamily: "Yusei Magic, sans-serif",
               }}
             >
@@ -236,9 +236,9 @@ export default function UpgradePage() {
                 ¥980
               </span>
               ¥490
-              <span style={{ fontSize: 12, opacity: 0.95 }}> / 月</span>
+              <span style={{ fontSize: 13, opacity: 0.95 }}> / 月</span>
             </div>
-            <div className="text-[10px] opacity-95 mt-1">
+            <div className="text-[12px] opacity-95 mt-1">
               いつでも解約できます
             </div>
           </BloomCard>
@@ -261,14 +261,14 @@ export default function UpgradePage() {
         )}
 
         <p
-          className="mt-2 text-center text-[10px]"
+          className="mt-2 text-center text-[12px]"
           style={{ color: "var(--bloom-ink-soft)" }}
         >
           β期間中の登録は、製品版でも価格を引き継ぎます
         </p>
 
         <p
-          className="mt-5 text-center text-[11px]"
+          className="mt-5 text-center text-[12px]"
           style={{ color: "var(--bloom-ink-soft)" }}
         >
           ※ 現在β版です。正式リリース時にご案内します

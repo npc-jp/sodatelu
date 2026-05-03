@@ -121,7 +121,7 @@ export default function AddChildPage() {
         {limitReached && (
           <BloomCard soft color="var(--bloom-yellow)" className="mb-4 p-3.5">
             <p
-              className="text-center text-[12px]"
+              className="text-center text-[13px]"
               style={{ color: "var(--bloom-ink)", lineHeight: 1.6 }}
             >
               無料プランでは1人まで登録できます。
@@ -209,7 +209,7 @@ export default function AddChildPage() {
           >
             <Heart size={18} color="var(--bloom-accent)" />
             <p
-              className="flex-1 text-[11px]"
+              className="flex-1 text-[12px]"
               style={{ color: "var(--bloom-ink)", lineHeight: 1.6 }}
             >
               性別はいつでも変更できます。
@@ -284,7 +284,7 @@ export default function AddChildPage() {
 
           {error && (
             <div
-              className="mt-4 rounded-xl px-3.5 py-2.5 text-xs"
+              className="mt-4 rounded-xl px-3.5 py-2.5 text-[13px]"
               style={{
                 background: "#FCE4D2",
                 color: "#A8421B",

@@ -247,7 +247,7 @@ function RecordDetail() {
               onClick={() => setIsEditing(true)}
               className="font-hand"
               style={{
-                fontSize: 12,
+                fontSize: 13,
                 color: "var(--bloom-ink)",
                 padding: "4px 12px",
                 border: "1.5px solid var(--bloom-line)",
@@ -295,7 +295,7 @@ function RecordDetail() {
                       <div className="mb-0.5" style={{ fontSize: 22 }}>
                         {cat.glyph}
                       </div>
-                      <div className="font-hand" style={{ fontSize: 12 }}>
+                      <div className="font-hand" style={{ fontSize: 13 }}>
                         {cat.label}
                       </div>
                     </button>
@@ -328,11 +328,11 @@ function RecordDetail() {
                     }}
                   >
                     {locked && (
-                      <span className="absolute" style={{ top: 3, right: 4, fontSize: 9 }}>
+                      <span className="absolute" style={{ top: 3, right: 4, fontSize: 12 }}>
                         🔒
                       </span>
                     )}
-                    <div className="font-hand" style={{ fontSize: 10 }}>
+                    <div className="font-hand" style={{ fontSize: 12 }}>
                       {cat.label}
                     </div>
                   </button>
@@ -342,7 +342,7 @@ function RecordDetail() {
 
             {!isPremium && (
               <p
-                className="mt-1.5 text-center text-[10px]"
+                className="mt-1.5 text-center text-[12px]"
                 style={{ color: "var(--bloom-ink-soft)" }}
               >
                 🔒 のカテゴリはプレミアムで使えます
@@ -362,7 +362,7 @@ function RecordDetail() {
                       >
                         {selectedMilestone.title}
                       </div>
-                      <div className="text-[10px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                      <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
                         {selectedMilestone.age_hint} ・ {selectedMilestone.category}
                       </div>
                     </div>
@@ -460,7 +460,7 @@ function RecordDetail() {
                 onChange={(e) => setMemo(e.target.value)}
                 rows={4}
                 placeholder="そのときの様子を、ゆっくり書いてください…"
-                className="block w-full resize-none bg-transparent text-[12px] focus:outline-none"
+                className="block w-full resize-none bg-transparent text-[13px] focus:outline-none"
                 style={{
                   color: "var(--bloom-ink)",
                   lineHeight: 1.7,
@@ -489,7 +489,7 @@ function RecordDetail() {
                     type="button"
                     onClick={() => photoInputRef.current?.click()}
                     className="bloom-border font-hand flex h-8 items-center rounded-full px-3"
-                    style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: 11 }}
+                    style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: 12 }}
                   >
                     変更
                   </button>
@@ -604,13 +604,13 @@ function RecordDetail() {
                   className="font-hand inline-block rounded-lg px-2 py-0.5 text-white"
                   style={{
                     background: categoryColor(record.category),
-                    fontSize: 10,
+                    fontSize: 12,
                     border: "1.5px solid var(--bloom-line)",
                   }}
                 >
                   {categoryLabel(record.category)}
                 </span>
-                <div className="text-[10px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
                   {record.recorded_date.toDate().toLocaleDateString("ja-JP", {
                     year: "numeric",
                     month: "long",
@@ -637,7 +637,7 @@ function RecordDetail() {
                 >
                   <Sprout size={18} color="var(--bloom-primary)" />
                   <div className="flex-1">
-                    <div className="text-[10px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                    <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
                       成長のめやす
                     </div>
                     <div
@@ -646,7 +646,7 @@ function RecordDetail() {
                     >
                       {milestone.title}
                     </div>
-                    <div className="text-[10px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                    <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
                       {milestone.age_hint} ・ {milestone.category}
                     </div>
                   </div>
@@ -681,7 +681,7 @@ function RecordDetail() {
             <button
               type="button"
               onClick={handleDeleteRequest}
-              className="mt-6 block w-full text-center text-[12px]"
+              className="mt-6 block w-full text-center text-[13px]"
               style={{ color: "#A8421B", textDecoration: "underline" }}
             >
               この記録を削除する

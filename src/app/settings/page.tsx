@@ -61,7 +61,7 @@ function Row({ label, value, rightSlot, onClick, bgColor }: RowProps) {
           </div>
           {value && (
             <div
-              className="mt-0.5 truncate text-[11px]"
+              className="mt-0.5 truncate text-[12px]"
               style={{ color: "var(--bloom-ink-soft)" }}
             >
               {value}
@@ -252,7 +252,7 @@ export default function SettingsPage() {
             <div className="font-hand" style={{ fontSize: 17 }}>
               {user.displayName || "あなた"}
             </div>
-            <div className="text-[11px] opacity-95 truncate">
+            <div className="text-[12px] opacity-95 truncate">
               {user.email || "（未登録）"}
             </div>
           </div>
@@ -283,7 +283,7 @@ export default function SettingsPage() {
                   プレミアムにアップグレード
                 </div>
                 <span
-                  className="font-hand rounded-md px-2 py-0.5 text-[10px] text-white"
+                  className="font-hand rounded-md px-2 py-0.5 text-[12px] text-white"
                   style={{
                     background: "var(--bloom-accent)",
                     border: "1.5px solid var(--bloom-line)",
@@ -293,7 +293,7 @@ export default function SettingsPage() {
                 </span>
               </div>
               <div
-                className="mt-1.5 text-[11px]"
+                className="mt-1.5 text-[12px]"
                 style={{ color: "var(--bloom-ink)", lineHeight: 1.5 }}
               >
                 11カテゴリすべて使えるように。年表のスナップショットも。
@@ -333,7 +333,7 @@ export default function SettingsPage() {
                 コミュニティ統計への協力
               </div>
               <p
-                className="mt-1 text-[11px]"
+                className="mt-1 text-[12px]"
                 style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
               >
                 個人を特定できない形で集計したデータを、子育て研究に役立てます。
@@ -390,7 +390,7 @@ export default function SettingsPage() {
         {/* アカウント削除 */}
         {deleteError && (
           <p
-            className="mt-3 rounded-xl px-3 py-2 text-xs"
+            className="mt-3 rounded-xl px-3 py-2 text-[13px]"
             style={{
               background: "#FCE4D2",
               color: "#A8421B",
@@ -407,7 +407,7 @@ export default function SettingsPage() {
             setConfirm1Open(true);
           }}
           disabled={deleting}
-          className="mt-2 w-full rounded-xl py-2.5 text-[11px]"
+          className="mt-2 w-full rounded-xl py-2.5 text-[12px]"
           style={{
             background: "transparent",
             color: "var(--bloom-ink-soft)",
@@ -418,7 +418,7 @@ export default function SettingsPage() {
         </button>
 
         <p
-          className="mt-5 text-center text-[10px]"
+          className="mt-5 text-center text-[12px]"
           style={{ color: "var(--bloom-ink-soft)" }}
         >
           ご質問は sodatelu.app@gmail.com まで

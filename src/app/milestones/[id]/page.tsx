@@ -142,7 +142,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
               <PottedPlant size={90} />
             </div>
             <div className="relative">
-              <div className="text-[11px] opacity-90">
+              <div className="text-[12px] opacity-90">
                 {firstRecord.recorded_date.toDate().toLocaleDateString("ja-JP")} にきろくしました
               </div>
               <div className="font-hand mt-1" style={{ fontSize: 22 }}>
@@ -150,7 +150,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
               </div>
               {milestone.description && (
                 <div
-                  className="mt-1.5 text-[11px] opacity-95"
+                  className="mt-1.5 text-[12px] opacity-95"
                   style={{ lineHeight: 1.5 }}
                 >
                   {milestone.description}
@@ -168,7 +168,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
             </div>
             {milestone.description && (
               <div
-                className="mt-1 text-[12px]"
+                className="mt-1 text-[13px]"
                 style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
               >
                 {milestone.description}
@@ -180,7 +180,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
                 style={{
                   background: "var(--bloom-yellow)",
                   color: "var(--bloom-ink)",
-                  fontSize: 10,
+                  fontSize: 12,
                   border: "1.5px solid var(--bloom-line)",
                 }}
               >
@@ -191,7 +191,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
                 style={{
                   background: "#fff",
                   color: "var(--bloom-ink-soft)",
-                  fontSize: 10,
+                  fontSize: 12,
                   border: "1.5px solid var(--bloom-line-soft)",
                 }}
               >
@@ -228,7 +228,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
               className="ml-auto rounded-md px-1.5 py-0.5"
               style={{
                 background: "var(--bloom-yellow)",
-                fontSize: 9,
+                fontSize: 12,
                 color: "var(--bloom-ink)",
                 border: "1.5px solid var(--bloom-line)",
               }}
@@ -237,7 +237,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
             </div>
           </div>
           <div
-            className="mt-1.5 text-[11px]"
+            className="mt-1.5 text-[12px]"
             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
           >
             sodateluのご家族のきろくから、平均的な時期を表示する予定です。
@@ -254,12 +254,12 @@ export default function MilestoneDetailPage({ params }: PageProps) {
         >
           <div
             className="font-hand mb-1"
-            style={{ fontSize: 12, color: "var(--bloom-ink)" }}
+            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
           >
             ● 個人差について
           </div>
           <div
-            className="text-[11px]"
+            className="text-[12px]"
             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
           >
             時期はあくまで目安です。お子さまひとりひとりのペースを大切にしてください。
@@ -290,7 +290,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
                       {rec.title}
                     </div>
                     <div
-                      className="mt-0.5 text-[10px]"
+                      className="mt-0.5 text-[12px]"
                       style={{ color: "var(--bloom-ink-soft)" }}
                     >
                       {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}

@@ -167,7 +167,7 @@ export default function HomePage() {
               <p className="font-hand text-sm" style={{ color: "var(--bloom-ink)" }}>
                 ファミリーへの招待が{invitations.length}件
               </p>
-              <p className="text-xs" style={{ color: "var(--bloom-ink-soft)" }}>
+              <p className="text-[13px]" style={{ color: "var(--bloom-ink-soft)" }}>
                 タップして確認する
               </p>
             </div>
@@ -190,7 +190,7 @@ export default function HomePage() {
                       background: isActive ? "var(--bloom-primary)" : "#fff",
                       color: isActive ? "#fff" : "var(--bloom-ink)",
                       fontFamily: "Yusei Magic, sans-serif",
-                      fontSize: 12,
+                      fontSize: 13,
                     }}
                   >
                     {kid.photo_url ? (
@@ -199,7 +199,7 @@ export default function HomePage() {
                     ) : (
                       <span
                         className="flex h-5 w-5 items-center justify-center rounded-full font-hand"
-                        style={{ background: "var(--bloom-yellow)", fontSize: 11, color: "var(--bloom-ink)" }}
+                        style={{ background: "var(--bloom-yellow)", fontSize: 12, color: "var(--bloom-ink)" }}
                       >
                         {kid.name.charAt(0)}
                       </span>
@@ -244,7 +244,7 @@ export default function HomePage() {
                   />
                   <div
                     className="bloom-border absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full"
-                    style={{ background: "var(--bloom-accent)", fontSize: 9, color: "#fff" }}
+                    style={{ background: "var(--bloom-accent)", fontSize: 12, color: "#fff" }}
                   >
                     📷
                   </div>
@@ -281,7 +281,7 @@ export default function HomePage() {
               <div className="font-hand" style={{ fontSize: 22 }}>
                 {child.name}
               </div>
-              <div className="text-[11px] opacity-95 mt-0.5">
+              <div className="text-[12px] opacity-95 mt-0.5">
                 {calcAge(child.birth_date)} ・ {child.gender}
               </div>
             </div>
@@ -295,7 +295,7 @@ export default function HomePage() {
             <div>
               <div
                 className="font-bold"
-                style={{ fontSize: 9, letterSpacing: "0.15em", color: "var(--bloom-ink-soft)" }}
+                style={{ fontSize: 12, letterSpacing: "0.15em", color: "var(--bloom-ink-soft)" }}
               >
                 {seasonLabel}
               </div>
@@ -303,7 +303,7 @@ export default function HomePage() {
                 {phase.name}
               </div>
             </div>
-            <div className="text-[11px]" style={{ color: "var(--bloom-ink-soft)" }}>
+            <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
               {phase.ageRange}
             </div>
           </div>
@@ -320,7 +320,7 @@ export default function HomePage() {
             </div>
             <div className="font-hand" style={{ fontSize: 22, color: "var(--bloom-ink)" }}>
               {records.length}{" "}
-              <span style={{ fontSize: 11, color: "var(--bloom-ink-soft)", fontFamily: "Zen Kaku Gothic New, sans-serif" }}>
+              <span style={{ fontSize: 12, color: "var(--bloom-ink-soft)", fontFamily: "Zen Kaku Gothic New, sans-serif" }}>
                 件
               </span>
             </div>
@@ -356,7 +356,7 @@ export default function HomePage() {
               <div className="font-hand mt-1.5" style={{ fontSize: 14, color: "var(--bloom-ink)" }}>
                 めやす
               </div>
-              <div className="text-[10px] mt-0.5" style={{ color: "var(--bloom-ink)" }}>
+              <div className="text-[12px] mt-0.5" style={{ color: "var(--bloom-ink)" }}>
                 {phase.name}
               </div>
             </button>
@@ -375,7 +375,7 @@ export default function HomePage() {
               <div className="font-hand mt-1.5" style={{ fontSize: 14, color: "var(--bloom-ink)" }}>
                 きょうだい
               </div>
-              <div className="text-[10px] mt-0.5" style={{ color: "var(--bloom-ink)" }}>
+              <div className="text-[12px] mt-0.5" style={{ color: "var(--bloom-ink)" }}>
                 追加する
               </div>
             </button>
@@ -393,7 +393,7 @@ export default function HomePage() {
             <div className="font-hand" style={{ fontSize: 15 }}>
               {child?.name ? `${child.name}のこれまで` : "これまでのおもいで"}
             </div>
-            <div className="text-[11px] mt-0.5 opacity-95">写真と一緒にゆっくり振り返る</div>
+            <div className="text-[12px] mt-0.5 opacity-95">写真と一緒にゆっくり振り返る</div>
           </div>
           <span className="font-hand" style={{ fontSize: 18 }}>→</span>
         </button>
@@ -414,7 +414,7 @@ export default function HomePage() {
             <p className="font-hand mt-3" style={{ fontSize: 14, color: "var(--bloom-ink)" }}>
               まだ記録はありません
             </p>
-            <p className="text-xs mt-1" style={{ color: "var(--bloom-ink-soft)" }}>
+            <p className="text-[13px] mt-1" style={{ color: "var(--bloom-ink-soft)" }}>
               はじめての「できた」を残してみよう
             </p>
             <button
@@ -442,7 +442,7 @@ export default function HomePage() {
                         className="bloom-border-soft font-hand inline-block rounded-lg px-2 py-0.5 text-white"
                         style={{
                           background: tagColor,
-                          fontSize: 10,
+                          fontSize: 12,
                           borderColor: "var(--bloom-line)",
                           borderWidth: "1.5px",
                           borderStyle: "solid",
@@ -457,13 +457,13 @@ export default function HomePage() {
                         {rec.title}
                       </span>
                     </div>
-                    <div className="text-[10px] shrink-0 ml-2" style={{ color: "var(--bloom-ink-soft)" }}>
+                    <div className="text-[12px] shrink-0 ml-2" style={{ color: "var(--bloom-ink-soft)" }}>
                       {dateStr}
                     </div>
                   </div>
                   {rec.memo && (
                     <p
-                      className="mt-1 text-[11px] line-clamp-2"
+                      className="mt-1 text-[12px] line-clamp-2"
                       style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
                     >
                       {rec.memo}

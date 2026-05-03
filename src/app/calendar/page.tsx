@@ -161,12 +161,12 @@ export default function CalendarPage() {
                     background: isActive ? "var(--bloom-primary)" : "#fff",
                     color: isActive ? "#fff" : "var(--bloom-ink)",
                     fontFamily: "Yusei Magic, sans-serif",
-                    fontSize: 12,
+                    fontSize: 13,
                   }}
                 >
                   <span
                     className="flex h-5 w-5 items-center justify-center rounded-full font-hand"
-                    style={{ background: "var(--bloom-yellow)", fontSize: 11, color: "var(--bloom-ink)" }}
+                    style={{ background: "var(--bloom-yellow)", fontSize: 12, color: "var(--bloom-ink)" }}
                   >
                     {kid.name.charAt(0)}
                   </span>
@@ -188,7 +188,7 @@ export default function CalendarPage() {
                 key={d}
                 className="font-hand text-center"
                 style={{
-                  fontSize: 11,
+                  fontSize: 12,
                   color:
                     i === 0
                       ? "var(--bloom-accent)"
@@ -228,7 +228,7 @@ export default function CalendarPage() {
                     borderRadius: 10,
                     color: showHighlight ? "#fff" : "var(--bloom-ink)",
                     fontFamily: "Zen Kaku Gothic New, sans-serif",
-                    fontSize: 12,
+                    fontSize: 13,
                     fontWeight: showHighlight ? 700 : 400,
                   }}
                 >
@@ -254,7 +254,7 @@ export default function CalendarPage() {
 
         {/* 凡例 */}
         <div
-          className="mt-3.5 flex justify-center gap-3.5 text-[11px]"
+          className="mt-3.5 flex justify-center gap-3.5 text-[12px]"
           style={{ color: "var(--bloom-ink-soft)" }}
         >
           {[
@@ -290,7 +290,7 @@ export default function CalendarPage() {
 
         {displayRecords.length === 0 ? (
           <BloomCard soft className="p-4 text-center">
-            <p className="text-xs" style={{ color: "var(--bloom-ink-soft)" }}>
+            <p className="text-[13px]" style={{ color: "var(--bloom-ink-soft)" }}>
               この日の きろくは ありません
             </p>
             {selectedDate === null && (
@@ -318,7 +318,7 @@ export default function CalendarPage() {
                       className="font-hand inline-block rounded-lg px-2 py-0.5 text-white"
                       style={{
                         background: categoryDotColor(rec.category),
-                        fontSize: 10,
+                        fontSize: 12,
                         border: "1.5px solid var(--bloom-line)",
                       }}
                     >
@@ -333,7 +333,7 @@ export default function CalendarPage() {
                   </div>
                   {rec.memo && (
                     <p
-                      className="mt-1 line-clamp-2 text-[11px]"
+                      className="mt-1 line-clamp-2 text-[12px]"
                       style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
                     >
                       {rec.memo}

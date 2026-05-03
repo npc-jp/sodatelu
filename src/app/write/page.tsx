@@ -158,7 +158,7 @@ function WriteForm() {
           >
             きろくしました ✦
           </p>
-          <p className="mt-2 text-xs" style={{ color: "var(--bloom-ink-soft)" }}>
+          <p className="mt-2 text-[13px]" style={{ color: "var(--bloom-ink-soft)" }}>
             ホームに戻ります…
           </p>
         </div>
@@ -211,7 +211,7 @@ function WriteForm() {
                     <div className="mb-0.5" style={{ fontSize: 22 }}>
                       {cat.glyph}
                     </div>
-                    <div className="font-hand" style={{ fontSize: 12 }}>
+                    <div className="font-hand" style={{ fontSize: 13 }}>
                       {cat.label}
                     </div>
                   </button>
@@ -244,11 +244,11 @@ function WriteForm() {
                   }}
                 >
                   {locked && (
-                    <span className="absolute" style={{ top: 3, right: 4, fontSize: 9 }}>
+                    <span className="absolute" style={{ top: 3, right: 4, fontSize: 12 }}>
                       🔒
                     </span>
                   )}
-                  <div className="font-hand" style={{ fontSize: 10 }}>
+                  <div className="font-hand" style={{ fontSize: 12 }}>
                     {cat.label}
                   </div>
                 </button>
@@ -258,7 +258,7 @@ function WriteForm() {
 
           {!isPremium && (
             <p
-              className="mt-1.5 text-center text-[10px]"
+              className="mt-1.5 text-center text-[12px]"
               style={{ color: "var(--bloom-ink-soft)" }}
             >
               🔒 のカテゴリはプレミアムで使えます
@@ -278,7 +278,7 @@ function WriteForm() {
                     >
                       {selectedMilestone.title}
                     </div>
-                    <div className="text-[10px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                    <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
                       {selectedMilestone.age_hint} ・ {selectedMilestone.category}
                     </div>
                   </div>
@@ -378,7 +378,7 @@ function WriteForm() {
               onChange={(e) => setMemo(e.target.value)}
               rows={4}
               placeholder="そのときの様子を、ゆっくり書いてください…"
-              className="block w-full resize-none bg-transparent text-[12px] focus:outline-none"
+              className="block w-full resize-none bg-transparent text-[13px] focus:outline-none"
               style={{
                 color: "var(--bloom-ink)",
                 lineHeight: 1.7,
