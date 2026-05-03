@@ -110,9 +110,16 @@ service cloud.firestore {
     // children コレクション
     // ============================================================
     match /children/{childId} {
-      allow get: if isSignedIn()
-        && resource.data.family_id != null
-        && isMyFamilyRef(resource.data.family_id);
+      // 古いデータの後方互換: family_id を持たない user_id ベース時代の child は
+      // user_id == 自分なら read/update/delete 可とする
+      function isLegacyOwnChild() {
+        return resource.data.user_id == /databases/$(database)/documents/users/$(request.auth.uid);
+      }
+
+      allow get: if isSignedIn() && (
+        (resource.data.family_id != null && isMyFamilyRef(resource.data.family_id))
+        || isLegacyOwnChild()
+      );
       // クエリ: 認証済みなら OK（where("family_id", "==", familyRef) 前提）
       allow list: if isSignedIn();
 
@@ -124,13 +131,15 @@ service cloud.firestore {
           || isMyFamilyAfter(request.resource.data.family_id)
         );
 
-      allow update: if isSignedIn()
-        && resource.data.family_id != null
-        && isMyFamilyRef(resource.data.family_id);
+      allow update: if isSignedIn() && (
+        (resource.data.family_id != null && isMyFamilyRef(resource.data.family_id))
+        || isLegacyOwnChild()
+      );
 
-      allow delete: if isSignedIn()
-        && resource.data.family_id != null
-        && isMyFamilyRef(resource.data.family_id);
+      allow delete: if isSignedIn() && (
+        (resource.data.family_id != null && isMyFamilyRef(resource.data.family_id))
+        || isLegacyOwnChild()
+      );
     }
 
     // ============================================================
