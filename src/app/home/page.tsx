@@ -67,19 +67,29 @@ export default function HomePage() {
       return;
     }
     if (kids.length === 0) {
-      // 家族の有無で行き先を分岐:
-      //   - family_id なし → 初回ユーザー → /onboarding（家族から作る）
-      //   - family_id あり → 全削除済の既存ユーザー → /add-child（家族はあるので子だけ追加）
-      // これがないと既存家族が孤児化したり、onboarding ループになったりする
-      getDocFromServer(doc(db, "users", user.uid))
-        .then((snap) => {
+      // 行き先判定。優先順位:
+      //   1. 自分宛の招待がある → /family（受諾フロー。子ども登録は不要）
+      //   2. family_id あり (子どもは0人) → /add-child
+      //   3. family_id なし → /onboarding（初回ユーザー、家族から作る）
+      (async () => {
+        try {
+          // 1. 招待チェック
+          if (user.email) {
+            const myInvs = await getInvitationsForEmail(user.email);
+            if (myInvs.length > 0) {
+              router.replace("/family");
+              return;
+            }
+          }
+          // 2/3. 家族の有無
+          const snap = await getDocFromServer(doc(db, "users", user.uid));
           const fam = snap.exists() ? snap.data().family_id : null;
           router.replace(fam ? "/add-child" : "/onboarding");
-        })
-        .catch((err) => {
-          console.error("[home] users 取得失敗:", err);
+        } catch (err) {
+          console.error("[home] 行き先判定失敗:", err);
           router.replace("/onboarding");
-        });
+        }
+      })();
       return;
     }
   }, [user, authLoading, childLoading, kids, router]);
