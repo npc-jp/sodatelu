@@ -25,3 +25,13 @@ export function getCurrentUrl(): string {
   if (typeof window === "undefined") return "https://sodatelu.vercel.app";
   return window.location.href;
 }
+
+// OS判定して案内する推奨ブラウザ名を返す
+// iOS → Safari / Android → Chrome / その他 → Safari か Chrome
+export function getRecommendedBrowserName(): string {
+  if (typeof navigator === "undefined") return "Safari か Chrome";
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/i.test(ua)) return "Safari";
+  if (/Android/i.test(ua)) return "Chrome";
+  return "Safari か Chrome";
+}

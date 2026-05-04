@@ -9,7 +9,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { isInAppBrowser } from "@/lib/in-app-browser";
+import { getRecommendedBrowserName, isInAppBrowser } from "@/lib/in-app-browser";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -38,9 +38,11 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   // アプリ内ブラウザ（LINE/X/IG等）検出。Google OAuth が拒否されるため案内を出す
   const [inAppBrowser, setInAppBrowser] = useState(false);
+  const [recommendedBrowser, setRecommendedBrowser] = useState("Safari か Chrome");
 
   useEffect(() => {
     setInAppBrowser(isInAppBrowser());
+    setRecommendedBrowser(getRecommendedBrowserName());
   }, []);
 
   // メール/パスワード認証
@@ -208,7 +210,7 @@ export default function LoginPage() {
               >
                 LINEやXなどのアプリ内ブラウザで開いています。
                 <br />
-                <strong>Safariや Chrome で開きなおしてください</strong>。
+                <strong>{recommendedBrowser} で開きなおしてください</strong>。
                 <br />
                 右上のメニューから「外部ブラウザで開く」を選ぶとスムーズです。
                 <br />
