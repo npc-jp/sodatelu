@@ -99,13 +99,13 @@ export default function MilestonesPage() {
           <Sprout size={20} color="var(--bloom-primary)" />
           <h1
             className="font-hand"
-            style={{ fontSize: 22, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "1.375rem", color: "var(--bloom-ink)" }}
           >
             成長のめやす
           </h1>
         </div>
         <p
-          className="mt-0.5 text-[12px]"
+          className="mt-0.5 text-[0.75rem]"
           style={{ color: "var(--bloom-ink-soft)", marginLeft: 28 }}
         >
           {childName ? `${childName}のこれから・きろく` : "これから・きろく"}
@@ -127,7 +127,7 @@ export default function MilestonesPage() {
               onClick={() => setCurrentPhase(phase.number)}
               className="bloom-border font-hand whitespace-nowrap rounded-xl px-3.5 py-1.5"
               style={{
-                fontSize: 14,
+                fontSize: "0.875rem",
                 fontWeight: 700,
                 background: active ? tabColor : "#fff",
                 color: active
@@ -148,7 +148,7 @@ export default function MilestonesPage() {
         {/* 趣旨説明 */}
         <p
           className="font-hand mb-4 text-center"
-          style={{ fontSize: 13, color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
+          style={{ fontSize: "0.8125rem", color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
         >
           時期はあくまで目安。
           <br />
@@ -168,10 +168,10 @@ export default function MilestonesPage() {
               <PottedPlant size={80} />
             </div>
             <div className="relative text-white">
-              <div className="font-hand" style={{ fontSize: 18 }}>
+              <div className="font-hand" style={{ fontSize: "1.125rem" }}>
                 {phaseInfo.name}
               </div>
-              <div className="text-[12px] mt-0.5 opacity-90">
+              <div className="text-[0.75rem] mt-0.5 opacity-90">
                 {phaseInfo.ageRange}
               </div>
               <div
@@ -179,7 +179,7 @@ export default function MilestonesPage() {
                 style={{
                   background: "#fff",
                   color: "var(--bloom-ink)",
-                  fontSize: 12,
+                  fontSize: "0.75rem",
                 }}
               >
                 {recordedCount}件 きろく ・ あと{remaining}件
@@ -228,7 +228,7 @@ export default function MilestonesPage() {
                             height: 26,
                             background: "var(--bloom-primary)",
                             color: "#fff",
-                            fontSize: 14,
+                            fontSize: "0.875rem",
                           }}
                         >
                           ✓
@@ -248,13 +248,13 @@ export default function MilestonesPage() {
                     <div className="flex-1 min-w-0">
                       <div
                         className="font-hand"
-                        style={{ fontSize: 15, color: "var(--bloom-ink)" }}
+                        style={{ fontSize: "0.9375rem", color: "var(--bloom-ink)" }}
                       >
                         {ms.title}
                       </div>
                       {ms.description && (
                         <div
-                          className="mt-1 text-[12px]"
+                          className="mt-1 text-[0.75rem]"
                           style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
                         >
                           {ms.description}
@@ -266,7 +266,7 @@ export default function MilestonesPage() {
                           style={{
                             background: "var(--bloom-yellow)",
                             color: "var(--bloom-ink)",
-                            fontSize: 12,
+                            fontSize: "0.75rem",
                             border: "1.5px solid var(--bloom-line)",
                           }}
                         >
@@ -277,7 +277,7 @@ export default function MilestonesPage() {
                           style={{
                             background: "#fff",
                             color: "var(--bloom-ink-soft)",
-                            fontSize: 12,
+                            fontSize: "0.75rem",
                             border: "1.5px solid var(--bloom-line-soft)",
                           }}
                         >

@@ -94,14 +94,14 @@ export default function EditEmailPage() {
           <BloomCard soft color="var(--bloom-yellow)" className="p-4">
             <p
               className="font-hand"
-              style={{ fontSize: 14, color: "var(--bloom-ink)", lineHeight: 1.7 }}
+              style={{ fontSize: "0.875rem", color: "var(--bloom-ink)", lineHeight: 1.7 }}
             >
               Google アカウントでログインしているため、
               <br />
               アプリ内でメールアドレスを変更できません。
             </p>
             <p
-              className="mt-3 text-[13px]"
+              className="mt-3 text-[0.8125rem]"
               style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
             >
               Google アカウント側で変更してください。
@@ -110,7 +110,7 @@ export default function EditEmailPage() {
             </p>
           </BloomCard>
           <div
-            className="mt-5 text-center text-[13px]"
+            className="mt-5 text-center text-[0.8125rem]"
             style={{ color: "var(--bloom-ink-soft)" }}
           >
             現在のメール: {user.email}
@@ -135,12 +135,12 @@ export default function EditEmailPage() {
           <BloomCard className="p-5 text-center">
             <h2
               className="font-hand"
-              style={{ fontSize: 18, color: "var(--bloom-ink)", lineHeight: 1.5 }}
+              style={{ fontSize: "1.125rem", color: "var(--bloom-ink)", lineHeight: 1.5 }}
             >
               確認メールを送りました
             </h2>
             <p
-              className="mt-3 text-[13px]"
+              className="mt-3 text-[0.8125rem]"
               style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.8 }}
             >
               <strong style={{ color: "var(--bloom-ink)" }}>{newEmail}</strong>
@@ -162,7 +162,7 @@ export default function EditEmailPage() {
             className="bloom-border bloom-shadow font-hand mt-5 w-full rounded-[14px] py-3.5 text-white"
             style={{
               background: "var(--bloom-primary)",
-              fontSize: 16,
+              fontSize: "1rem",
               letterSpacing: "0.08em",
             }}
           >
@@ -186,7 +186,7 @@ export default function EditEmailPage() {
 
       <main className="flex-1 overflow-y-auto px-[18px] pt-5 pb-10">
         <p
-          className="text-[13px]"
+          className="text-[0.8125rem]"
           style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
         >
           現在のパスワードと新しいメールアドレスを入力してください。
@@ -196,7 +196,7 @@ export default function EditEmailPage() {
         </p>
 
         <BloomCard soft color="var(--bloom-yellow)" className="mt-4 p-3.5">
-          <p className="text-[12px]" style={{ color: "var(--bloom-ink)", lineHeight: 1.6 }}>
+          <p className="text-[0.75rem]" style={{ color: "var(--bloom-ink)", lineHeight: 1.6 }}>
             現在のメール: <strong>{user.email}</strong>
           </p>
         </BloomCard>
@@ -205,7 +205,7 @@ export default function EditEmailPage() {
           {/* 現在のパスワード */}
           <div
             className="font-hand mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● 現在のパスワード
           </div>
@@ -218,14 +218,14 @@ export default function EditEmailPage() {
               required
               autoComplete="current-password"
               className="font-hand block w-full bg-transparent focus:outline-none"
-              style={{ fontSize: 16, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}
             />
           </BloomCard>
 
           {/* 新メールアドレス */}
           <div
             className="font-hand mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● 新しいメールアドレス
           </div>
@@ -238,13 +238,13 @@ export default function EditEmailPage() {
               required
               autoComplete="email"
               className="font-hand block w-full bg-transparent focus:outline-none"
-              style={{ fontSize: 16, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}
             />
           </BloomCard>
 
           {error && (
             <div
-              className="mt-4 rounded-xl px-3.5 py-2.5 text-[13px]"
+              className="mt-4 rounded-xl px-3.5 py-2.5 text-[0.8125rem]"
               style={{
                 background: "#FCE4D2",
                 color: "#A8421B",
@@ -266,7 +266,7 @@ export default function EditEmailPage() {
             className="bloom-border bloom-shadow font-hand mt-5 w-full rounded-[14px] py-3.5 text-white disabled:opacity-50"
             style={{
               background: "var(--bloom-primary)",
-              fontSize: 16,
+              fontSize: "1rem",
               letterSpacing: "0.08em",
             }}
           >

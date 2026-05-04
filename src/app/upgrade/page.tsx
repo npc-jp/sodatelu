@@ -111,14 +111,14 @@ export default function UpgradePage() {
           </div>
           <h2
             className="font-hand"
-            style={{ fontSize: 24, color: "var(--bloom-ink)", lineHeight: 1.4 }}
+            style={{ fontSize: "1.5rem", color: "var(--bloom-ink)", lineHeight: 1.4 }}
           >
             もっと、まいにちを
             <br />
             のこしませんか
           </h2>
           <p
-            className="mt-2.5 text-[13px]"
+            className="mt-2.5 text-[0.8125rem]"
             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
           >
             プレミアムは、すべてのカテゴリを使えるようになるプラン。
@@ -130,7 +130,7 @@ export default function UpgradePage() {
           <Sparkle size={14} color="var(--bloom-accent)" />
           <h3
             className="font-hand"
-            style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
           >
             できるようになること
           </h3>
@@ -148,7 +148,7 @@ export default function UpgradePage() {
                 height: 36,
                 background: f.color,
                 color: f.color === "var(--bloom-yellow)" ? "var(--bloom-ink)" : "#fff",
-                fontSize: 16,
+                fontSize: "1rem",
               }}
             >
               {f.glyph}
@@ -156,12 +156,12 @@ export default function UpgradePage() {
             <div className="flex-1 min-w-0">
               <div
                 className="font-hand"
-                style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
               >
                 {f.title}
               </div>
               <div
-                className="mt-1 text-[12px]"
+                className="mt-1 text-[0.75rem]"
                 style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
               >
                 {f.body}
@@ -175,7 +175,7 @@ export default function UpgradePage() {
           <Cloud size={20} color="var(--bloom-line)" />
           <h3
             className="font-hand"
-            style={{ fontSize: 13, color: "var(--bloom-ink-soft)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink-soft)" }}
           >
             そのうち
           </h3>
@@ -190,7 +190,7 @@ export default function UpgradePage() {
                 border: "1.5px dashed var(--bloom-line-soft)",
                 color: "var(--bloom-ink-soft)",
                 fontFamily: "Yusei Magic, sans-serif",
-                fontSize: 12,
+                fontSize: "0.75rem",
                 opacity: 0.85,
               }}
             >
@@ -216,19 +216,19 @@ export default function UpgradePage() {
                 color: "var(--bloom-ink)",
                 padding: "3px 12px",
                 borderRadius: 10,
-                fontSize: 12,
+                fontSize: "0.75rem",
                 fontFamily: "Yusei Magic, sans-serif",
               }}
             >
               β期間 50%オフ
             </div>
-            <div className="font-hand mt-1" style={{ fontSize: 14 }}>
+            <div className="font-hand mt-1" style={{ fontSize: "0.875rem" }}>
               プレミアム
             </div>
-            <div className="font-hand mt-1.5" style={{ fontSize: 32 }}>
+            <div className="font-hand mt-1.5" style={{ fontSize: "2rem" }}>
               <span
                 style={{
-                  fontSize: 16,
+                  fontSize: "1rem",
                   opacity: 0.7,
                   textDecoration: "line-through",
                   marginRight: 6,
@@ -237,9 +237,9 @@ export default function UpgradePage() {
                 ¥980
               </span>
               ¥490
-              <span style={{ fontSize: 13, opacity: 0.95 }}> / 月</span>
+              <span style={{ fontSize: "0.8125rem", opacity: 0.95 }}> / 月</span>
             </div>
-            <div className="text-[12px] opacity-95 mt-1">
+            <div className="text-[0.75rem] opacity-95 mt-1">
               いつでも解約できます
             </div>
           </BloomCard>
@@ -253,7 +253,7 @@ export default function UpgradePage() {
             className="bloom-border bloom-shadow font-hand mt-3.5 w-full rounded-[14px] py-4 text-white"
             style={{
               background: "var(--bloom-primary)",
-              fontSize: 17,
+              fontSize: "1.0625rem",
               letterSpacing: "0.08em",
             }}
           >
@@ -262,14 +262,14 @@ export default function UpgradePage() {
         )}
 
         <p
-          className="mt-2 text-center text-[12px]"
+          className="mt-2 text-center text-[0.75rem]"
           style={{ color: "var(--bloom-ink-soft)" }}
         >
           β期間中の登録は、製品版でも価格を引き継ぎます
         </p>
 
         <p
-          className="mt-5 text-center text-[12px]"
+          className="mt-5 text-center text-[0.75rem]"
           style={{ color: "var(--bloom-ink-soft)" }}
         >
           ※ 現在β版です。正式リリース時にご案内します

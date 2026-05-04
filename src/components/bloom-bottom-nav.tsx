@@ -63,13 +63,13 @@ export default function BloomBottomNav({ current }: Props) {
                 background: isActive ? "var(--bloom-primary)" : "transparent",
                 color: isActive ? "#fff" : "var(--bloom-ink-soft)",
                 border: isActive ? "2px solid var(--bloom-line)" : "none",
-                fontSize: 13,
+                fontSize: "0.8125rem",
               }}
             >
               {item.glyph}
             </span>
             <span
-              className="text-[12px]"
+              className="text-[0.75rem]"
               style={{
                 color: "var(--bloom-ink)",
                 fontWeight: isActive ? 700 : 400,

@@ -38,7 +38,7 @@ export default function PrivacyPage() {
             <Heart size={16} color="var(--bloom-accent)" />
             <div
               className="font-hand"
-              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
             >
               3つのお約束
             </div>
@@ -52,14 +52,14 @@ export default function PrivacyPage() {
                 className="font-hand shrink-0"
                 style={{
                   color: "var(--bloom-primary)",
-                  fontSize: 14,
+                  fontSize: "0.875rem",
                   lineHeight: 1.4,
                 }}
               >
                 ✦
               </span>
               <span
-                className="text-[13px]"
+                className="text-[0.8125rem]"
                 style={{ color: "var(--bloom-ink)", lineHeight: 1.6 }}
               >
                 {p}
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
             background: "var(--bloom-yellow)",
             border: "2px solid var(--bloom-line)",
             color: "var(--bloom-ink)",
-            fontSize: 12,
+            fontSize: "0.75rem",
             lineHeight: 1.6,
           }}
         >
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
 
         {/* 前文 */}
         <p
-          className="mt-5 text-[13px]"
+          className="mt-5 text-[0.8125rem]"
           style={{ color: "var(--bloom-ink)", lineHeight: 1.8 }}
         >
           sodatelu（そだてる）は、保護者さまがお子さまの成長を記録するためのアプリです。
@@ -139,7 +139,7 @@ export default function PrivacyPage() {
           />
 
           <p
-            className="mt-3 rounded-xl px-3 py-2.5 text-[12px]"
+            className="mt-3 rounded-xl px-3 py-2.5 text-[0.75rem]"
             style={{
               background: "var(--bloom-yellow)",
               border: "1.5px solid var(--bloom-line)",
@@ -261,7 +261,7 @@ export default function PrivacyPage() {
             削除されるのは、お子さまの情報・記録・写真・ファミリー設定すべてです。
           </p>
           <p
-            className="mt-3 rounded-xl px-3 py-2.5 text-[12px]"
+            className="mt-3 rounded-xl px-3 py-2.5 text-[0.75rem]"
             style={{
               background: "var(--bloom-bg)",
               border: "1.5px solid var(--bloom-line-soft)",
@@ -286,7 +286,7 @@ export default function PrivacyPage() {
             ]}
           />
           <p
-            className="mt-2 text-[12px]"
+            className="mt-2 text-[0.75rem]"
             style={{ color: "var(--bloom-ink-soft)" }}
           >
             ※ 第三者の解析・広告 SDK は組み込まれていません。
@@ -320,12 +320,12 @@ export default function PrivacyPage() {
         >
           <div
             className="font-hand"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● ご質問は
           </div>
           <div
-            className="mt-1 text-[12px]"
+            className="mt-1 text-[0.75rem]"
             style={{
               color: "var(--bloom-ink-soft)",
               fontFamily: "ui-monospace, monospace",
@@ -334,7 +334,7 @@ export default function PrivacyPage() {
             sodatelu.app@gmail.com
           </div>
           <div
-            className="mt-1 text-[12px]"
+            className="mt-1 text-[0.75rem]"
             style={{
               color: "var(--bloom-ink-soft)",
               fontFamily: "ui-monospace, monospace",
@@ -347,7 +347,7 @@ export default function PrivacyPage() {
         <div className="mt-5 text-center">
           <Link
             href="/login"
-            className="font-hand text-[13px]"
+            className="font-hand text-[0.8125rem]"
             style={{ color: "var(--bloom-accent)" }}
           >
             ログイン画面に戻る →
@@ -372,12 +372,12 @@ function Section({
     <div className="mt-5">
       <h2
         className="font-hand mb-2"
-        style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+        style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
       >
         {title}
       </h2>
       <div
-        className="space-y-2 text-[13px]"
+        className="space-y-2 text-[0.8125rem]"
         style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.8 }}
       >
         {children}
@@ -391,7 +391,7 @@ function Subtitle({ children }: { children: React.ReactNode }) {
   return (
     <p
       className="font-hand mt-2"
-      style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+      style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
     >
       ● {children}
     </p>
@@ -406,7 +406,7 @@ function UList({ items }: { items: string[] }) {
       style={{ color: "var(--bloom-ink-soft)" }}
     >
       {items.map((item, i) => (
-        <li key={i} className="text-[13px]" style={{ lineHeight: 1.7 }}>
+        <li key={i} className="text-[0.8125rem]" style={{ lineHeight: 1.7 }}>
           {item}
         </li>
       ))}

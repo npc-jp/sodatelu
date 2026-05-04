@@ -254,7 +254,7 @@ function RecordDetail() {
               onClick={() => setIsEditing(true)}
               className="font-hand"
               style={{
-                fontSize: 13,
+                fontSize: "0.8125rem",
                 color: "var(--bloom-ink)",
                 padding: "4px 12px",
                 border: "1.5px solid var(--bloom-line)",
@@ -279,7 +279,7 @@ function RecordDetail() {
               <>
                 <div
                   className="font-hand mb-2"
-                  style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                  style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
                 >
                   ● だれの きろく？
                 </div>
@@ -297,7 +297,7 @@ function RecordDetail() {
                             background: active ? "var(--bloom-primary)" : "#fff",
                             color: active ? "#fff" : "var(--bloom-ink)",
                             fontFamily: "Yusei Magic, sans-serif",
-                            fontSize: 13,
+                            fontSize: "0.8125rem",
                           }}
                         >
                           {kid.photo_url ? (
@@ -306,7 +306,7 @@ function RecordDetail() {
                           ) : (
                             <span
                               className="flex h-5 w-5 items-center justify-center rounded-full"
-                              style={{ background: "var(--bloom-yellow)", fontSize: 11, color: "var(--bloom-ink)" }}
+                              style={{ background: "var(--bloom-yellow)", fontSize: "0.6875rem", color: "var(--bloom-ink)" }}
                             >
                               {kid.name.charAt(0)}
                             </span>
@@ -323,7 +323,7 @@ function RecordDetail() {
             {/* カテゴリ選択 */}
             <div
               className="font-hand mb-2"
-              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
             >
               ● どんなこと？
             </div>
@@ -345,10 +345,10 @@ function RecordDetail() {
                       className="block w-full px-1 py-3.5 text-center"
                       style={{ color: active ? "#fff" : "var(--bloom-ink)" }}
                     >
-                      <div className="mb-0.5" style={{ fontSize: 22 }}>
+                      <div className="mb-0.5" style={{ fontSize: "1.375rem" }}>
                         {cat.glyph}
                       </div>
-                      <div className="font-hand" style={{ fontSize: 13 }}>
+                      <div className="font-hand" style={{ fontSize: "0.8125rem" }}>
                         {cat.label}
                       </div>
                     </button>
@@ -381,11 +381,11 @@ function RecordDetail() {
                     }}
                   >
                     {locked && (
-                      <span className="absolute" style={{ top: 3, right: 4, fontSize: 12 }}>
+                      <span className="absolute" style={{ top: 3, right: 4, fontSize: "0.75rem" }}>
                         🔒
                       </span>
                     )}
-                    <div className="font-hand" style={{ fontSize: 12 }}>
+                    <div className="font-hand" style={{ fontSize: "0.75rem" }}>
                       {cat.label}
                     </div>
                   </button>
@@ -395,7 +395,7 @@ function RecordDetail() {
 
             {!isPremium && (
               <p
-                className="mt-1.5 text-center text-[12px]"
+                className="mt-1.5 text-center text-[0.75rem]"
                 style={{ color: "var(--bloom-ink-soft)" }}
               >
                 🔒 のカテゴリはプレミアムで使えます
@@ -411,11 +411,11 @@ function RecordDetail() {
                     <div className="flex-1">
                       <div
                         className="font-hand"
-                        style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                        style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
                       >
                         {selectedMilestone.title}
                       </div>
-                      <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                      <div className="text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)" }}>
                         {selectedMilestone.age_hint} ・ {selectedMilestone.category}
                       </div>
                     </div>
@@ -423,7 +423,7 @@ function RecordDetail() {
                       type="button"
                       onClick={clearMilestone}
                       className="font-hand"
-                      style={{ fontSize: 14, color: "var(--bloom-ink-soft)" }}
+                      style={{ fontSize: "0.875rem", color: "var(--bloom-ink-soft)" }}
                       aria-label="めやすの紐付けを外す"
                     >
                       ✕
@@ -444,7 +444,7 @@ function RecordDetail() {
                     <Sprout size={18} color="var(--bloom-primary)" />
                     <span
                       className="font-hand flex-1 text-left"
-                      style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                      style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
                     >
                       めやすに ひもづける（任意）
                     </span>
@@ -468,7 +468,7 @@ function RecordDetail() {
             {/* タイトル */}
             <div
               className="font-hand mt-4 mb-1.5"
-              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
             >
               ● タイトル
             </div>
@@ -479,14 +479,14 @@ function RecordDetail() {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="はじめて歩いた！"
                 className="font-hand block w-full bg-transparent focus:outline-none"
-                style={{ fontSize: 16, color: "var(--bloom-ink)" }}
+                style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}
               />
             </BloomCard>
 
             {/* 日付 */}
             <div
               className="font-hand mt-4 mb-1.5"
-              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
             >
               ● いつ？
             </div>
@@ -496,14 +496,14 @@ function RecordDetail() {
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 className="font-hand block w-full bg-transparent focus:outline-none"
-                style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
               />
             </BloomCard>
 
             {/* メモ */}
             <div
               className="font-hand mt-4 mb-1.5"
-              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
             >
               ● そのときのこと
             </div>
@@ -513,7 +513,7 @@ function RecordDetail() {
                 onChange={(e) => setMemo(e.target.value)}
                 rows={4}
                 placeholder="そのときの様子を、ゆっくり書いてください…"
-                className="block w-full resize-none bg-transparent text-[13px] focus:outline-none"
+                className="block w-full resize-none bg-transparent text-[0.8125rem] focus:outline-none"
                 style={{
                   color: "var(--bloom-ink)",
                   lineHeight: 1.7,
@@ -524,7 +524,7 @@ function RecordDetail() {
             {/* 写真 */}
             <div
               className="font-hand mt-4 mb-1.5"
-              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
             >
               ● 写真
             </div>
@@ -542,7 +542,7 @@ function RecordDetail() {
                     type="button"
                     onClick={() => photoInputRef.current?.click()}
                     className="bloom-border font-hand flex h-8 items-center rounded-full px-3"
-                    style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: 12 }}
+                    style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: "0.75rem" }}
                   >
                     変更
                   </button>
@@ -554,7 +554,7 @@ function RecordDetail() {
                       setExistingPhotoUrl("");
                     }}
                     className="bloom-border flex h-8 w-8 items-center justify-center rounded-full"
-                    style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: 14 }}
+                    style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: "0.875rem" }}
                     aria-label="写真を削除"
                   >
                     ✕
@@ -587,7 +587,7 @@ function RecordDetail() {
                 >
                   <span
                     className="font-hand"
-                    style={{ fontSize: 13, color: "var(--bloom-ink-soft)" }}
+                    style={{ fontSize: "0.8125rem", color: "var(--bloom-ink-soft)" }}
                   >
                     ＋ 写真をえらぶ
                   </span>
@@ -628,7 +628,7 @@ function RecordDetail() {
                 style={{
                   background: "#fff",
                   color: "var(--bloom-ink)",
-                  fontSize: 14,
+                  fontSize: "0.875rem",
                 }}
               >
                 キャンセル
@@ -640,7 +640,7 @@ function RecordDetail() {
                 className="bloom-border bloom-shadow font-hand flex-1 rounded-[14px] py-3.5 text-white disabled:opacity-50"
                 style={{
                   background: "var(--bloom-primary)",
-                  fontSize: 14,
+                  fontSize: "0.875rem",
                   letterSpacing: "0.05em",
                 }}
               >
@@ -658,13 +658,13 @@ function RecordDetail() {
                   className="font-hand inline-block rounded-lg px-2 py-0.5 text-white"
                   style={{
                     background: categoryColor(record.category),
-                    fontSize: 12,
+                    fontSize: "0.75rem",
                     border: "1.5px solid var(--bloom-line)",
                   }}
                 >
                   {categoryLabel(record.category)}
                 </span>
-                <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                <div className="text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)" }}>
                   {record.recorded_date.toDate().toLocaleDateString("ja-JP", {
                     year: "numeric",
                     month: "long",
@@ -674,7 +674,7 @@ function RecordDetail() {
               </div>
               <h2
                 className="font-hand mt-2"
-                style={{ fontSize: 22, color: "var(--bloom-ink)", lineHeight: 1.4 }}
+                style={{ fontSize: "1.375rem", color: "var(--bloom-ink)", lineHeight: 1.4 }}
               >
                 {record.title}
               </h2>
@@ -691,16 +691,16 @@ function RecordDetail() {
                 >
                   <Sprout size={18} color="var(--bloom-primary)" />
                   <div className="flex-1">
-                    <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                    <div className="text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)" }}>
                       成長のめやす
                     </div>
                     <div
                       className="font-hand"
-                      style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                      style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
                     >
                       {milestone.title}
                     </div>
-                    <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                    <div className="text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)" }}>
                       {milestone.age_hint} ・ {milestone.category}
                     </div>
                   </div>
@@ -710,7 +710,7 @@ function RecordDetail() {
               {/* メモ */}
               {record.memo && (
                 <div
-                  className="mt-4 whitespace-pre-wrap text-[13px]"
+                  className="mt-4 whitespace-pre-wrap text-[0.8125rem]"
                   style={{ color: "var(--bloom-ink)", lineHeight: 1.8 }}
                 >
                   {record.memo}
@@ -735,7 +735,7 @@ function RecordDetail() {
             <button
               type="button"
               onClick={handleDeleteRequest}
-              className="mt-6 block w-full text-center text-[13px]"
+              className="mt-6 block w-full text-center text-[0.8125rem]"
               style={{ color: "#A8421B", textDecoration: "underline" }}
             >
               この記録を削除する

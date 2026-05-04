@@ -1,21 +1,23 @@
 // 文字サイズ設定（端末ごとに localStorage 保存）
-// 「文字だけ大きく」よりも「全体を拡大」した方が、メニュー・カード・タップ領域も
-// 一緒に大きくなって視認性・操作性が改善する。CSS の zoom で実装する。
+// 文字だけを拡大したいので、html の font-size を変えて、
+// 各fontSize は rem 単位で記述する設計にする。
+// アイコン・パディング・カードサイズは px のまま → 拡大されない。
 //
-// Firefox は zoom 非対応だが、現時点では Chrome/Safari (PWA含む) を主ターゲットとする。
+// 基準: html font-size = 16px (small)。各UIテキストは rem 単位 = 設計時px / 16
 
 export type FontScale = "small" | "medium" | "large";
 
+// html の font-size (px)
 export const FONT_SCALES: Record<FontScale, number> = {
-  small: 1,
-  medium: 1.5,
-  large: 2,
+  small: 16,
+  medium: 20,
+  large: 24,
 };
 
 export const FONT_SCALE_LABELS: Record<FontScale, string> = {
   small: "小",
-  medium: "中（1.5倍）",
-  large: "大（2倍）",
+  medium: "中（1.25倍）",
+  large: "大（1.5倍）",
 };
 
 const STORAGE_KEY = "sodatelu.font_scale";
@@ -33,11 +35,9 @@ export function setFontScale(value: FontScale) {
   applyFontScaleToDOM(value);
 }
 
-// html要素に zoom を適用。<html> 全体に効くので、レイアウトと文字が比例拡大される
+// html要素の font-size を変える。rem単位で書かれた文字は連動して拡大される
 export function applyFontScaleToDOM(value: FontScale) {
   if (typeof document === "undefined") return;
-  const scale = FONT_SCALES[value];
-  // CSS zoom は html 要素にかけて全体ズーム。Chromium/WebKit は対応。
-  // Firefox は zoom 非対応だが β段階では割り切る
-  document.documentElement.style.zoom = String(scale);
+  const px = FONT_SCALES[value];
+  document.documentElement.style.fontSize = `${px}px`;
 }

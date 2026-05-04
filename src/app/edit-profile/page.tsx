@@ -75,7 +75,7 @@ export default function EditProfilePage() {
 
       <main className="flex-1 overflow-y-auto px-[18px] pt-5 pb-10">
         <p
-          className="text-[13px]"
+          className="text-[0.8125rem]"
           style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
         >
           家族のメンバーや招待された人に表示される名前です。
@@ -86,7 +86,7 @@ export default function EditProfilePage() {
         <form onSubmit={handleSubmit} className="mt-5">
           <div
             className="font-hand mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● ニックネーム
           </div>
@@ -98,14 +98,14 @@ export default function EditProfilePage() {
               placeholder="例：あづ、ママ、たろうパパ"
               maxLength={30}
               className="font-hand block w-full bg-transparent focus:outline-none"
-              style={{ fontSize: 16, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}
               autoFocus
             />
           </BloomCard>
 
           {error && (
             <div
-              className="mt-4 rounded-xl px-3.5 py-2.5 text-[13px]"
+              className="mt-4 rounded-xl px-3.5 py-2.5 text-[0.8125rem]"
               style={{
                 background: "#FCE4D2",
                 color: "#A8421B",
@@ -122,7 +122,7 @@ export default function EditProfilePage() {
             className="bloom-border bloom-shadow font-hand mt-5 w-full rounded-[14px] py-3.5 text-white disabled:opacity-50"
             style={{
               background: "var(--bloom-primary)",
-              fontSize: 16,
+              fontSize: "1rem",
               letterSpacing: "0.08em",
             }}
           >

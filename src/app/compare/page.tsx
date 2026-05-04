@@ -142,7 +142,7 @@ export default function ComparePage() {
           <Sprout size={18} color="var(--bloom-primary)" />
           <h1
             className="font-hand"
-            style={{ fontSize: 22, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "1.375rem", color: "var(--bloom-ink)" }}
           >
             年表
           </h1>
@@ -154,11 +154,11 @@ export default function ComparePage() {
             </div>
             <p
               className="font-hand mt-4"
-              style={{ fontSize: 15, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.9375rem", color: "var(--bloom-ink)" }}
             >
               きょうだいの 成長を ならべて見よう
             </p>
-            <p className="mt-2 text-[12px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
+            <p className="mt-2 text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
               {kids.length === 0
                 ? "まずは お子さまを 追加してください"
                 : "もう一人 追加すると 年表が 並びます"}
@@ -170,7 +170,7 @@ export default function ComparePage() {
                 className="bloom-border bloom-shadow font-hand mt-4 rounded-xl px-5 py-2.5 text-white"
                 style={{
                   background: "var(--bloom-primary)",
-                  fontSize: 13,
+                  fontSize: "0.8125rem",
                   letterSpacing: "0.08em",
                 }}
               >
@@ -194,14 +194,14 @@ export default function ComparePage() {
         <Sprout size={18} color="var(--bloom-primary)" />
         <h1
           className="font-hand"
-          style={{ fontSize: 22, color: "var(--bloom-ink)" }}
+          style={{ fontSize: "1.375rem", color: "var(--bloom-ink)" }}
         >
           年表
         </h1>
         <div className="ml-auto flex items-center gap-1.5">
           <Star size={14} color="var(--bloom-yellow)" />
           <span
-            className="text-[12px]"
+            className="text-[0.75rem]"
             style={{ color: "var(--bloom-ink-soft)" }}
           >
             月齢ぞろえ
@@ -212,7 +212,7 @@ export default function ComparePage() {
       {/* 案内: スマホ横向きで見やすい */}
       {kids.length >= 3 && (
         <p
-          className="px-[18px] pb-1 text-[12px]"
+          className="px-[18px] pb-1 text-[0.75rem]"
           style={{ color: "var(--bloom-ink-soft)" }}
         >
           ↔ よこにスクロール／スマホは横向きが見やすいです
@@ -228,7 +228,7 @@ export default function ComparePage() {
               <Sprout size={36} color="var(--bloom-primary)" />
               <p
                 className="font-hand mt-3"
-                style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
               >
                 きろくをつけると 年表に ならびます
               </p>
@@ -263,7 +263,7 @@ export default function ComparePage() {
                         height: 28,
                         background: "var(--bloom-yellow)",
                         fontFamily: "Yusei Magic, sans-serif",
-                        fontSize: 13,
+                        fontSize: "0.8125rem",
                         color: "var(--bloom-ink)",
                       }}
                     >
@@ -272,11 +272,11 @@ export default function ComparePage() {
                     <div className="min-w-0">
                       <div
                         className="font-hand truncate"
-                        style={{ fontSize: 13 }}
+                        style={{ fontSize: "0.8125rem" }}
                       >
                         {kid.name}
                       </div>
-                      <div className="text-[12px] opacity-95">
+                      <div className="text-[0.75rem] opacity-95">
                         {compactAge(kid.birth_date)}
                       </div>
                     </div>
@@ -294,7 +294,7 @@ export default function ComparePage() {
                     className="font-hand inline-block rounded-[10px] px-2 py-0.5"
                     style={{
                       background: "var(--bloom-bg)",
-                      fontSize: 12,
+                      fontSize: "0.75rem",
                       color: "var(--bloom-ink-soft)",
                       border: "1.5px solid var(--bloom-line-soft)",
                     }}
@@ -343,12 +343,12 @@ export default function ComparePage() {
                               >
                                 <div
                                   className="font-hand line-clamp-2"
-                                  style={{ fontSize: 13, color: "var(--bloom-ink)", lineHeight: 1.4 }}
+                                  style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)", lineHeight: 1.4 }}
                                 >
                                   {rec.title}
                                 </div>
                                 {/* 日付は左、N日目は右に寄せる */}
-                                <div className="mt-0.5 flex items-center justify-between gap-1.5 text-[12px]">
+                                <div className="mt-0.5 flex items-center justify-between gap-1.5 text-[0.75rem]">
                                   <span style={{ color: "var(--bloom-ink-soft)" }}>
                                     {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}
                                   </span>

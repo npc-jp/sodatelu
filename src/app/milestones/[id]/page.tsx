@@ -94,7 +94,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
               className="bloom-border bloom-shadow font-hand mt-4 rounded-xl px-5 py-2.5 text-white"
               style={{
                 background: "var(--bloom-primary)",
-                fontSize: 13,
+                fontSize: "0.8125rem",
                 letterSpacing: "0.08em",
               }}
             >
@@ -142,15 +142,15 @@ export default function MilestoneDetailPage({ params }: PageProps) {
               <PottedPlant size={90} />
             </div>
             <div className="relative">
-              <div className="text-[12px] opacity-90">
+              <div className="text-[0.75rem] opacity-90">
                 {firstRecord.recorded_date.toDate().toLocaleDateString("ja-JP")} にきろくしました
               </div>
-              <div className="font-hand mt-1" style={{ fontSize: 22 }}>
+              <div className="font-hand mt-1" style={{ fontSize: "1.375rem" }}>
                 できました ✦
               </div>
               {milestone.description && (
                 <div
-                  className="mt-1.5 text-[12px] opacity-95"
+                  className="mt-1.5 text-[0.75rem] opacity-95"
                   style={{ lineHeight: 1.5 }}
                 >
                   {milestone.description}
@@ -162,13 +162,13 @@ export default function MilestoneDetailPage({ params }: PageProps) {
           <BloomCard soft className="p-3.5">
             <div
               className="font-hand"
-              style={{ fontSize: 16, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}
             >
               {milestone.title}
             </div>
             {milestone.description && (
               <div
-                className="mt-1 text-[13px]"
+                className="mt-1 text-[0.8125rem]"
                 style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
               >
                 {milestone.description}
@@ -180,7 +180,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
                 style={{
                   background: "var(--bloom-yellow)",
                   color: "var(--bloom-ink)",
-                  fontSize: 12,
+                  fontSize: "0.75rem",
                   border: "1.5px solid var(--bloom-line)",
                 }}
               >
@@ -191,7 +191,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
                 style={{
                   background: "#fff",
                   color: "var(--bloom-ink-soft)",
-                  fontSize: 12,
+                  fontSize: "0.75rem",
                   border: "1.5px solid var(--bloom-line-soft)",
                 }}
               >
@@ -220,7 +220,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
             <Heart size={16} color="var(--bloom-accent)" />
             <div
               className="font-hand"
-              style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
             >
               みんなのきろく
             </div>
@@ -228,7 +228,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
               className="ml-auto rounded-md px-1.5 py-0.5"
               style={{
                 background: "var(--bloom-yellow)",
-                fontSize: 12,
+                fontSize: "0.75rem",
                 color: "var(--bloom-ink)",
                 border: "1.5px solid var(--bloom-line)",
               }}
@@ -237,7 +237,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
             </div>
           </div>
           <div
-            className="mt-1.5 text-[12px]"
+            className="mt-1.5 text-[0.75rem]"
             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
           >
             sodateluのご家族のきろくから、平均的な時期を表示する予定です。
@@ -254,12 +254,12 @@ export default function MilestoneDetailPage({ params }: PageProps) {
         >
           <div
             className="font-hand mb-1"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● 個人差について
           </div>
           <div
-            className="text-[12px]"
+            className="text-[0.75rem]"
             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
           >
             時期はあくまで目安です。お子さまひとりひとりのペースを大切にしてください。
@@ -271,7 +271,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
           <div className="mt-5">
             <h2
               className="font-hand mb-2"
-              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
             >
               {child ? `${child.name}のきろく` : "うちの子のきろく"}
             </h2>
@@ -285,12 +285,12 @@ export default function MilestoneDetailPage({ params }: PageProps) {
                   >
                     <div
                       className="font-hand truncate"
-                      style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                      style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
                     >
                       {rec.title}
                     </div>
                     <div
-                      className="mt-0.5 text-[12px]"
+                      className="mt-0.5 text-[0.75rem]"
                       style={{ color: "var(--bloom-ink-soft)" }}
                     >
                       {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}
@@ -311,7 +311,7 @@ export default function MilestoneDetailPage({ params }: PageProps) {
           className="bloom-border bloom-shadow font-hand mt-5 w-full rounded-[14px] py-3.5 text-white"
           style={{
             background: "var(--bloom-accent)",
-            fontSize: 15,
+            fontSize: "0.9375rem",
             letterSpacing: "0.08em",
           }}
         >

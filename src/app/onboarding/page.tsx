@@ -218,7 +218,7 @@ export default function OnboardingPage() {
           <button
             type="button"
             onClick={() => setStep(2)}
-            className="text-[13px]"
+            className="text-[0.8125rem]"
             style={{
               color: "var(--bloom-ink-soft)",
               padding: "4px 10px",
@@ -241,7 +241,7 @@ export default function OnboardingPage() {
             <div className="relative mx-auto mt-5 inline-block">
               <h1
                 className="font-hand"
-                style={{ fontSize: 26, color: "var(--bloom-ink)", lineHeight: 1.5 }}
+                style={{ fontSize: "1.625rem", color: "var(--bloom-ink)", lineHeight: 1.5 }}
               >
                 ちいさな きせきを、
                 <br />
@@ -252,7 +252,7 @@ export default function OnboardingPage() {
               </div>
             </div>
             <p
-              className="mt-7 text-[13px]"
+              className="mt-7 text-[0.8125rem]"
               style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.9 }}
             >
               できたこと、はじめたこと、感じたこと。
@@ -270,7 +270,7 @@ export default function OnboardingPage() {
                   className="bloom-border-soft font-hand inline-block rounded-lg px-2 py-0.5 text-white"
                   style={{
                     background: "var(--bloom-primary)",
-                    fontSize: 12,
+                    fontSize: "0.75rem",
                     borderColor: "var(--bloom-line)",
                     borderWidth: 1.5,
                     borderStyle: "solid",
@@ -278,14 +278,14 @@ export default function OnboardingPage() {
                 >
                   できた
                 </span>
-                <div className="font-hand" style={{ fontSize: 13, color: "var(--bloom-ink)" }}>
+                <div className="font-hand" style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}>
                   はじめての一歩
                 </div>
-                <div className="ml-auto text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                <div className="ml-auto text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)" }}>
                   1y3m
                 </div>
               </div>
-              <div className="mt-1 text-[12px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}>
+              <div className="mt-1 text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}>
                 リビングで、急に。
               </div>
             </div>
@@ -299,18 +299,18 @@ export default function OnboardingPage() {
             </div>
             <h2
               className="font-hand mt-3"
-              style={{ fontSize: 22, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "1.375rem", color: "var(--bloom-ink)" }}
             >
               はじめまして！
             </h2>
-            <p className="mt-2 text-[13px]" style={{ color: "var(--bloom-ink-soft)" }}>
+            <p className="mt-2 text-[0.8125rem]" style={{ color: "var(--bloom-ink-soft)" }}>
               お子さまのことを すこし おしえてください
             </p>
 
             <div className="mt-7 text-left">
               <label
                 className="font-hand mb-1.5 block"
-                style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
               >
                 ● なまえ
               </label>
@@ -320,13 +320,13 @@ export default function OnboardingPage() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="ニックネームでもOK"
-                className="bloom-border bloom-shadow-soft block w-full rounded-[14px] px-3.5 py-3 text-[14px] focus:outline-none"
+                className="bloom-border bloom-shadow-soft block w-full rounded-[14px] px-3.5 py-3 text-[0.875rem] focus:outline-none"
                 style={{ background: "#fff", color: "var(--bloom-ink)" }}
               />
 
               <label
                 className="font-hand mt-4 mb-1.5 block"
-                style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
               >
                 ● 生まれた日
               </label>
@@ -335,13 +335,13 @@ export default function OnboardingPage() {
                 value={birthDate}
                 onChange={(e) => setBirthDate(e.target.value)}
                 required
-                className="bloom-border bloom-shadow-soft block w-full rounded-[14px] px-3.5 py-3 text-[14px] focus:outline-none"
+                className="bloom-border bloom-shadow-soft block w-full rounded-[14px] px-3.5 py-3 text-[0.875rem] focus:outline-none"
                 style={{ background: "#fff", color: "var(--bloom-ink)" }}
               />
 
               <label
                 className="font-hand mt-4 mb-1.5 block"
-                style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
               >
                 ● 写真（任意）
               </label>
@@ -369,7 +369,7 @@ export default function OnboardingPage() {
                       background: "#fff",
                     }}
                   >
-                    <span className="font-hand" style={{ color: "var(--bloom-ink-soft)", fontSize: 13 }}>
+                    <span className="font-hand" style={{ color: "var(--bloom-ink-soft)", fontSize: "0.8125rem" }}>
                       ＋ 写真をえらぶ
                     </span>
                   </div>
@@ -399,11 +399,11 @@ export default function OnboardingPage() {
             </div>
             <h2
               className="font-hand mt-3"
-              style={{ fontSize: 22, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "1.375rem", color: "var(--bloom-ink)" }}
             >
               せいべつ を おしえてね
             </h2>
-            <p className="mt-2 text-[13px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
+            <p className="mt-2 text-[0.8125rem]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
               いつでも変えられます。
               <br />
               「じぶんらしく」を選ぶと、表示はなまえだけになります。
@@ -423,7 +423,7 @@ export default function OnboardingPage() {
                       color: active ? "#fff" : "var(--bloom-ink)",
                     }}
                   >
-                    <span className="font-hand" style={{ fontSize: 13 }}>
+                    <span className="font-hand" style={{ fontSize: "0.8125rem" }}>
                       {g.label}
                     </span>
                   </button>
@@ -433,7 +433,7 @@ export default function OnboardingPage() {
 
             {error && (
               <div
-                className="bloom-border-soft mt-4 rounded-xl px-3 py-2 text-[13px]"
+                className="bloom-border-soft mt-4 rounded-xl px-3 py-2 text-[0.8125rem]"
                 style={{ background: "#FCE4D2", color: "#A8421B" }}
               >
                 {error}
@@ -475,7 +475,7 @@ export default function OnboardingPage() {
           className="bloom-border bloom-shadow font-hand mt-3.5 w-full rounded-[14px] py-3.5 text-white disabled:opacity-50"
           style={{
             background: "var(--bloom-primary)",
-            fontSize: 16,
+            fontSize: "1rem",
             letterSpacing: "0.08em",
           }}
         >

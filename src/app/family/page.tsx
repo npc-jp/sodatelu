@@ -209,7 +209,7 @@ ${url}`;
               <Sparkle size={14} color="var(--bloom-accent)" />
               <h2
                 className="font-hand"
-                style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
               >
                 あなた宛の招待
               </h2>
@@ -223,7 +223,7 @@ ${url}`;
               >
                 <p
                   className="font-hand"
-                  style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                  style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
                 >
                   {inv.invited_by_name} さんからの招待
                 </p>
@@ -234,7 +234,7 @@ ${url}`;
                     className="bloom-border bloom-shadow font-hand flex-1 rounded-xl py-2 text-white"
                     style={{
                       background: "var(--bloom-primary)",
-                      fontSize: 13,
+                      fontSize: "0.8125rem",
                       letterSpacing: "0.05em",
                     }}
                   >
@@ -262,7 +262,7 @@ ${url}`;
           <Sprout size={16} color="var(--bloom-primary)" />
           <h2
             className="font-hand"
-            style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
           >
             こども
           </h2>
@@ -284,7 +284,7 @@ ${url}`;
                     height: 44,
                     background: color,
                     fontFamily: "Yusei Magic, sans-serif",
-                    fontSize: 18,
+                    fontSize: "1.125rem",
                     color: "#fff",
                   }}
                 >
@@ -293,12 +293,12 @@ ${url}`;
                 <div className="flex-1 min-w-0">
                   <div
                     className="font-hand truncate"
-                    style={{ fontSize: 15, color: "var(--bloom-ink)" }}
+                    style={{ fontSize: "0.9375rem", color: "var(--bloom-ink)" }}
                   >
                     {kid.name}
                   </div>
                   <div
-                    className="mt-0.5 text-[12px]"
+                    className="mt-0.5 text-[0.75rem]"
                     style={{ color: "var(--bloom-ink-soft)" }}
                   >
                     {compactAge(kid.birth_date.toDate().getTime())}
@@ -328,7 +328,7 @@ ${url}`;
               background: "#fff",
               border: "2px dashed var(--bloom-line)",
               fontFamily: "Yusei Magic, sans-serif",
-              fontSize: 22,
+              fontSize: "1.375rem",
               color: "var(--bloom-ink-soft)",
             }}
           >
@@ -337,12 +337,12 @@ ${url}`;
           <div className="flex-1 text-left">
             <div
               className="font-hand"
-              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
             >
               きょうだいを追加
             </div>
             <div
-              className="mt-0.5 text-[12px]"
+              className="mt-0.5 text-[0.75rem]"
               style={{ color: "var(--bloom-ink-soft)" }}
             >
               2人目から年表が並びます
@@ -355,7 +355,7 @@ ${url}`;
           <Star size={16} color="var(--bloom-yellow)" />
           <h2
             className="font-hand"
-            style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
           >
             記録できるひと
           </h2>
@@ -377,7 +377,7 @@ ${url}`;
                   height: 36,
                   background: color,
                   fontFamily: "Yusei Magic, sans-serif",
-                  fontSize: 13,
+                  fontSize: "0.8125rem",
                   color: "#fff",
                 }}
               >
@@ -386,19 +386,19 @@ ${url}`;
               <div className="flex-1 min-w-0">
                 <div
                   className="font-hand truncate"
-                  style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                  style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
                 >
                   {isMe ? "あなた" : member.display_name || member.email}
                 </div>
                 <div
-                  className="text-[12px] truncate"
+                  className="text-[0.75rem] truncate"
                   style={{ color: "var(--bloom-ink-soft)" }}
                 >
                   {member.email}
                 </div>
               </div>
               <span
-                className="rounded-md px-2 py-0.5 text-[12px]"
+                className="rounded-md px-2 py-0.5 text-[0.75rem]"
                 style={{
                   background: "var(--bloom-bg)",
                   border: "1.5px solid var(--bloom-line-soft)",
@@ -415,7 +415,7 @@ ${url}`;
         {pendingInvitations.length > 0 && (
           <div className="mt-4">
             <div
-              className="mb-2 text-[12px]"
+              className="mb-2 text-[0.75rem]"
               style={{ color: "var(--bloom-ink-soft)" }}
             >
               招待中…
@@ -435,17 +435,17 @@ ${url}`;
                     border: "1.5px solid var(--bloom-line-soft)",
                   }}
                 >
-                  <span style={{ fontSize: 16 }}>✉</span>
+                  <span style={{ fontSize: "1rem" }}>✉</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div
-                    className="truncate text-[13px]"
+                    className="truncate text-[0.8125rem]"
                     style={{ color: "var(--bloom-ink)" }}
                   >
                     {inv.invited_email}
                   </div>
                   <div
-                    className="text-[12px]"
+                    className="text-[0.75rem]"
                     style={{ color: "var(--bloom-ink-soft)" }}
                   >
                     承認待ち
@@ -465,12 +465,12 @@ ${url}`;
           >
             <p
               className="font-hand mb-2"
-              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
             >
               ✦ 招待を登録しました
             </p>
             <p
-              className="text-[13px]"
+              className="text-[0.8125rem]"
               style={{ color: "var(--bloom-ink)", lineHeight: 1.7 }}
             >
               下のメッセージを LINE などで相手に送ってください。
@@ -478,7 +478,7 @@ ${url}`;
               相手がリンクからログインすると、家族に参加できます。
             </p>
             <pre
-              className="mt-3 whitespace-pre-wrap rounded-xl p-3 text-[12px]"
+              className="mt-3 whitespace-pre-wrap rounded-xl p-3 text-[0.75rem]"
               style={{
                 background: "#fff",
                 border: "1.5px solid var(--bloom-line)",
@@ -496,7 +496,7 @@ ${url}`;
                 className="bloom-border bloom-shadow font-hand flex-1 rounded-xl py-2.5 text-white"
                 style={{
                   background: "var(--bloom-primary)",
-                  fontSize: 13,
+                  fontSize: "0.8125rem",
                 }}
               >
                 {copied ? "✓ コピーしました" : "コピーする"}
@@ -522,7 +522,7 @@ ${url}`;
             style={{
               background: "var(--bloom-yellow)",
               color: "var(--bloom-ink)",
-              fontSize: 14,
+              fontSize: "0.875rem",
               letterSpacing: "0.05em",
             }}
           >
@@ -537,7 +537,7 @@ ${url}`;
                 onChange={(e) => setInviteEmail(e.target.value)}
                 required
                 placeholder="メールアドレス"
-                className="block w-full rounded-xl px-3 py-2.5 text-[13px] focus:outline-none"
+                className="block w-full rounded-xl px-3 py-2.5 text-[0.8125rem] focus:outline-none"
                 style={{
                   background: "var(--bloom-bg)",
                   border: "1.5px solid var(--bloom-line-soft)",
@@ -551,7 +551,7 @@ ${url}`;
                   className="bloom-border bloom-shadow font-hand flex-1 rounded-xl py-2 text-white disabled:opacity-50"
                   style={{
                     background: "var(--bloom-primary)",
-                    fontSize: 13,
+                    fontSize: "0.8125rem",
                   }}
                 >
                   {sending ? "送信中…" : "送る"}
@@ -573,7 +573,7 @@ ${url}`;
         )}
 
         <p
-          className="mt-3 text-center text-[12px]"
+          className="mt-3 text-center text-[0.75rem]"
           style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
         >
           招待を登録すると、相手にお知らせする
@@ -583,7 +583,7 @@ ${url}`;
 
         {status && (
           <p
-            className="mt-3 text-center text-[13px]"
+            className="mt-3 text-center text-[0.8125rem]"
             style={{ color: "var(--bloom-ink)" }}
           >
             {status}

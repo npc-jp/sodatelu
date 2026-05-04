@@ -110,12 +110,12 @@ export default function BookPage() {
         <Sprout size={18} color="var(--bloom-primary)" />
         <h1
           className="font-hand"
-          style={{ fontSize: 22, color: "var(--bloom-ink)" }}
+          style={{ fontSize: "1.375rem", color: "var(--bloom-ink)" }}
         >
           アルバム
         </h1>
         <div
-          className="ml-auto text-[12px]"
+          className="ml-auto text-[0.75rem]"
           style={{ color: "var(--bloom-ink-soft)" }}
         >
           {records.length}件
@@ -137,12 +137,12 @@ export default function BookPage() {
                     background: isActive ? "var(--bloom-primary)" : "#fff",
                     color: isActive ? "#fff" : "var(--bloom-ink)",
                     fontFamily: "Yusei Magic, sans-serif",
-                    fontSize: 13,
+                    fontSize: "0.8125rem",
                   }}
                 >
                   <span
                     className="flex h-5 w-5 items-center justify-center rounded-full font-hand"
-                    style={{ background: "var(--bloom-yellow)", fontSize: 12, color: "var(--bloom-ink)" }}
+                    style={{ background: "var(--bloom-yellow)", fontSize: "0.75rem", color: "var(--bloom-ink)" }}
                   >
                     {kid.name.charAt(0)}
                   </span>
@@ -169,7 +169,7 @@ export default function BookPage() {
                 color: active ? "#fff" : "var(--bloom-ink)",
                 border: "1.5px solid var(--bloom-line)",
                 boxShadow: active ? "2px 2px 0 var(--bloom-line)" : "none",
-                fontSize: 12,
+                fontSize: "0.75rem",
               }}
             >
               {f.label}
@@ -184,7 +184,7 @@ export default function BookPage() {
             <Sprout size={36} color="var(--bloom-primary)" />
             <p
               className="font-hand mt-3"
-              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
             >
               {filter === "photos"
                 ? "写真付きの きろくが まだありません"
@@ -196,7 +196,7 @@ export default function BookPage() {
               className="bloom-border bloom-shadow font-hand mt-4 rounded-xl px-5 py-2.5 text-white"
               style={{
                 background: "var(--bloom-primary)",
-                fontSize: 13,
+                fontSize: "0.8125rem",
                 letterSpacing: "0.08em",
               }}
             >
@@ -210,7 +210,7 @@ export default function BookPage() {
               <div className="mb-2 flex items-center gap-2 px-1">
                 <span
                   className="font-hand"
-                  style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                  style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
                 >
                   {month}
                 </span>
@@ -219,7 +219,7 @@ export default function BookPage() {
                   style={{ height: 1, background: "var(--bloom-line-soft)" }}
                 />
                 <span
-                  className="text-[12px]"
+                  className="text-[0.75rem]"
                   style={{ color: "var(--bloom-ink-soft)" }}
                 >
                   {recs.length}件
@@ -262,7 +262,7 @@ export default function BookPage() {
                               className="font-hand inline-block rounded-lg px-2 py-0.5 text-white"
                               style={{
                                 background: categoryColor(rec.category),
-                                fontSize: 12,
+                                fontSize: "0.75rem",
                                 border: "1.5px solid var(--bloom-line)",
                               }}
                             >
@@ -270,13 +270,13 @@ export default function BookPage() {
                             </span>
                             <span
                               className="font-hand truncate"
-                              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                              style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
                             >
                               {rec.title}
                             </span>
                           </div>
                           <span
-                            className="ml-2 shrink-0 text-[12px]"
+                            className="ml-2 shrink-0 text-[0.75rem]"
                             style={{ color: "var(--bloom-ink-soft)" }}
                           >
                             {`${rec.recorded_date.toDate().getMonth() + 1}/${rec.recorded_date.toDate().getDate()}`}
@@ -284,14 +284,14 @@ export default function BookPage() {
                         </div>
                         {rec.memo && (
                           <p
-                            className="mt-1 line-clamp-2 text-[12px]"
+                            className="mt-1 line-clamp-2 text-[0.75rem]"
                             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
                           >
                             {rec.memo}
                           </p>
                         )}
                         <div
-                          className="mt-2 inline-block rounded-full px-2 py-0.5 text-[12px]"
+                          className="mt-2 inline-block rounded-full px-2 py-0.5 text-[0.75rem]"
                           style={{
                             background: "var(--bloom-primary-soft)",
                             color: "var(--bloom-ink)",

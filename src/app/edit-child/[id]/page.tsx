@@ -176,7 +176,7 @@ export default function EditChildPage() {
           </div>
           <p
             className="font-hand mt-2"
-            style={{ fontSize: 13, color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}
           >
             {target.name} のプロフィール
           </p>
@@ -186,7 +186,7 @@ export default function EditChildPage() {
           {/* なまえ */}
           <div
             className="font-hand mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● なまえ
           </div>
@@ -198,14 +198,14 @@ export default function EditChildPage() {
               required
               placeholder="ニックネームでもOK"
               className="font-hand block w-full bg-transparent focus:outline-none"
-              style={{ fontSize: 16, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}
             />
           </BloomCard>
 
           {/* 生まれた日 */}
           <div
             className="font-hand mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● 生まれた日
           </div>
@@ -216,14 +216,14 @@ export default function EditChildPage() {
               onChange={(e) => setBirthDate(e.target.value)}
               required
               className="font-hand block w-full bg-transparent focus:outline-none"
-              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
             />
           </BloomCard>
 
           {/* 性別 */}
           <div
             className="font-hand mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● 性別
           </div>
@@ -243,7 +243,7 @@ export default function EditChildPage() {
                     className="block w-full px-1 py-3.5 text-center"
                     style={{ color: active ? "#fff" : "var(--bloom-ink)" }}
                   >
-                    <div className="font-hand" style={{ fontSize: 13 }}>
+                    <div className="font-hand" style={{ fontSize: "0.8125rem" }}>
                       {g.label}
                     </div>
                   </button>
@@ -260,7 +260,7 @@ export default function EditChildPage() {
           >
             <Heart size={18} color="var(--bloom-accent)" />
             <p
-              className="flex-1 text-[12px]"
+              className="flex-1 text-[0.75rem]"
               style={{ color: "var(--bloom-ink)", lineHeight: 1.6 }}
             >
               性別はいつでも変更できます。
@@ -272,7 +272,7 @@ export default function EditChildPage() {
           {/* 写真 */}
           <div
             className="font-hand mt-4 mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● 写真（任意）
           </div>
@@ -293,7 +293,7 @@ export default function EditChildPage() {
                     setPhotoCleared(true);
                   }}
                   className="bloom-border absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full"
-                  style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: 13 }}
+                  style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: "0.8125rem" }}
                   aria-label="写真を削除"
                 >
                   ✕
@@ -313,7 +313,7 @@ export default function EditChildPage() {
               >
                 <span
                   className="font-hand"
-                  style={{ fontSize: 13, color: "var(--bloom-ink-soft)" }}
+                  style={{ fontSize: "0.8125rem", color: "var(--bloom-ink-soft)" }}
                 >
                   ＋ 写真をえらぶ
                 </span>
@@ -337,7 +337,7 @@ export default function EditChildPage() {
 
           {error && (
             <div
-              className="mt-4 rounded-xl px-3.5 py-2.5 text-[13px]"
+              className="mt-4 rounded-xl px-3.5 py-2.5 text-[0.8125rem]"
               style={{
                 background: "#FCE4D2",
                 color: "#A8421B",
@@ -354,7 +354,7 @@ export default function EditChildPage() {
             className="bloom-border bloom-shadow font-hand mt-5 w-full rounded-[14px] py-3.5 text-white disabled:opacity-50"
             style={{
               background: "var(--bloom-primary)",
-              fontSize: 16,
+              fontSize: "1rem",
               letterSpacing: "0.08em",
             }}
           >
@@ -366,7 +366,7 @@ export default function EditChildPage() {
             type="button"
             onClick={() => setShowDeleteConfirm(true)}
             disabled={loading || deleting}
-            className="mt-6 block w-full text-center text-[13px] disabled:opacity-50"
+            className="mt-6 block w-full text-center text-[0.8125rem] disabled:opacity-50"
             style={{ color: "#A8421B", textDecoration: "underline" }}
           >
             {target.name} のプロフィールを削除する

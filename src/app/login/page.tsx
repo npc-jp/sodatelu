@@ -153,7 +153,7 @@ export default function LoginPage() {
         </div>
         <div
           className="font-hand relative mt-3 inline-block"
-          style={{ fontSize: 38, color: "var(--bloom-ink)", letterSpacing: "0.04em" }}
+          style={{ fontSize: "2.375rem", color: "var(--bloom-ink)", letterSpacing: "0.04em" }}
         >
           sodatelu
           <div className="absolute" style={{ bottom: -4, left: 0, right: 0 }}>
@@ -203,7 +203,7 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="メールアドレス"
-              className="block w-full rounded-xl px-3.5 py-3 text-[13px] focus:outline-none"
+              className="block w-full rounded-xl px-3.5 py-3 text-[0.8125rem] focus:outline-none"
               style={{
                 background: "var(--bloom-bg)",
                 border: "1.5px solid var(--bloom-line-soft)",
@@ -217,7 +217,7 @@ export default function LoginPage() {
               required
               minLength={6}
               placeholder="パスワード（6文字以上）"
-              className="block w-full rounded-xl px-3.5 py-3 text-[13px] focus:outline-none"
+              className="block w-full rounded-xl px-3.5 py-3 text-[0.8125rem] focus:outline-none"
               style={{
                 background: "var(--bloom-bg)",
                 border: "1.5px solid var(--bloom-line-soft)",
@@ -227,7 +227,7 @@ export default function LoginPage() {
 
             {error && (
               <div
-                className="rounded-lg px-3 py-2 text-[13px]"
+                className="rounded-lg px-3 py-2 text-[0.8125rem]"
                 style={{ background: "#FCE4D2", color: "#A8421B" }}
               >
                 {error}
@@ -240,14 +240,14 @@ export default function LoginPage() {
               className="bloom-border bloom-shadow font-hand mt-1 w-full rounded-[14px] py-3.5 text-white disabled:opacity-50"
               style={{
                 background: "var(--bloom-primary)",
-                fontSize: 15,
+                fontSize: "0.9375rem",
                 letterSpacing: "0.1em",
               }}
             >
               {loading ? "処理中…" : isSignUp ? "登録してはじめる" : "はじめる"}
             </button>
 
-            <p className="pt-2 text-center text-[13px]" style={{ color: "var(--bloom-ink-soft)" }}>
+            <p className="pt-2 text-center text-[0.8125rem]" style={{ color: "var(--bloom-ink-soft)" }}>
               {isSignUp ? "すでにアカウントをお持ちですか？" : "アカウントをお持ちでないですか？"}
               <button
                 type="button"
@@ -263,7 +263,7 @@ export default function LoginPage() {
             </p>
           </form>
 
-          <p className="mt-4 text-center text-[12px]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
+          <p className="mt-4 text-center text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
             登録することで
             <Link
               href="/privacy"

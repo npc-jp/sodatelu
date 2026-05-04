@@ -160,7 +160,7 @@ export default function HomePage() {
           <Sprout size={22} color="var(--bloom-primary)" />
           <span
             className="font-hand"
-            style={{ fontSize: 19, color: "var(--bloom-ink)", letterSpacing: "0.02em" }}
+            style={{ fontSize: "1.1875rem", color: "var(--bloom-ink)", letterSpacing: "0.02em" }}
           >
             sodatelu
           </span>
@@ -199,11 +199,11 @@ export default function HomePage() {
               <p className="font-hand text-sm" style={{ color: "var(--bloom-ink)" }}>
                 ファミリーへの招待が{invitations.length}件
               </p>
-              <p className="text-[13px]" style={{ color: "var(--bloom-ink-soft)" }}>
+              <p className="text-[0.8125rem]" style={{ color: "var(--bloom-ink-soft)" }}>
                 タップして確認する
               </p>
             </div>
-            <span className="font-hand" style={{ fontSize: 18, color: "var(--bloom-ink)" }}>→</span>
+            <span className="font-hand" style={{ fontSize: "1.125rem", color: "var(--bloom-ink)" }}>→</span>
           </button>
         )}
 
@@ -222,7 +222,7 @@ export default function HomePage() {
                       background: isActive ? "var(--bloom-primary)" : "#fff",
                       color: isActive ? "#fff" : "var(--bloom-ink)",
                       fontFamily: "Yusei Magic, sans-serif",
-                      fontSize: 13,
+                      fontSize: "0.8125rem",
                     }}
                   >
                     {kid.photo_url ? (
@@ -231,7 +231,7 @@ export default function HomePage() {
                     ) : (
                       <span
                         className="flex h-5 w-5 items-center justify-center rounded-full font-hand"
-                        style={{ background: "var(--bloom-yellow)", fontSize: 12, color: "var(--bloom-ink)" }}
+                        style={{ background: "var(--bloom-yellow)", fontSize: "0.75rem", color: "var(--bloom-ink)" }}
                       >
                         {kid.name.charAt(0)}
                       </span>
@@ -276,7 +276,7 @@ export default function HomePage() {
                   />
                   <div
                     className="bloom-border absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full"
-                    style={{ background: "var(--bloom-accent)", fontSize: 12, color: "#fff" }}
+                    style={{ background: "var(--bloom-accent)", fontSize: "0.75rem", color: "#fff" }}
                   >
                     📷
                   </div>
@@ -286,7 +286,7 @@ export default function HomePage() {
                   className="bloom-border flex h-[58px] w-[58px] items-center justify-center rounded-full"
                   style={{ background: "var(--bloom-yellow)" }}
                 >
-                  <span className="font-hand" style={{ fontSize: 26, color: "var(--bloom-ink)" }}>
+                  <span className="font-hand" style={{ fontSize: "1.625rem", color: "var(--bloom-ink)" }}>
                     {child.name.charAt(0)}
                   </span>
                 </div>
@@ -310,10 +310,10 @@ export default function HomePage() {
               }}
             />
             <div className="flex-1 text-white">
-              <div className="font-hand" style={{ fontSize: 22 }}>
+              <div className="font-hand" style={{ fontSize: "1.375rem" }}>
                 {child.name}
               </div>
-              <div className="text-[12px] opacity-95 mt-0.5">
+              <div className="text-[0.75rem] opacity-95 mt-0.5">
                 {calcAge(child.birth_date)} ・ {child.gender}
               </div>
             </div>
@@ -327,15 +327,15 @@ export default function HomePage() {
             <div>
               <div
                 className="font-bold"
-                style={{ fontSize: 12, letterSpacing: "0.15em", color: "var(--bloom-ink-soft)" }}
+                style={{ fontSize: "0.75rem", letterSpacing: "0.15em", color: "var(--bloom-ink-soft)" }}
               >
                 {seasonLabel}
               </div>
-              <div className="font-hand mt-0.5" style={{ fontSize: 16, color: "var(--bloom-ink)" }}>
+              <div className="font-hand mt-0.5" style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}>
                 {phase.name}
               </div>
             </div>
-            <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
+            <div className="text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)" }}>
               {phase.ageRange}
             </div>
           </div>
@@ -346,13 +346,13 @@ export default function HomePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkle size={16} color="var(--bloom-accent)" />
-              <span className="font-hand" style={{ fontSize: 14, color: "var(--bloom-ink)" }}>
+              <span className="font-hand" style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}>
                 これまでのきろく
               </span>
             </div>
-            <div className="font-hand" style={{ fontSize: 22, color: "var(--bloom-ink)" }}>
+            <div className="font-hand" style={{ fontSize: "1.375rem", color: "var(--bloom-ink)" }}>
               {records.length}{" "}
-              <span style={{ fontSize: 12, color: "var(--bloom-ink-soft)", fontFamily: "Zen Kaku Gothic New, sans-serif" }}>
+              <span style={{ fontSize: "0.75rem", color: "var(--bloom-ink-soft)", fontFamily: "Zen Kaku Gothic New, sans-serif" }}>
                 件
               </span>
             </div>
@@ -380,7 +380,7 @@ export default function HomePage() {
             ))}
           </div>
           <div
-            className="mt-1.5 flex justify-between text-[10px]"
+            className="mt-1.5 flex justify-between text-[0.625rem]"
             style={{ color: "var(--bloom-ink-soft)" }}
           >
             <span>6ヶ月前</span>
@@ -401,10 +401,10 @@ export default function HomePage() {
               className="block w-full text-left"
             >
               <Star size={20} color="var(--bloom-ink)" />
-              <div className="font-hand mt-1.5" style={{ fontSize: 14, color: "var(--bloom-ink)" }}>
+              <div className="font-hand mt-1.5" style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}>
                 めやす
               </div>
-              <div className="text-[12px] mt-0.5" style={{ color: "var(--bloom-ink)" }}>
+              <div className="text-[0.75rem] mt-0.5" style={{ color: "var(--bloom-ink)" }}>
                 {phase.name}
               </div>
             </button>
@@ -420,10 +420,10 @@ export default function HomePage() {
               className="block w-full text-left"
             >
               <Heart size={20} color="var(--bloom-accent)" />
-              <div className="font-hand mt-1.5" style={{ fontSize: 14, color: "var(--bloom-ink)" }}>
+              <div className="font-hand mt-1.5" style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}>
                 きょうだい
               </div>
-              <div className="text-[12px] mt-0.5" style={{ color: "var(--bloom-ink)" }}>
+              <div className="text-[0.75rem] mt-0.5" style={{ color: "var(--bloom-ink)" }}>
                 追加する
               </div>
             </button>
@@ -438,17 +438,17 @@ export default function HomePage() {
         >
           <OpenBook size={50} />
           <div className="min-w-0 flex-1">
-            <div className="font-hand" style={{ fontSize: 15 }}>
+            <div className="font-hand" style={{ fontSize: "0.9375rem" }}>
               {child?.name ? `${child.name}のこれまで` : "これまでのおもいで"}
             </div>
-            <div className="text-[12px] mt-0.5 opacity-95">写真と一緒にゆっくり振り返る</div>
+            <div className="text-[0.75rem] mt-0.5 opacity-95">写真と一緒にゆっくり振り返る</div>
           </div>
-          <span className="font-hand" style={{ fontSize: 18 }}>→</span>
+          <span className="font-hand" style={{ fontSize: "1.125rem" }}>→</span>
         </button>
 
         {/* さいきんの記録セクション */}
         <div className="mt-6 mb-3 flex items-center gap-2.5">
-          <span className="font-hand" style={{ fontSize: 16, color: "var(--bloom-ink)" }}>
+          <span className="font-hand" style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}>
             さいきんの記録
           </span>
           <WavyLine width={80} color="var(--bloom-primary)" stroke={2} />
@@ -459,16 +459,16 @@ export default function HomePage() {
             <div className="flex justify-center">
               <Sprout size={42} color="var(--bloom-primary)" />
             </div>
-            <p className="font-hand mt-3" style={{ fontSize: 14, color: "var(--bloom-ink)" }}>
+            <p className="font-hand mt-3" style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}>
               まだ記録はありません
             </p>
-            <p className="text-[13px] mt-1" style={{ color: "var(--bloom-ink-soft)" }}>
+            <p className="text-[0.8125rem] mt-1" style={{ color: "var(--bloom-ink-soft)" }}>
               はじめての「できた」を残してみよう
             </p>
             <button
               onClick={() => router.push(`/write?childId=${child?.id}`)}
               className="bloom-border bloom-shadow font-hand mt-4 rounded-xl px-5 py-2.5 text-white"
-              style={{ background: "var(--bloom-primary)", fontSize: 13, letterSpacing: "0.08em" }}
+              style={{ background: "var(--bloom-primary)", fontSize: "0.8125rem", letterSpacing: "0.08em" }}
             >
               さいしょの きろく ✦
             </button>
@@ -490,7 +490,7 @@ export default function HomePage() {
                         className="bloom-border-soft font-hand inline-block rounded-lg px-2 py-0.5 text-white"
                         style={{
                           background: tagColor,
-                          fontSize: 12,
+                          fontSize: "0.75rem",
                           borderColor: "var(--bloom-line)",
                           borderWidth: "1.5px",
                           borderStyle: "solid",
@@ -500,18 +500,18 @@ export default function HomePage() {
                       </span>
                       <span
                         className="font-hand truncate"
-                        style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                        style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
                       >
                         {rec.title}
                       </span>
                     </div>
-                    <div className="text-[12px] shrink-0 ml-2" style={{ color: "var(--bloom-ink-soft)" }}>
+                    <div className="text-[0.75rem] shrink-0 ml-2" style={{ color: "var(--bloom-ink-soft)" }}>
                       {dateStr}
                     </div>
                   </div>
                   {rec.memo && (
                     <p
-                      className="mt-1 text-[12px] line-clamp-2"
+                      className="mt-1 text-[0.75rem] line-clamp-2"
                       style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.5 }}
                     >
                       {rec.memo}

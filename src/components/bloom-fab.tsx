@@ -31,7 +31,7 @@ export default function BloomFab({
       className="bloom-border bloom-shadow font-hand fixed flex h-[54px] w-[54px] items-center justify-center rounded-full text-white"
       style={{
         background: color,
-        fontSize: 26,
+        fontSize: "1.625rem",
         bottom: 100,
         // ワイドビューでは max-w-md コンテナの右下に表示するため、
         // 50vw から max-w-md の半分 (224px) を引いて 20px 内側に置く

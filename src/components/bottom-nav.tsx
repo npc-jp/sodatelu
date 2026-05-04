@@ -41,7 +41,7 @@ export default function BottomNav({ current }: { current: string }) {
           <button
             key={item.key}
             onClick={() => router.push(item.href)}
-            className={`flex flex-1 flex-col items-center gap-0.5 pb-2 pt-2 text-[13px] transition-colors ${
+            className={`flex flex-1 flex-col items-center gap-0.5 pb-2 pt-2 text-[0.8125rem] transition-colors ${
               isActive
                 ? "text-amber-500"
                 : "text-slate-400 hover:text-slate-600"

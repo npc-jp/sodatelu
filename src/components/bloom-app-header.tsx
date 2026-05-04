@@ -67,7 +67,7 @@ export default function BloomAppHeader({
             type="button"
             onClick={handleBack}
             className="font-hand shrink-0"
-            style={{ fontSize: 20, color: textColor }}
+            style={{ fontSize: "1.25rem", color: textColor }}
             aria-label="戻る"
           >
             ←
@@ -78,7 +78,7 @@ export default function BloomAppHeader({
             <Sprout size={22} color="var(--bloom-primary)" />
             <span
               className="font-hand"
-              style={{ fontSize: 19, color: textColor, letterSpacing: "0.02em" }}
+              style={{ fontSize: "1.1875rem", color: textColor, letterSpacing: "0.02em" }}
             >
               sodatelu
             </span>
@@ -88,14 +88,14 @@ export default function BloomAppHeader({
             {title && (
               <h1
                 className="font-hand truncate"
-                style={{ fontSize: 20, color: textColor, lineHeight: 1.1 }}
+                style={{ fontSize: "1.25rem", color: textColor, lineHeight: 1.1 }}
               >
                 {title}
               </h1>
             )}
             {subtitle && (
               <p
-                className="mt-0.5 truncate text-[12px]"
+                className="mt-0.5 truncate text-[0.75rem]"
                 style={{
                   color: textColor === "var(--bloom-ink)" ? "var(--bloom-ink-soft)" : textColor,
                   opacity: textColor === "var(--bloom-ink)" ? 1 : 0.9,

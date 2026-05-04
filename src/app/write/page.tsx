@@ -154,11 +154,11 @@ function WriteForm() {
           </div>
           <p
             className="font-hand mt-4"
-            style={{ fontSize: 22, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "1.375rem", color: "var(--bloom-ink)" }}
           >
             きろくしました ✦
           </p>
-          <p className="mt-2 text-[13px]" style={{ color: "var(--bloom-ink-soft)" }}>
+          <p className="mt-2 text-[0.8125rem]" style={{ color: "var(--bloom-ink-soft)" }}>
             ホームに戻ります…
           </p>
         </div>
@@ -186,7 +186,7 @@ function WriteForm() {
           {/* カテゴリ選択 */}
           <div
             className="font-hand mb-2"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● どんなこと？
           </div>
@@ -208,10 +208,10 @@ function WriteForm() {
                     className="block w-full px-1 py-3.5 text-center"
                     style={{ color: active ? "#fff" : "var(--bloom-ink)" }}
                   >
-                    <div className="mb-0.5" style={{ fontSize: 22 }}>
+                    <div className="mb-0.5" style={{ fontSize: "1.375rem" }}>
                       {cat.glyph}
                     </div>
-                    <div className="font-hand" style={{ fontSize: 13 }}>
+                    <div className="font-hand" style={{ fontSize: "0.8125rem" }}>
                       {cat.label}
                     </div>
                   </button>
@@ -244,11 +244,11 @@ function WriteForm() {
                   }}
                 >
                   {locked && (
-                    <span className="absolute" style={{ top: 3, right: 4, fontSize: 12 }}>
+                    <span className="absolute" style={{ top: 3, right: 4, fontSize: "0.75rem" }}>
                       🔒
                     </span>
                   )}
-                  <div className="font-hand" style={{ fontSize: 12 }}>
+                  <div className="font-hand" style={{ fontSize: "0.75rem" }}>
                     {cat.label}
                   </div>
                 </button>
@@ -258,7 +258,7 @@ function WriteForm() {
 
           {!isPremium && (
             <p
-              className="mt-1.5 text-center text-[12px]"
+              className="mt-1.5 text-center text-[0.75rem]"
               style={{ color: "var(--bloom-ink-soft)" }}
             >
               🔒 のカテゴリはプレミアムで使えます
@@ -274,11 +274,11 @@ function WriteForm() {
                   <div className="flex-1">
                     <div
                       className="font-hand"
-                      style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                      style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
                     >
                       {selectedMilestone.title}
                     </div>
-                    <div className="text-[12px]" style={{ color: "var(--bloom-ink-soft)" }}>
+                    <div className="text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)" }}>
                       {selectedMilestone.age_hint} ・ {selectedMilestone.category}
                     </div>
                   </div>
@@ -286,7 +286,7 @@ function WriteForm() {
                     type="button"
                     onClick={clearMilestone}
                     className="font-hand"
-                    style={{ fontSize: 14, color: "var(--bloom-ink-soft)" }}
+                    style={{ fontSize: "0.875rem", color: "var(--bloom-ink-soft)" }}
                     aria-label="めやすの紐付けを外す"
                   >
                     ✕
@@ -307,7 +307,7 @@ function WriteForm() {
                   <Sprout size={18} color="var(--bloom-primary)" />
                   <span
                     className="font-hand flex-1 text-left"
-                    style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                    style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
                   >
                     めやすに ひもづける（任意）
                   </span>
@@ -331,7 +331,7 @@ function WriteForm() {
           {/* タイトル */}
           <div
             className="font-hand mt-4 mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● タイトル
           </div>
@@ -343,14 +343,14 @@ function WriteForm() {
               required
               placeholder={selectedMilestone ? `例：${selectedMilestone.title}ができた日` : "はじめて歩いた！"}
               className="font-hand block w-full bg-transparent focus:outline-none"
-              style={{ fontSize: 16, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}
             />
           </BloomCard>
 
           {/* 日付 */}
           <div
             className="font-hand mt-4 mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● いつ？
           </div>
@@ -361,14 +361,14 @@ function WriteForm() {
               onChange={(e) => setDate(e.target.value)}
               required
               className="font-hand block w-full bg-transparent focus:outline-none"
-              style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+              style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
             />
           </BloomCard>
 
           {/* メモ */}
           <div
             className="font-hand mt-4 mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● そのときのこと
           </div>
@@ -378,7 +378,7 @@ function WriteForm() {
               onChange={(e) => setMemo(e.target.value)}
               rows={4}
               placeholder="そのときの様子を、ゆっくり書いてください…"
-              className="block w-full resize-none bg-transparent text-[13px] focus:outline-none"
+              className="block w-full resize-none bg-transparent text-[0.8125rem] focus:outline-none"
               style={{
                 color: "var(--bloom-ink)",
                 lineHeight: 1.7,
@@ -389,7 +389,7 @@ function WriteForm() {
           {/* 写真 */}
           <div
             className="font-hand mt-4 mb-1.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             ● 写真
           </div>
@@ -409,7 +409,7 @@ function WriteForm() {
                   setPhotoPreview(null);
                 }}
                 className="bloom-border absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full"
-                style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: 14 }}
+                style={{ background: "#fff", color: "var(--bloom-ink)", fontSize: "0.875rem" }}
                 aria-label="写真を削除"
               >
                 ✕
@@ -428,7 +428,7 @@ function WriteForm() {
               >
                 <span
                   className="font-hand"
-                  style={{ fontSize: 13, color: "var(--bloom-ink-soft)" }}
+                  style={{ fontSize: "0.8125rem", color: "var(--bloom-ink-soft)" }}
                 >
                   ＋ 写真をえらぶ
                 </span>
@@ -456,7 +456,7 @@ function WriteForm() {
             className="bloom-border bloom-shadow font-hand mt-5 w-full rounded-[14px] py-3.5 text-white disabled:opacity-50"
             style={{
               background: "var(--bloom-primary)",
-              fontSize: 16,
+              fontSize: "1rem",
               letterSpacing: "0.08em",
             }}
           >

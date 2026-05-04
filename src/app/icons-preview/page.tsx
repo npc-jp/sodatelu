@@ -51,11 +51,11 @@ export default function IconsPreviewPage() {
           <div className="mt-3 flex items-center gap-2 rounded-xl bg-slate-50 px-3 py-2">
             <span className="text-lg">👶</span>
             <div>
-              <p className="text-[13px] font-medium text-slate-400">Phase 2</p>
+              <p className="text-[0.8125rem] font-medium text-slate-400">Phase 2</p>
               <p className="text-sm font-bold text-slate-700">よちよち期</p>
             </div>
             <div className="ml-auto text-right">
-              <p className="text-[13px] text-slate-400">1〜3歳</p>
+              <p className="text-[0.8125rem] text-slate-400">1〜3歳</p>
             </div>
           </div>
         </div>
@@ -66,10 +66,10 @@ export default function IconsPreviewPage() {
         <div className="mb-5 rounded-2xl bg-white p-4 shadow-sm">
           <h3 className="mb-3 text-sm font-bold text-slate-600">きろくサマリー</h3>
           <div className="flex flex-wrap gap-2">
-            <span className="flex items-center gap-1 rounded-full bg-slate-50 px-3 py-1 text-[13px] font-medium text-slate-600">
+            <span className="flex items-center gap-1 rounded-full bg-slate-50 px-3 py-1 text-[0.8125rem] font-medium text-slate-600">
               ✨ できた <span className="ml-1 font-bold text-amber-600">1</span>
             </span>
-            <span className="flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-[13px] font-bold text-amber-600">
+            <span className="flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-[0.8125rem] font-bold text-amber-600">
               合計 1件
             </span>
           </div>
@@ -80,14 +80,14 @@ export default function IconsPreviewPage() {
             <span className="text-2xl">🏆</span>
             <div>
               <p className="text-sm font-bold text-slate-700">成長のめやす</p>
-              <p className="text-[13px] text-slate-400">よちよち期</p>
+              <p className="text-[0.8125rem] text-slate-400">よちよち期</p>
             </div>
           </div>
           <div className="flex items-center gap-2 rounded-2xl bg-white p-4 shadow-sm">
             <span className="text-2xl">👶</span>
             <div>
               <p className="text-sm font-bold text-slate-700">きょうだい</p>
-              <p className="text-[13px] text-slate-400">追加</p>
+              <p className="text-[0.8125rem] text-slate-400">追加</p>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ export default function IconsPreviewPage() {
           <span className="text-2xl">📖</span>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-bold text-slate-700">さくらのこれまで</p>
-            <p className="text-[13px] text-slate-400">写真と一緒にゆっくり振り返る</p>
+            <p className="text-[0.8125rem] text-slate-400">写真と一緒にゆっくり振り返る</p>
           </div>
           <span className="text-slate-300">›</span>
         </div>
@@ -113,7 +113,7 @@ export default function IconsPreviewPage() {
               <p className="mt-1 text-sm text-slate-500 line-clamp-2">
                 ものすごく驚いた。今日の朝連の時、犬ひとたちの中でパッと言えた。ちゃんと耳に入って驚いた。うれしかった。
               </p>
-              <p className="mt-2 text-[13px] text-slate-400">
+              <p className="mt-2 text-[0.8125rem] text-slate-400">
                 2026/5/1
                 <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-slate-500">できた</span>
                 <span className="ml-2 text-slate-300">by wizardaz1976@mac.com</span>
@@ -136,7 +136,7 @@ export default function IconsPreviewPage() {
           return (
             <button
               key={item.key}
-              className={`flex flex-1 flex-col items-center gap-0.5 pb-2 pt-2 text-[13px] transition-colors ${
+              className={`flex flex-1 flex-col items-center gap-0.5 pb-2 pt-2 text-[0.8125rem] transition-colors ${
                 item.isActive ? "text-amber-500" : "text-slate-400"
               }`}
             >

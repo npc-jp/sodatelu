@@ -63,13 +63,13 @@ function Row({ label, value, rightSlot, onClick, bgColor }: RowProps) {
         <div className="flex-1 min-w-0">
           <div
             className="font-hand"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             {label}
           </div>
           {value && (
             <div
-              className="mt-0.5 truncate text-[12px]"
+              className="mt-0.5 truncate text-[0.75rem]"
               style={{ color: "var(--bloom-ink-soft)" }}
             >
               {value}
@@ -92,7 +92,7 @@ function SectionTitle({ children, icon }: SectionTitleProps) {
       {icon}
       <div
         className="font-hand"
-        style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+        style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
       >
         {children}
       </div>
@@ -261,17 +261,17 @@ export default function SettingsPage() {
               height: 50,
               background: "var(--bloom-yellow)",
               fontFamily: "Yusei Magic, sans-serif",
-              fontSize: 22,
+              fontSize: "1.375rem",
               color: "var(--bloom-ink)",
             }}
           >
             {initial}
           </div>
           <div className="relative flex-1 min-w-0">
-            <div className="font-hand" style={{ fontSize: 17 }}>
+            <div className="font-hand" style={{ fontSize: "1.0625rem" }}>
               {user.displayName || "あなた"}
             </div>
-            <div className="text-[12px] opacity-95 truncate">
+            <div className="text-[0.75rem] opacity-95 truncate">
               {user.email || "（未登録）"}
             </div>
           </div>
@@ -297,12 +297,12 @@ export default function SettingsPage() {
                 <Sparkle size={16} color="var(--bloom-accent)" />
                 <div
                   className="font-hand flex-1"
-                  style={{ fontSize: 14, color: "var(--bloom-ink)" }}
+                  style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}
                 >
                   プレミアムにアップグレード
                 </div>
                 <span
-                  className="font-hand rounded-md px-2 py-0.5 text-[12px] text-white"
+                  className="font-hand rounded-md px-2 py-0.5 text-[0.75rem] text-white"
                   style={{
                     background: "var(--bloom-accent)",
                     border: "1.5px solid var(--bloom-line)",
@@ -312,7 +312,7 @@ export default function SettingsPage() {
                 </span>
               </div>
               <div
-                className="mt-1.5 text-[12px]"
+                className="mt-1.5 text-[0.75rem]"
                 style={{ color: "var(--bloom-ink)", lineHeight: 1.5 }}
               >
                 11カテゴリすべて使えるように。年表のスナップショットも。
@@ -347,7 +347,7 @@ export default function SettingsPage() {
         <BloomCard soft className="mb-1.5 p-3.5">
           <div
             className="font-hand mb-2.5"
-            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+            style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
           >
             文字サイズ
           </div>
@@ -365,7 +365,7 @@ export default function SettingsPage() {
                     color: active ? "#fff" : "var(--bloom-ink)",
                   }}
                 >
-                  <div className="font-hand" style={{ fontSize: 13, fontWeight: 700 }}>
+                  <div className="font-hand" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
                     {FONT_SCALE_LABELS[key]}
                   </div>
                 </button>
@@ -373,7 +373,7 @@ export default function SettingsPage() {
             })}
           </div>
           <p
-            className="mt-2 text-[11px]"
+            className="mt-2 text-[0.6875rem]"
             style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
           >
             この端末でだけ有効です。すぐに反映されます。
@@ -389,12 +389,12 @@ export default function SettingsPage() {
             <div className="flex-1 min-w-0">
               <div
                 className="font-hand"
-                style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+                style={{ fontSize: "0.8125rem", color: "var(--bloom-ink)" }}
               >
                 コミュニティ統計への協力
               </div>
               <p
-                className="mt-1 text-[12px]"
+                className="mt-1 text-[0.75rem]"
                 style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
               >
                 個人を特定できない形で集計したデータを、子育て研究に役立てます。
@@ -442,7 +442,7 @@ export default function SettingsPage() {
           style={{
             background: "#fff",
             color: "var(--bloom-ink)",
-            fontSize: 13,
+            fontSize: "0.8125rem",
           }}
         >
           ログアウト
@@ -451,7 +451,7 @@ export default function SettingsPage() {
         {/* アカウント削除 */}
         {deleteError && (
           <p
-            className="mt-3 rounded-xl px-3 py-2 text-[13px]"
+            className="mt-3 rounded-xl px-3 py-2 text-[0.8125rem]"
             style={{
               background: "#FCE4D2",
               color: "#A8421B",
@@ -468,7 +468,7 @@ export default function SettingsPage() {
             setConfirm1Open(true);
           }}
           disabled={deleting}
-          className="mt-2 w-full rounded-xl py-2.5 text-[12px]"
+          className="mt-2 w-full rounded-xl py-2.5 text-[0.75rem]"
           style={{
             background: "transparent",
             color: "var(--bloom-ink-soft)",
@@ -479,7 +479,7 @@ export default function SettingsPage() {
         </button>
 
         <p
-          className="mt-5 text-center text-[12px]"
+          className="mt-5 text-center text-[0.75rem]"
           style={{ color: "var(--bloom-ink-soft)" }}
         >
           ご質問は sodatelu.app@gmail.com まで
