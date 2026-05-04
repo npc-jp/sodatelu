@@ -414,18 +414,25 @@ export default function SettingsPage() {
               aria-checked={communityOptIn}
               disabled={settingsLoading || optInSaving}
               onClick={handleToggleOptIn}
-              className="bloom-border relative inline-flex h-7 w-12 shrink-0 items-center rounded-full transition-colors disabled:opacity-50"
+              className="bloom-border relative inline-flex shrink-0 items-center rounded-full transition-colors disabled:opacity-50"
               style={{
                 background: communityOptIn
                   ? "var(--bloom-primary)"
                   : "var(--bloom-line-soft)",
+                // 文字サイズに連動して大きくなるよう em 単位
+                height: "1.75em",
+                width: "3em",
               }}
             >
               <span
-                className="inline-block h-5 w-5 transform rounded-full bg-white transition-transform"
+                className="inline-block transform rounded-full bg-white transition-transform"
                 style={{
+                  height: "1.25em",
+                  width: "1.25em",
                   border: "1.5px solid var(--bloom-line)",
-                  transform: communityOptIn ? "translateX(20px)" : "translateX(2px)",
+                  transform: communityOptIn
+                    ? "translateX(1.5em)"
+                    : "translateX(0.125em)",
                 }}
               />
             </button>

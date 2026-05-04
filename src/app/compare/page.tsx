@@ -364,7 +364,7 @@ export default function ComparePage() {
                                     {rec.recorded_date.toDate().toLocaleDateString("ja-JP")}
                                   </span>
                                   <span style={{ color: "var(--bloom-primary)", fontWeight: 700 }}>
-                                    {day}日目
+                                    {day}日
                                   </span>
                                 </div>
                               </button>
