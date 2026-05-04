@@ -487,7 +487,7 @@ export default function HomePage() {
                   <div className="flex items-baseline justify-between">
                     <div className="flex items-center gap-1.5 min-w-0">
                       <span
-                        className="bloom-border-soft font-hand inline-block rounded-lg px-2 py-0.5 text-white"
+                        className="bloom-border-soft font-hand inline-block shrink-0 whitespace-nowrap rounded-lg px-2 py-0.5 text-white"
                         style={{
                           background: tagColor,
                           fontSize: "0.75rem",

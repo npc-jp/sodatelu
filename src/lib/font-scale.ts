@@ -16,8 +16,15 @@ export const FONT_SCALES: Record<FontScale, number> = {
 
 export const FONT_SCALE_LABELS: Record<FontScale, string> = {
   small: "小",
-  medium: "中（1.25倍）",
-  large: "大（1.5倍）",
+  medium: "中",
+  large: "大",
+};
+
+// セレクター下部の説明用
+export const FONT_SCALE_DESCRIPTIONS: Record<FontScale, string> = {
+  small: "標準サイズ",
+  medium: "1.25倍",
+  large: "1.5倍",
 };
 
 const STORAGE_KEY = "sodatelu.font_scale";

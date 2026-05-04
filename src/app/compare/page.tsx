@@ -219,8 +219,8 @@ export default function ComparePage() {
         </p>
       )}
 
-      {/* タイムライン本体: 横スクロール領域。
-          ヘッダー（子ども名チップ）と各月齢行を同じ列幅で揃え、横方向に一緒にスクロールさせる */}
+      {/* タイムライン本体: 2人以下なら画面幅で半々表示、3人以上は横スクロール
+          ヘッダー（子ども名チップ）と各月齢行を同じ列幅で揃える */}
       <main className="flex-1 overflow-x-auto overflow-y-auto pb-10">
         {timeline.length === 0 ? (
           <div className="px-3.5 pt-3">
@@ -235,15 +235,26 @@ export default function ComparePage() {
             </BloomCard>
           </div>
         ) : (
+          (() => {
+            // 2人以下: 画面幅を2分割（1人は左半分、もう半分は空白で「もう一人いると並びます」感を出す）
+            // 3人以上: 固定140px列で横スクロール
+            const isFlexLayout = kids.length <= 2;
+            const gridTemplate = isFlexLayout
+              ? "repeat(2, minmax(0, 1fr))"
+              : `repeat(${kids.length}, ${COL_WIDTH}px)`;
+            const wrapperStyle = isFlexLayout
+              ? { width: "100%" }
+              : { minWidth: kids.length * COL_WIDTH + 60 };
+            return (
           <div
-            className="min-w-max px-3.5 pt-1"
-            style={{ minWidth: kids.length * COL_WIDTH + 60 }}
+            className="px-3.5 pt-1"
+            style={wrapperStyle}
           >
             {/* ヘッダー: きょうだいカラーチップを N列横並び */}
             <div
               className="sticky top-0 z-10 mb-2 grid gap-2 pb-2 pt-1"
               style={{
-                gridTemplateColumns: `repeat(${kids.length}, ${COL_WIDTH}px)`,
+                gridTemplateColumns: gridTemplate,
                 background: "var(--bloom-bg)",
               }}
             >
@@ -310,7 +321,7 @@ export default function ComparePage() {
                 <div
                   className="grid items-start gap-2"
                   style={{
-                    gridTemplateColumns: `repeat(${kids.length}, ${COL_WIDTH}px)`,
+                    gridTemplateColumns: gridTemplate,
                   }}
                 >
                   {kids.map((kid) => {
@@ -367,6 +378,8 @@ export default function ComparePage() {
               </div>
             ))}
           </div>
+            );
+          })()
         )}
       </main>
 

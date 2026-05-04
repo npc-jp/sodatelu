@@ -24,6 +24,7 @@ import {
 } from "@/lib/firestore";
 import { deleteOwnAccount, type AccountDeletionResult } from "@/lib/account-delete";
 import {
+  FONT_SCALE_DESCRIPTIONS,
   FONT_SCALE_LABELS,
   FONT_SCALES,
   getFontScale,
@@ -365,8 +366,14 @@ export default function SettingsPage() {
                     color: active ? "#fff" : "var(--bloom-ink)",
                   }}
                 >
-                  <div className="font-hand" style={{ fontSize: "0.8125rem", fontWeight: 700 }}>
+                  <div className="font-hand" style={{ fontSize: "1rem", fontWeight: 700 }}>
                     {FONT_SCALE_LABELS[key]}
+                  </div>
+                  <div
+                    className="mt-0.5 text-[0.625rem]"
+                    style={{ opacity: active ? 0.9 : 0.7 }}
+                  >
+                    {FONT_SCALE_DESCRIPTIONS[key]}
                   </div>
                 </button>
               );
