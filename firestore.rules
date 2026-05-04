@@ -155,6 +155,14 @@ service cloud.firestore {
       return child.family_id != null && familyPlan(child.family_id) == "premium";
     }
 
+    // βテスター特典: users.beta_tester == true なら永久プレミアム扱い
+    // β期間中に登録した友人テスターが正式リリース後も全機能を使えるよう保証する
+    function isBetaTester() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.beta_tester == true;
+    }
+
     match /records/{recordId} {
       allow get: if isSignedIn()
         && resource.data.child_id != null
@@ -169,6 +177,7 @@ service cloud.firestore {
         && (
           !isPremiumCategory(request.resource.data.category)
           || isPremiumByChild(request.resource.data.child_id)
+          || isBetaTester()
         );
 
       allow update: if isSignedIn()
@@ -177,6 +186,7 @@ service cloud.firestore {
         && (
           !isPremiumCategory(request.resource.data.category)
           || isPremiumByChild(request.resource.data.child_id)
+          || isBetaTester()
         );
 
       allow delete: if isSignedIn()

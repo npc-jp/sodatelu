@@ -5,8 +5,11 @@
 //   タブレット/PCサイズ(md以上)では左右の余白に Bloom の装飾SVGを散らして
 //   「世界観が広がる」演出を加える（友人テストで iPad ユーザー対応のための B案）
 // - /compare のような「N人を横並びで比較」したい画面: 全幅に開放
+// - 文字サイズ設定（小/中/大）を起動時に localStorage から復元
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { applyFontScaleToDOM, getFontScale } from "@/lib/font-scale";
 import {
   Cloud,
   Heart,
@@ -26,6 +29,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const isFullWidth = FULL_WIDTH_PATHS.some(
     (p) => pathname === p || pathname.startsWith(`${p}/`)
   );
+
+  // 文字サイズ設定を初回マウント時に html に適用
+  useEffect(() => {
+    applyFontScaleToDOM(getFontScale());
+  }, []);
 
   if (isFullWidth) {
     // 全幅: ラッパーなし

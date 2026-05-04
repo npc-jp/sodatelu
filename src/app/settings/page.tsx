@@ -23,6 +23,13 @@ import {
   updateCommunityStatsOptIn,
 } from "@/lib/firestore";
 import { deleteOwnAccount, type AccountDeletionResult } from "@/lib/account-delete";
+import {
+  FONT_SCALE_LABELS,
+  FONT_SCALES,
+  getFontScale,
+  setFontScale,
+  type FontScale,
+} from "@/lib/font-scale";
 import ConfirmModal from "@/components/confirm-modal";
 import BloomAppHeader from "@/components/bloom-app-header";
 import BloomBottomNav from "@/components/bloom-bottom-nav";
@@ -103,6 +110,17 @@ export default function SettingsPage() {
   const { isPremium } = usePlan();
 
   const [settingsLoading, setSettingsLoading] = useState(true);
+  const [fontScale, setFontScaleState] = useState<FontScale>("small");
+
+  // 文字サイズ設定を localStorage から復元
+  useEffect(() => {
+    setFontScaleState(getFontScale());
+  }, []);
+
+  function handleChangeFontScale(value: FontScale) {
+    setFontScaleState(value);
+    setFontScale(value);
+  }
   const [communityOptIn, setCommunityOptIn] = useState(false);
   const [optInSaving, setOptInSaving] = useState(false);
 
@@ -321,6 +339,46 @@ export default function SettingsPage() {
           value={user.email || "未登録"}
           onClick={() => router.push("/edit-email")}
         />
+
+        {/* 表示設定 */}
+        <SectionTitle icon={<Sparkle size={14} color="var(--bloom-accent)" />}>
+          表示
+        </SectionTitle>
+        <BloomCard soft className="mb-1.5 p-3.5">
+          <div
+            className="font-hand mb-2.5"
+            style={{ fontSize: 13, color: "var(--bloom-ink)" }}
+          >
+            文字サイズ
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {(Object.keys(FONT_SCALES) as FontScale[]).map((key) => {
+              const active = fontScale === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => handleChangeFontScale(key)}
+                  className={`bloom-border ${active ? "bloom-shadow" : "bloom-shadow-soft"} rounded-xl py-2 text-center`}
+                  style={{
+                    background: active ? "var(--bloom-primary)" : "#fff",
+                    color: active ? "#fff" : "var(--bloom-ink)",
+                  }}
+                >
+                  <div className="font-hand" style={{ fontSize: 13, fontWeight: 700 }}>
+                    {FONT_SCALE_LABELS[key]}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+          <p
+            className="mt-2 text-[11px]"
+            style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.6 }}
+          >
+            この端末でだけ有効です。すぐに反映されます。
+          </p>
+        </BloomCard>
 
         {/* プライバシー */}
         <SectionTitle icon={<Heart size={14} color="var(--bloom-accent)" />}>
