@@ -6,9 +6,10 @@
 //
 // 既存ロジック維持: メール/パスワード認証 + Googleログイン + Firestore users 作成
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { isInAppBrowser } from "@/lib/in-app-browser";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -35,6 +36,12 @@ export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  // アプリ内ブラウザ（LINE/X/IG等）検出。Google OAuth が拒否されるため案内を出す
+  const [inAppBrowser, setInAppBrowser] = useState(false);
+
+  useEffect(() => {
+    setInAppBrowser(isInAppBrowser());
+  }, []);
 
   // メール/パスワード認証
   async function handleSubmit(e: React.FormEvent) {
@@ -179,12 +186,45 @@ export default function LoginPage() {
         }}
       >
         <div className="mx-auto max-w-sm">
-          {/* Googleログイン */}
+          {/* アプリ内ブラウザ警告（LINE/X/IG等から開いた時にGoogleログインが拒否されるため） */}
+          {inAppBrowser && (
+            <div
+              className="mb-3 rounded-[14px] p-3"
+              style={{
+                background: "var(--bloom-yellow)",
+                border: "2px solid var(--bloom-line)",
+                color: "var(--bloom-ink)",
+              }}
+            >
+              <p
+                className="font-hand"
+                style={{ fontSize: "0.875rem", lineHeight: 1.6 }}
+              >
+                ⚠️ Googleログインができません
+              </p>
+              <p
+                className="mt-1 text-[0.75rem]"
+                style={{ lineHeight: 1.7 }}
+              >
+                LINEやXなどのアプリ内ブラウザで開いています。
+                <br />
+                <strong>Safariや Chrome で開きなおしてください</strong>。
+                <br />
+                右上のメニューから「外部ブラウザで開く」を選ぶとスムーズです。
+                <br />
+                <br />
+                メール+パスワードでの登録なら このまま続けられます。
+              </p>
+            </div>
+          )}
+
+          {/* Googleログイン（アプリ内ブラウザ時は無効化） */}
           <button
             onClick={handleGoogleLogin}
-            disabled={loading}
+            disabled={loading || inAppBrowser}
             className="bloom-border bloom-shadow-soft mb-3 flex w-full items-center justify-center gap-3 rounded-[14px] py-3 text-sm font-medium disabled:opacity-50"
             style={{ background: "#fff", color: "var(--bloom-ink)" }}
+            aria-disabled={inAppBrowser}
           >
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
