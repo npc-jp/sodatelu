@@ -60,6 +60,39 @@ export const Heart = ({ size = 24, color = "#E89A9A" }: IllustrationProps) => (
   </svg>
 );
 
+// 家のシルエット「マイホーム＝家族」アイコン（手描き風・屋根＋壁＋ドア）
+export const Family = ({ size = 24, color = "#E89A9A", stroke = 2 }: IllustrationProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
+    {/* 屋根（少しオフセットで手描き感） */}
+    <path
+      d="M3 12 L12 3.5 L21 12"
+      stroke={color}
+      strokeWidth={stroke}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+    {/* 家の壁＋床（コの字） */}
+    <path
+      d="M5.5 11 L5.5 20.5 L18.5 20.5 L18.5 11"
+      stroke={color}
+      strokeWidth={stroke}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+    {/* ドア（中央下・家族の入口を象徴） */}
+    <path
+      d="M10 20.5 L10 14.8 Q 12 13.8, 14 14.8 L 14 20.5"
+      stroke={color}
+      strokeWidth={stroke}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+    />
+  </svg>
+);
+
 export const Star = ({ size = 24, color = "#F5B945" }: IllustrationProps) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
     <path

@@ -17,7 +17,7 @@ import { getPhase } from "@/lib/phases";
 import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
 import BloomFab from "@/components/bloom-fab";
-import { Gear, Heart, OpenBook, PottedPlant, Sparkle, Sprout, Star, WavyLine } from "@/components/illustrations";
+import { Family, Gear, Heart, OpenBook, PottedPlant, Sparkle, Sprout, Star, WavyLine } from "@/components/illustrations";
 
 // 月齢計算
 function calcAge(birthDate: Timestamp): string {
@@ -172,7 +172,7 @@ export default function HomePage() {
             style={{ background: "var(--bloom-yellow)" }}
             aria-label="ファミリー"
           >
-            <Heart size={20} color="var(--bloom-ink)" />
+            <Family size={22} color="var(--bloom-ink)" />
           </button>
           <button
             onClick={() => router.push("/settings")}
@@ -194,7 +194,7 @@ export default function HomePage() {
             className="bloom-border bloom-shadow-soft mb-3 flex w-full items-center gap-3 rounded-2xl p-3 text-left"
             style={{ background: "var(--bloom-accent-soft)" }}
           >
-            <Heart size={20} color="var(--bloom-accent)" />
+            <Family size={20} color="var(--bloom-accent)" />
             <div className="flex-1">
               <p className="font-hand text-sm" style={{ color: "var(--bloom-ink)" }}>
                 ファミリーへの招待が{invitations.length}件

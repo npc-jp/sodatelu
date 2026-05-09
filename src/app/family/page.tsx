@@ -2,7 +2,7 @@
 
 // ファミリー設定画面 — Bloom デザイン適用
 // 参照: design_handoff_bloom/dir-bloom-extra.jsx の BloomFamily
-// Heart ヘッダー / こども / 記録できるひと / 「+ 家族をしょうたい」CTA
+// Family ヘッダー / こども / 記録できるひと / 「+ 家族をしょうたい」CTA
 //
 // 既存ロジック維持: メンバー一覧 + 招待送信 + 自分宛招待の承認/辞退
 
@@ -27,7 +27,7 @@ import { useChild } from "@/lib/child-context";
 import BloomAppHeader from "@/components/bloom-app-header";
 import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
-import { Heart, Sparkle, Sprout, Star } from "@/components/illustrations";
+import { Family, Sparkle, Sprout, Star } from "@/components/illustrations";
 
 // 子どもごとのカラー
 const CHILD_COLORS = [
@@ -198,7 +198,7 @@ ${url}`;
         title="ファミリー"
         subtitle={familyName}
         showBack
-        rightSlot={<Heart size={16} color="var(--bloom-accent)" />}
+        rightSlot={<Family size={22} color="var(--bloom-accent)" />}
       />
 
       <main className="flex-1 overflow-y-auto px-4 pt-4 pb-28">
