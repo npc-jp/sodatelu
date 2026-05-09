@@ -1,11 +1,12 @@
 // テスト用アカウントとデータを投入するスクリプト
-// - wizardaz1976@me.com で新規アカウント作成
+// - .env.local の SODATELU_TEST_EMAIL でアカウント作成（既存なら signIn）
 // - 男の子（そうた・2014/4/15生まれ）と女の子（はなこ・2022/8/20生まれ）を登録
 // - 各 milestone に紐付いた記録 + 自由記録を投入
 // - 写真は10件程度（picsum.photos）
 //
 // 使い方:
-//   node scripts/seed-test-account.mjs
+//   1. .env.local に SODATELU_TEST_EMAIL=... と SODATELU_TEST_PASSWORD=... を設定
+//   2. node --env-file=.env.local scripts/seed-test-account.mjs
 
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -17,11 +18,15 @@ const FIREBASE_CONFIG = {
   projectId: "sodatelu",
 };
 
-// === テストアカウント情報 ===
+// === テストアカウント情報（.env.local から読み込み） ===
 const TEST_ACCOUNT = {
-  email: "wizardaz1976@me.com",
-  password: "sodatelu_test_2026",
+  email: process.env.SODATELU_TEST_EMAIL,
+  password: process.env.SODATELU_TEST_PASSWORD,
 };
+if (!TEST_ACCOUNT.email || !TEST_ACCOUNT.password) {
+  console.error("Error: .env.local に SODATELU_TEST_EMAIL / SODATELU_TEST_PASSWORD を設定してください");
+  process.exit(1);
+}
 
 // === 子ども情報 ===
 const CHILDREN = [
