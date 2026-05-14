@@ -80,6 +80,39 @@ export type GrowthRecord = {
   recorded_by_name?: string;
 };
 
+// === 身長・体重の計測記録（成長機能 Phase 1 で追加） ===
+// 仕様書 growth-feature-spec-v1-2026-05-14.md B-2 参照
+// records とは別コレクション。日記型 records と数値計測型 measurements を分離する設計
+export type Measurement = {
+  id?: string;
+  child_id: DocumentReference;
+  family_id: DocumentReference;
+  measured_date: Timestamp; // 計測日（UTC）
+  height_cm: number | null; // 身長(cm)。未入力時 null
+  weight_kg: number | null; // 体重(kg)。未入力時 null
+  memo: string; // 備考（任意）
+  created_by_uid: string;
+  created_at: Timestamp;
+  updated_at: Timestamp;
+};
+
+// === 予防接種の記録（成長機能 Phase 3 で追加） ===
+// 仕様書 growth-feature-spec-v1-2026-05-14.md B-2 / A-2 参照
+// vaccine_id は /public/data/vaccination-schedule.json の vaccines[].id と対応
+export type VaccinationRecord = {
+  id?: string;
+  child_id: DocumentReference;
+  family_id: DocumentReference;
+  vaccine_id: string; // マスタJSONの id（例: "hepatitis_b"）
+  dose_number: number; // 何回目の接種か（1始まり）
+  vaccinated_date: Timestamp | null; // 接種日。未入力時 null（完了チェックのみ）
+  is_completed: boolean; // 完了フラグ
+  memo: string; // 備考（任意）
+  created_by_uid: string;
+  created_at: Timestamp;
+  updated_at: Timestamp;
+};
+
 // 招待の型定義
 export type Invitation = {
   id?: string;
@@ -99,6 +132,8 @@ export const childrenRef = collection(db, "children");
 export const milestonesRef = collection(db, "milestones");
 export const recordsRef = collection(db, "records");
 export const invitationsRef = collection(db, "invitations");
+export const measurementsRef = collection(db, "measurements");
+export const vaccinationsRef = collection(db, "vaccinations");
 
 // === ファミリー作成（初回登録時） ===
 
@@ -450,4 +485,166 @@ export async function getPendingInvitations(familyId: string) {
     id: d.id,
     ...d.data(),
   })) as (Invitation & { id: string })[];
+}
+
+// ============================================================
+// measurements コレクション（成長機能 Phase 1）
+// ============================================================
+// 身長・体重の計測記録。日記型 records とは別系統で管理する。
+// 仕様書: growth-feature-spec-v1-2026-05-14.md A-3, B-2 参照
+
+// === 計測記録の追加 ===
+// 身長・体重のどちらか片方だけでも保存可能（両方 null は不可）
+
+export async function addMeasurement(data: {
+  childId: string;
+  familyId: string;
+  measured_date: Date;
+  height_cm: number | null;
+  weight_kg: number | null;
+  memo?: string;
+  createdByUid: string;
+}) {
+  // 身長・体重とも null の場合はエラー（フォーム側で弾く想定だが防御的に）
+  if (data.height_cm == null && data.weight_kg == null) {
+    throw new Error("身長または体重のどちらかは入力してください");
+  }
+  return addDoc(measurementsRef, {
+    child_id: doc(db, "children", data.childId),
+    family_id: doc(db, "families", data.familyId),
+    measured_date: Timestamp.fromDate(data.measured_date),
+    height_cm: data.height_cm,
+    weight_kg: data.weight_kg,
+    memo: data.memo ?? "",
+    created_by_uid: data.createdByUid,
+    created_at: serverTimestamp(),
+    updated_at: serverTimestamp(),
+  });
+}
+
+// === 子どもの計測記録一覧を取得（measured_date 降順） ===
+
+export async function getMeasurementsByChild(childId: string) {
+  const childRef = doc(db, "children", childId);
+  const q = query(measurementsRef, where("child_id", "==", childRef));
+  const snapshot = await getDocs(q);
+  const items = snapshot.docs.map((d) => ({
+    id: d.id,
+    ...d.data(),
+  })) as (Measurement & { id: string })[];
+  // クライアント側でソート（複合インデックス必須を避けるため。データ件数が小さい想定）
+  return items.sort(
+    (a, b) => b.measured_date.seconds - a.measured_date.seconds
+  );
+}
+
+// === 計測記録の更新 ===
+// childId / familyId / created_by_uid / created_at は変更不可（編集対象外）
+
+export async function updateMeasurement(
+  measurementId: string,
+  data: {
+    measured_date: Date;
+    height_cm: number | null;
+    weight_kg: number | null;
+    memo?: string;
+  }
+) {
+  if (data.height_cm == null && data.weight_kg == null) {
+    throw new Error("身長または体重のどちらかは入力してください");
+  }
+  const update: Record<string, unknown> = {
+    measured_date: Timestamp.fromDate(data.measured_date),
+    height_cm: data.height_cm,
+    weight_kg: data.weight_kg,
+    updated_at: serverTimestamp(),
+  };
+  if (data.memo !== undefined) {
+    update.memo = data.memo;
+  }
+  return updateDoc(doc(db, "measurements", measurementId), update);
+}
+
+// === 計測記録の削除 ===
+
+export async function deleteMeasurement(measurementId: string) {
+  return deleteDoc(doc(db, "measurements", measurementId));
+}
+
+// ============================================================
+// vaccinations コレクション（成長機能 Phase 3）
+// ============================================================
+// 予防接種の接種記録。マスタは /public/data/vaccination-schedule.json
+// vaccine_id × dose_number の組み合わせで一意。Firestore側は通常のドキュメントとして
+// 保存し、クライアント側で (vaccine_id, dose_number) → record の Map を構築する。
+// 仕様書: growth-feature-spec-v1-2026-05-14.md A-2, B-2 参照
+
+// === 予防接種の追加 ===
+// vaccinated_date は null 許容（チェックのみ完了、日付未入力もOK）
+
+export async function addVaccination(data: {
+  childId: string;
+  familyId: string;
+  vaccineId: string;
+  doseNumber: number;
+  vaccinated_date: Date | null;
+  memo?: string;
+  createdByUid: string;
+}) {
+  return addDoc(vaccinationsRef, {
+    child_id: doc(db, "children", data.childId),
+    family_id: doc(db, "families", data.familyId),
+    vaccine_id: data.vaccineId,
+    dose_number: data.doseNumber,
+    vaccinated_date: data.vaccinated_date
+      ? Timestamp.fromDate(data.vaccinated_date)
+      : null,
+    is_completed: true,
+    memo: data.memo ?? "",
+    created_by_uid: data.createdByUid,
+    created_at: serverTimestamp(),
+    updated_at: serverTimestamp(),
+  });
+}
+
+// === 子どもの予防接種記録一覧を取得 ===
+// 並び順は (vaccine_id, dose_number) ベースのMap構築のためソート不要
+
+export async function getVaccinationsByChild(childId: string) {
+  const childRef = doc(db, "children", childId);
+  const q = query(vaccinationsRef, where("child_id", "==", childRef));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((d) => ({
+    id: d.id,
+    ...d.data(),
+  })) as (VaccinationRecord & { id: string })[];
+}
+
+// === 予防接種記録の更新 ===
+// 編集対象は接種日とメモのみ。vaccine_id / dose_number は変更不可
+
+export async function updateVaccination(
+  vaccinationId: string,
+  data: {
+    vaccinated_date: Date | null;
+    memo?: string;
+  }
+) {
+  const update: Record<string, unknown> = {
+    vaccinated_date: data.vaccinated_date
+      ? Timestamp.fromDate(data.vaccinated_date)
+      : null,
+    is_completed: true,
+    updated_at: serverTimestamp(),
+  };
+  if (data.memo !== undefined) {
+    update.memo = data.memo;
+  }
+  return updateDoc(doc(db, "vaccinations", vaccinationId), update);
+}
+
+// === 予防接種記録の削除（チェックを外す） ===
+
+export async function deleteVaccination(vaccinationId: string) {
+  return deleteDoc(doc(db, "vaccinations", vaccinationId));
 }

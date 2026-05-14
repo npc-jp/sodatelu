@@ -15,6 +15,7 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
@@ -36,6 +37,9 @@ export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  // パスワードリセット送信中・成功メッセージ表示用
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetMessage, setResetMessage] = useState("");
   // アプリ内ブラウザ（LINE/X/IG等）検出。Google OAuth が拒否されるため案内を出す
   const [inAppBrowser, setInAppBrowser] = useState(false);
   const [recommendedBrowser, setRecommendedBrowser] = useState("Safari か Chrome");
@@ -95,6 +99,46 @@ export default function LoginPage() {
       }
     } finally {
       setLoading(false);
+    }
+  }
+
+  // パスワードリセットメール送信
+  // βテスター全員が自力でパスワード復旧できるよう、Firebase Auth の sendPasswordResetEmail を使う
+  // メアド欄を共有: フォームに入力済みならその値を、空なら入力を促す
+  async function handlePasswordReset() {
+    setError("");
+    setResetMessage("");
+
+    if (!email) {
+      setError("メールアドレスを入力してから「パスワードを忘れた」を押してください");
+      return;
+    }
+
+    setResetLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      // セキュリティ上、宛先の有無に関わらず同じメッセージ
+      // （存在しないメアドを判別できないようにするため）
+      setResetMessage(
+        "パスワードリセットのメールを送りました。受信箱を確認してください。"
+      );
+    } catch (err: unknown) {
+      const firebaseError = err as { code?: string };
+      switch (firebaseError.code) {
+        case "auth/invalid-email":
+          setError("メールアドレスの形式が正しくありません");
+          break;
+        case "auth/missing-email":
+          setError("メールアドレスを入力してください");
+          break;
+        default:
+          // user-not-found 等もここで吸収（攻撃者にヒントを与えない）
+          setResetMessage(
+            "パスワードリセットのメールを送りました。受信箱を確認してください。"
+          );
+      }
+    } finally {
+      setResetLoading(false);
     }
   }
 
@@ -276,6 +320,18 @@ export default function LoginPage() {
               </div>
             )}
 
+            {resetMessage && (
+              <div
+                className="rounded-lg px-3 py-2 text-[0.8125rem]"
+                style={{
+                  background: "var(--bloom-primary-soft)",
+                  color: "var(--bloom-ink)",
+                }}
+              >
+                ✦ {resetMessage}
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={loading}
@@ -289,6 +345,23 @@ export default function LoginPage() {
               {loading ? "処理中…" : isSignUp ? "登録してはじめる" : "はじめる"}
             </button>
 
+            {/* パスワードリセット（ログインモードのみ表示。新規登録時は不要） */}
+            {!isSignUp && (
+              <p className="pt-1 text-center text-[0.75rem]">
+                <button
+                  type="button"
+                  onClick={handlePasswordReset}
+                  disabled={resetLoading}
+                  className="font-hand underline disabled:opacity-50"
+                  style={{ color: "var(--bloom-ink-soft)" }}
+                >
+                  {resetLoading
+                    ? "送信中…"
+                    : "パスワードを忘れた方はこちら"}
+                </button>
+              </p>
+            )}
+
             <p className="pt-2 text-center text-[0.8125rem]" style={{ color: "var(--bloom-ink-soft)" }}>
               {isSignUp ? "すでにアカウントをお持ちですか？" : "アカウントをお持ちでないですか？"}
               <button
@@ -296,6 +369,7 @@ export default function LoginPage() {
                 onClick={() => {
                   setIsSignUp(!isSignUp);
                   setError("");
+                  setResetMessage("");
                 }}
                 className="font-hand ml-1.5"
                 style={{ color: "var(--bloom-accent)" }}

@@ -1,0 +1,293 @@
+{
+  "version": "2026-05",
+  "scope": "定期接種のみ（全13種・接種回数合計28回）",
+  "license": "公的情報を参考に作成。出典: 厚生労働省『予防接種スケジュール』（最新版）／日本小児科学会 推奨スケジュール 2025年4月版",
+  "note": "5種混合（DPT-IPV-Hib）は2024年4月に定期接種化。旧4種混合+ヒブ単独の後継として扱う。ロタウイルスは1価/5価で接種回数が異なるため最大3回として note 注記。HPVは交差接種スケジュールにより回数差異あり",
+  "vaccines": [
+    {
+      "id": "hepatitis_b",
+      "name": "B型肝炎",
+      "nameShort": "B型肝炎",
+      "category": "定期",
+      "description": "B型肝炎ウイルスへの感染を予防します。母子感染予防として乳幼児期に接種します。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 2,
+          "standardAgeMonthsTo": 9,
+          "note": "生後2ヶ月から接種開始"
+        },
+        {
+          "doseNumber": 2,
+          "standardAgeMonthsFrom": 3,
+          "standardAgeMonthsTo": 10,
+          "note": "1回目から4〜8週間後"
+        },
+        {
+          "doseNumber": 3,
+          "standardAgeMonthsFrom": 7,
+          "standardAgeMonthsTo": 12,
+          "note": "1回目から20〜24週間後"
+        }
+      ]
+    },
+    {
+      "id": "rotavirus",
+      "name": "ロタウイルス",
+      "nameShort": "ロタ",
+      "category": "定期",
+      "description": "ロタウイルスによる重症胃腸炎を予防します。1価（2回）または5価（3回）のいずれかを選択します。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 2,
+          "standardAgeMonthsTo": 4,
+          "note": "生後14週6日までに初回を開始することが推奨"
+        },
+        {
+          "doseNumber": 2,
+          "standardAgeMonthsFrom": 3,
+          "standardAgeMonthsTo": 6,
+          "note": "1回目から4週以上あけて"
+        },
+        {
+          "doseNumber": 3,
+          "standardAgeMonthsFrom": 4,
+          "standardAgeMonthsTo": 8,
+          "note": "5価（ロタテック）のみ。1価（ロタリックス）はここまでで終了"
+        }
+      ]
+    },
+    {
+      "id": "pcv",
+      "name": "小児用肺炎球菌",
+      "nameShort": "肺炎球菌",
+      "category": "定期",
+      "description": "肺炎球菌による髄膜炎・肺炎などを予防します。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 2,
+          "standardAgeMonthsTo": 7,
+          "note": "生後2ヶ月から接種開始"
+        },
+        {
+          "doseNumber": 2,
+          "standardAgeMonthsFrom": 3,
+          "standardAgeMonthsTo": 8,
+          "note": "1回目から27日以上あけて"
+        },
+        {
+          "doseNumber": 3,
+          "standardAgeMonthsFrom": 4,
+          "standardAgeMonthsTo": 9,
+          "note": "2回目から27日以上あけて"
+        },
+        {
+          "doseNumber": 4,
+          "standardAgeMonthsFrom": 12,
+          "standardAgeMonthsTo": 15,
+          "note": "追加接種。3回目から60日以上あけて、生後12〜15ヶ月の間"
+        }
+      ]
+    },
+    {
+      "id": "dtpiphib",
+      "name": "5種混合（DPT-IPV-Hib）",
+      "nameShort": "5種混合",
+      "category": "定期",
+      "description": "百日せき・ジフテリア・破傷風・ポリオ・Hib感染症を予防します。2024年4月より定期接種化（旧4種混合＋Hib単独の後継）。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 2,
+          "standardAgeMonthsTo": 7,
+          "note": "生後2ヶ月から接種開始"
+        },
+        {
+          "doseNumber": 2,
+          "standardAgeMonthsFrom": 3,
+          "standardAgeMonthsTo": 8,
+          "note": "1回目から3〜8週間後"
+        },
+        {
+          "doseNumber": 3,
+          "standardAgeMonthsFrom": 4,
+          "standardAgeMonthsTo": 9,
+          "note": "2回目から3〜8週間後"
+        },
+        {
+          "doseNumber": 4,
+          "standardAgeMonthsFrom": 15,
+          "standardAgeMonthsTo": 18,
+          "note": "追加接種。3回目から6〜18ヶ月後"
+        }
+      ]
+    },
+    {
+      "id": "bcg",
+      "name": "BCG",
+      "nameShort": "BCG",
+      "category": "定期",
+      "description": "結核（特に乳幼児の重症結核）を予防します。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 5,
+          "standardAgeMonthsTo": 8,
+          "note": "生後5〜8ヶ月の間に1回（標準は5〜7ヶ月）"
+        }
+      ]
+    },
+    {
+      "id": "mr_first",
+      "name": "MR（麻しん・風しん）第1期",
+      "nameShort": "MR第1期",
+      "category": "定期",
+      "description": "麻しん（はしか）と風しんを同時に予防する混合ワクチン。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 12,
+          "standardAgeMonthsTo": 24,
+          "note": "1歳の誕生日を過ぎたらできるだけ早く接種"
+        }
+      ]
+    },
+    {
+      "id": "varicella",
+      "name": "水痘（みずぼうそう）",
+      "nameShort": "水痘",
+      "category": "定期",
+      "description": "水痘（みずぼうそう）を予防します。2回接種が定期化されています。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 12,
+          "standardAgeMonthsTo": 15,
+          "note": "生後12〜15ヶ月の間に1回目"
+        },
+        {
+          "doseNumber": 2,
+          "standardAgeMonthsFrom": 18,
+          "standardAgeMonthsTo": 24,
+          "note": "1回目から6〜12ヶ月後"
+        }
+      ]
+    },
+    {
+      "id": "japanese_encephalitis_first",
+      "name": "日本脳炎 第1期",
+      "nameShort": "日本脳炎1期",
+      "category": "定期",
+      "description": "日本脳炎ウイルスによる脳炎を予防します。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 36,
+          "standardAgeMonthsTo": 48,
+          "note": "標準は3歳から開始（生後6ヶ月から接種可能）"
+        },
+        {
+          "doseNumber": 2,
+          "standardAgeMonthsFrom": 37,
+          "standardAgeMonthsTo": 48,
+          "note": "1回目から1〜4週間後"
+        },
+        {
+          "doseNumber": 3,
+          "standardAgeMonthsFrom": 48,
+          "standardAgeMonthsTo": 60,
+          "note": "2回目から概ね1年後（4歳頃）"
+        }
+      ]
+    },
+    {
+      "id": "mr_second",
+      "name": "MR（麻しん・風しん）第2期",
+      "nameShort": "MR第2期",
+      "category": "定期",
+      "description": "麻しん・風しんの免疫を確実なものにする追加接種です。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 60,
+          "standardAgeMonthsTo": 84,
+          "note": "5歳以上7歳未満で、小学校就学前の1年間に接種"
+        }
+      ]
+    },
+    {
+      "id": "japanese_encephalitis_second",
+      "name": "日本脳炎 第2期",
+      "nameShort": "日本脳炎2期",
+      "category": "定期",
+      "description": "日本脳炎の追加接種。学齢期に1回接種します。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 108,
+          "standardAgeMonthsTo": 156,
+          "note": "9〜12歳の間（標準は9歳）"
+        }
+      ]
+    },
+    {
+      "id": "dt_second",
+      "name": "二種混合（DT）第2期",
+      "nameShort": "DT2期",
+      "category": "定期",
+      "description": "ジフテリア・破傷風の追加接種。学齢期に1回接種します。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 132,
+          "standardAgeMonthsTo": 156,
+          "note": "11〜12歳の間（標準は11歳）"
+        }
+      ]
+    },
+    {
+      "id": "hpv",
+      "name": "HPV（ヒトパピローマウイルス）",
+      "nameShort": "HPV",
+      "category": "定期",
+      "description": "子宮頸がんなどの原因となるHPV感染を予防します。小学6年〜高校1年相当の女子が定期接種対象。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 144,
+          "standardAgeMonthsTo": 192,
+          "note": "中学1年生（標準）。小学6年〜高校1年相当が定期接種対象"
+        },
+        {
+          "doseNumber": 2,
+          "standardAgeMonthsFrom": 146,
+          "standardAgeMonthsTo": 192,
+          "note": "1回目から1〜2ヶ月後（ワクチン種類により異なる）"
+        },
+        {
+          "doseNumber": 3,
+          "standardAgeMonthsFrom": 150,
+          "standardAgeMonthsTo": 192,
+          "note": "1回目から6ヶ月後。9価ワクチンで15歳未満で開始した場合は2回で終了"
+        }
+      ]
+    },
+    {
+      "id": "influenza_b",
+      "name": "インフルエンザ菌b型（Hib）単独 ※経過措置",
+      "nameShort": "Hib（経過措置）",
+      "category": "定期",
+      "description": "2024年4月以降は5種混合に統合されたため、新規対象児は5種混合を接種します。すでにHib単独で開始済みの児の経過措置として残っています。",
+      "doses": [
+        {
+          "doseNumber": 1,
+          "standardAgeMonthsFrom": 2,
+          "standardAgeMonthsTo": 7,
+          "note": "5種混合で代替（経過措置のみ表示）"
+        }
+      ]
+    }
+  ]
+}

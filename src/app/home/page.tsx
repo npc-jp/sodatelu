@@ -319,72 +319,39 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* SEASON / フェーズ */}
-          <div
-            className="bloom-border relative mt-3.5 flex items-center justify-between rounded-xl px-3.5 py-2.5"
-            style={{ background: "#fff" }}
-          >
-            <div>
-              <div
-                className="font-bold"
-                style={{ fontSize: "0.75rem", letterSpacing: "0.15em", color: "var(--bloom-ink-soft)" }}
-              >
-                {seasonLabel}
+          {/* SEASON / これまでのきろく 2カラム */}
+          <div className="mt-3.5 grid grid-cols-2 gap-2.5">
+            {/* SEASON / フェーズ */}
+            <div
+              className="bloom-border rounded-xl p-3.5 text-center"
+              style={{ background: "#fff" }}
+            >
+              <div className="flex items-center justify-center gap-1.5" style={{ transform: "translateX(-14px)" }}>
+                <Sprout size={20} color="var(--bloom-primary)" />
+                <span style={{ fontSize: "0.75rem", color: "var(--bloom-ink-soft)" }}>
+                  {phase.name}
+                </span>
               </div>
               <div className="font-hand mt-0.5" style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}>
-                {phase.name}
+                {phase.ageRange}
               </div>
             </div>
-            <div className="text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)" }}>
-              {phase.ageRange}
-            </div>
-          </div>
-        </BloomCard>
 
-        {/* 記録サマリーカード */}
-        <BloomCard soft className="mt-3 px-4 py-3.5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Sparkle size={16} color="var(--bloom-accent)" />
-              <span className="font-hand" style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}>
-                これまでのきろく
-              </span>
+            {/* これまでのきろく件数 */}
+            <div
+              className="bloom-border rounded-xl p-3.5 text-center"
+              style={{ background: "#fff" }}
+            >
+              <div className="flex items-center justify-center gap-1.5" style={{ transform: "translateX(-14px)" }}>
+                <Sparkle size={20} color="var(--bloom-accent)" />
+                <span style={{ fontSize: "0.75rem", color: "var(--bloom-ink-soft)" }}>
+                  これまでのきろく
+                </span>
+              </div>
+              <div className="font-hand mt-0.5" style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}>
+                {records.length} 件
+              </div>
             </div>
-            <div className="font-hand" style={{ fontSize: "1.375rem", color: "var(--bloom-ink)" }}>
-              {records.length}{" "}
-              <span style={{ fontSize: "0.75rem", color: "var(--bloom-ink-soft)", fontFamily: "Zen Kaku Gothic New, sans-serif" }}>
-                件
-              </span>
-            </div>
-          </div>
-          {/* 直近7ヶ月の月別件数。最新月（右端）はaccent色で強調 */}
-          <div className="mt-2.5 flex h-9 items-end gap-1.5">
-            {recentBars.map((bar, i) => (
-              <div
-                key={i}
-                className="flex-1 rounded"
-                style={{
-                  height: bar.height,
-                  background:
-                    i === 6
-                      ? bar.count > 0
-                        ? "var(--bloom-accent)"
-                        : "var(--bloom-primary-soft)"
-                      : bar.count > 0
-                        ? "var(--bloom-primary)"
-                        : "var(--bloom-primary-soft)",
-                  border: "1.5px solid var(--bloom-line)",
-                }}
-                title={`${bar.count}件`}
-              />
-            ))}
-          </div>
-          <div
-            className="mt-1.5 flex justify-between text-[0.625rem]"
-            style={{ color: "var(--bloom-ink-soft)" }}
-          >
-            <span>6ヶ月前</span>
-            <span>今月</span>
           </div>
         </BloomCard>
 
@@ -398,14 +365,13 @@ export default function HomePage() {
             <button
               type="button"
               onClick={() => router.push("/milestones")}
-              className="block w-full text-left"
+              className="block w-full text-center"
             >
-              <Star size={20} color="var(--bloom-ink)" />
-              <div className="font-hand mt-1.5" style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}>
-                めやす
-              </div>
-              <div className="text-[0.75rem] mt-0.5" style={{ color: "var(--bloom-ink)" }}>
-                {phase.name}
+              <div className="flex items-center justify-center gap-1.5">
+                <Star size={20} color="var(--bloom-ink)" />
+                <span className="font-hand" style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}>
+                  めやすをみる
+                </span>
               </div>
             </button>
           </BloomCard>
@@ -416,15 +382,14 @@ export default function HomePage() {
           >
             <button
               type="button"
-              onClick={() => router.push("/add-child")}
-              className="block w-full text-left"
+              onClick={() => router.push("/write")}
+              className="block w-full text-center"
             >
-              <Heart size={20} color="var(--bloom-accent)" />
-              <div className="font-hand mt-1.5" style={{ fontSize: "0.875rem", color: "var(--bloom-ink)" }}>
-                きょうだい
-              </div>
-              <div className="text-[0.75rem] mt-0.5" style={{ color: "var(--bloom-ink)" }}>
-                追加する
+              <div className="flex items-center justify-center gap-1.5">
+                <Sparkle size={20} color="var(--bloom-accent)" />
+                <span className="font-hand" style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}>
+                  きろくする
+                </span>
               </div>
             </button>
           </BloomCard>

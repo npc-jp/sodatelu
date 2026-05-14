@@ -9,6 +9,7 @@ rules_version = '2';
 // - records/{recordId}: 紐付くchild_idの所属familyメンバーのみ read/write
 // - milestones/{milestoneId}: 認証済みユーザーは全員 read 可。書き込みは管理者のみ
 // - invitations/{invitationId}: 招待を出した本人 + 招待先メールアドレスの本人のみ
+// - measurements/{measurementId}: 同じ family_id を持つメンバーのみ read/write（成長機能 Phase 1）
 //
 // 重要: read を get / list に分離している
 // - get: 単一ドキュメント取得時の厳格な評価（家族メンバーかどうか等）
@@ -200,6 +201,80 @@ service cloud.firestore {
     match /milestones/{milestoneId} {
       allow read: if isSignedIn();
       allow write: if false;
+    }
+
+    // ============================================================
+    // measurements コレクション（成長機能 Phase 1）
+    // ============================================================
+    // 身長・体重の計測記録。同じファミリーのメンバーのみ read/write 可。
+    // 仕様書: growth-feature-spec-v1-2026-05-14.md C-2 参照
+    // 既存lessons[2026-04-30] read = get / list 分離パターンに準拠
+    match /measurements/{measurementId} {
+      // 単一取得: 自分のファミリーの計測データのみ
+      allow get: if isSignedIn()
+        && resource.data.family_id != null
+        && isMyFamilyRef(resource.data.family_id);
+
+      // クエリ: 認証済みなら OK
+      // セキュリティはクライアント側の where("child_id", "==", childRef) で担保
+      allow list: if isSignedIn();
+
+      // 作成: 自分のファミリー宛 + 自分のUIDで作成 + 身長か体重のどちらかは必須
+      allow create: if isSignedIn()
+        && request.resource.data.family_id != null
+        && isMyFamilyRef(request.resource.data.family_id)
+        && request.resource.data.created_by_uid == request.auth.uid
+        && (
+          request.resource.data.height_cm != null
+          || request.resource.data.weight_kg != null
+        );
+
+      // 更新: 自分のファミリーのデータのみ。身長か体重のどちらかは必須を維持
+      allow update: if isSignedIn()
+        && resource.data.family_id != null
+        && isMyFamilyRef(resource.data.family_id)
+        && (
+          request.resource.data.height_cm != null
+          || request.resource.data.weight_kg != null
+        );
+
+      // 削除: 自分のファミリーのデータのみ
+      allow delete: if isSignedIn()
+        && resource.data.family_id != null
+        && isMyFamilyRef(resource.data.family_id);
+    }
+
+    // ============================================================
+    // vaccinations コレクション（成長機能 Phase 3）
+    // ============================================================
+    // 予防接種の接種記録。同じファミリーのメンバーのみ read/write 可。
+    // 仕様書: growth-feature-spec-v1-2026-05-14.md C-2 参照
+    // measurements と同じ get/list 分離パターン
+    match /vaccinations/{vaccinationId} {
+      // 単一取得: 自分のファミリーの記録のみ
+      allow get: if isSignedIn()
+        && resource.data.family_id != null
+        && isMyFamilyRef(resource.data.family_id);
+
+      // クエリ: 認証済みなら OK
+      // セキュリティはクライアント側の where("child_id", "==", childRef) で担保
+      allow list: if isSignedIn();
+
+      // 作成: 自分のファミリー宛 + 自分のUIDで作成
+      allow create: if isSignedIn()
+        && request.resource.data.family_id != null
+        && isMyFamilyRef(request.resource.data.family_id)
+        && request.resource.data.created_by_uid == request.auth.uid;
+
+      // 更新: 自分のファミリーのデータのみ
+      allow update: if isSignedIn()
+        && resource.data.family_id != null
+        && isMyFamilyRef(resource.data.family_id);
+
+      // 削除: 自分のファミリーのデータのみ
+      allow delete: if isSignedIn()
+        && resource.data.family_id != null
+        && isMyFamilyRef(resource.data.family_id);
     }
 
     // ============================================================

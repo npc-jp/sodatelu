@@ -26,6 +26,7 @@ import { milestoneToAppCategory } from "@/lib/category-map";
 import BloomAppHeader from "@/components/bloom-app-header";
 import BloomCard from "@/components/bloom-card";
 import MilestonePicker from "@/components/milestone-picker";
+import MeasurementForm from "@/components/measurement-form";
 import { Sparkle, Sprout } from "@/components/illustrations";
 
 type CategoryOption = {
@@ -56,11 +57,15 @@ function WriteForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuth();
-  const { selectedChild } = useChild();
+  const { selectedChild, children: kids } = useChild();
   const { isPremium } = usePlan();
 
   // URLパラメータがあればそれを使い、なければ選択中の子ども
   const childId = searchParams.get("childId") || selectedChild?.id || "";
+  // 対象の子の family_id（measurements 保存に必要）
+  // URLパラメータ経由で他の子になっている場合も kids から再取得して整合性を保つ
+  const targetChild = kids.find((k) => k.id === childId) || selectedChild;
+  const familyId = targetChild?.family_id?.id || "";
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<MilestoneCategory | "">("");
@@ -74,6 +79,9 @@ function WriteForm() {
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
+  // 身長・体重ショートカットモーダル
+  // measurements は records と独立して保存できる（仕様書 A-3）
+  const [showMeasurementModal, setShowMeasurementModal] = useState(false);
 
   // 紐付け済みのめやすID（ピッカーから除外する）
   useEffect(() => {
@@ -463,7 +471,76 @@ function WriteForm() {
             {loading ? "保存中…" : "きろくする ✦"}
           </button>
         </form>
+
+        {/* 身長・体重ショートカット（仕様書 A-3 サブ導線）
+            記録の保存とは独立しており、計測だけ・両方どちらでも保存できる
+            ボタンは secondary 色味（メインの「きろくする」と区別） */}
+        {childId && familyId && (
+          <div className="mt-6">
+            <div
+              className="mb-2 flex items-center gap-2"
+              style={{ color: "var(--bloom-ink-soft)" }}
+            >
+              <span
+                className="block flex-1"
+                style={{
+                  height: 1,
+                  background: "var(--bloom-line-soft)",
+                }}
+              />
+              <span className="font-hand text-[0.75rem]">あわせて</span>
+              <span
+                className="block flex-1"
+                style={{
+                  height: 1,
+                  background: "var(--bloom-line-soft)",
+                }}
+              />
+            </div>
+            <BloomCard
+              soft
+              color="var(--bloom-accent-soft, var(--bloom-bg))"
+              className="p-3"
+            >
+              <p
+                className="font-hand mb-2 text-center"
+                style={{
+                  fontSize: "0.8125rem",
+                  color: "var(--bloom-ink)",
+                  lineHeight: 1.6,
+                }}
+              >
+                身長・体重も きろくしますか？
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowMeasurementModal(true)}
+                className="bloom-border font-hand w-full rounded-[14px] py-2.5"
+                style={{
+                  background: "#fff",
+                  color: "var(--bloom-ink)",
+                  fontSize: "0.875rem",
+                }}
+              >
+                📏 身長・体重を入力する
+              </button>
+            </BloomCard>
+          </div>
+        )}
       </main>
+
+      {/* 身長・体重入力モーダル（記録画面ショートカット）
+          計測日のデフォルトは記録日に合わせる（write画面の date state を渡す） */}
+      {childId && familyId && user && (
+        <MeasurementForm
+          open={showMeasurementModal}
+          childId={childId}
+          familyId={familyId}
+          createdByUid={user.uid}
+          defaultDate={date}
+          onClose={() => setShowMeasurementModal(false)}
+        />
+      )}
     </div>
   );
 }

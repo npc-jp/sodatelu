@@ -22,6 +22,13 @@
   --bloom-line: #2E2A22;          /* メインボーダー */
   --bloom-line-soft: #D8CFB6;     /* 細い区切り、点線、ロック済み入力 */
 
+  /* 成長曲線グラフ用カラー（Phase 2 で追加）
+     仕様書 A-4 のパーセンタイル帯指定で使用。男児=青系、女児=赤系 */
+  --bloom-blue: #6B8FE8;          /* 男児中央値・濃い青 */
+  --bloom-blue-soft: #A8C4F0;     /* 男児パーセンタイル帯・淡い青 */
+  --bloom-blue-accent: #4F73D2;   /* 男児計測点（その子が男児の場合） */
+  --bloom-pink-deep: #E89BAE;     /* 女児パーセンタイル帯・濃いピンク */
+
   --background: var(--bloom-bg);
   --foreground: var(--bloom-ink);
 }
@@ -41,6 +48,10 @@
   --color-bloom-ink-soft: var(--bloom-ink-soft);
   --color-bloom-line: var(--bloom-line);
   --color-bloom-line-soft: var(--bloom-line-soft);
+  --color-bloom-blue: var(--bloom-blue);
+  --color-bloom-blue-soft: var(--bloom-blue-soft);
+  --color-bloom-blue-accent: var(--bloom-blue-accent);
+  --color-bloom-pink-deep: var(--bloom-pink-deep);
 }
 
 /* Google Fonts (見出し: Yusei Magic / 本文: Zen Kaku Gothic New) は冒頭で読み込み済み */
