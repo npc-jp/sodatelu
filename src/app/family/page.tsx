@@ -27,7 +27,7 @@ import { useChild } from "@/lib/child-context";
 import BloomAppHeader from "@/components/bloom-app-header";
 import BloomBottomNav from "@/components/bloom-bottom-nav";
 import BloomCard from "@/components/bloom-card";
-import { Family, Sparkle, Sprout, Star } from "@/components/illustrations";
+import { Family as FamilyIcon, Sparkle, Sprout, Star } from "@/components/illustrations";
 
 // 子どもごとのカラー
 const CHILD_COLORS = [
@@ -198,7 +198,7 @@ ${url}`;
         title="ファミリー"
         subtitle={familyName}
         showBack
-        rightSlot={<Family size={22} color="var(--bloom-accent)" />}
+        rightSlot={<FamilyIcon size={22} color="var(--bloom-accent)" />}
       />
 
       <main className="flex-1 overflow-y-auto px-4 pt-4 pb-28">
