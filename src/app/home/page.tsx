@@ -345,7 +345,7 @@ export default function HomePage() {
               <div className="flex items-center justify-center gap-1.5" style={{ transform: "translateX(-14px)" }}>
                 <Sparkle size={20} color="var(--bloom-accent)" />
                 <span style={{ fontSize: "0.75rem", color: "var(--bloom-ink-soft)" }}>
-                  これまでのきろく
+                  きろく
                 </span>
               </div>
               <div className="font-hand mt-0.5" style={{ fontSize: "1rem", color: "var(--bloom-ink)" }}>
