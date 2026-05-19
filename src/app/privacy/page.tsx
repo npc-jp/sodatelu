@@ -27,7 +27,7 @@ export default function PrivacyPage() {
     >
       <BloomAppHeader
         title="プライバシーポリシー"
-        subtitle="2026年5月版"
+        subtitle="2026-05-19 制定"
         showBack
       />
 
@@ -80,7 +80,7 @@ export default function PrivacyPage() {
           }}
         >
           β版（ベータ版）のため、内容は今後アップデートされる可能性があります。
-          重大な変更時は事前にお知らせします。最終更新: 2026-04-30
+          重大な変更時は事前にお知らせします。制定: 2026-05-19
         </div>
 
         {/* 前文 */}
@@ -308,6 +308,55 @@ export default function PrivacyPage() {
             更新することがあります。重要な変更がある場合は、アプリ内のお知らせまたは
             ご登録のメールアドレスにご連絡します。
           </p>
+          <p
+            className="mt-2 text-[0.75rem]"
+            style={{ color: "var(--bloom-ink-soft)" }}
+          >
+            制定日: 2026年5月19日
+          </p>
+        </Section>
+
+        {/* 12. 事業者情報（個人情報取扱事業者） */}
+        <Section title="12. 事業者情報">
+          <p>
+            sodatelu の運営者（個人情報取扱事業者）は以下のとおりです。
+          </p>
+          <div
+            className="mt-2 rounded-xl px-3.5 py-3 text-[0.8125rem]"
+            style={{
+              background: "#fff",
+              border: "1.5px solid var(--bloom-line-soft)",
+              color: "var(--bloom-ink)",
+              lineHeight: 1.9,
+            }}
+          >
+            <div>
+              <span style={{ color: "var(--bloom-ink-soft)" }}>屋号 / </span>
+              npc（エヌ・ピー・シー）
+            </div>
+            <div>
+              <span style={{ color: "var(--bloom-ink-soft)" }}>代表者 / </span>
+              薮根 梓（やぶね あづさ）
+            </div>
+            <div>
+              <span style={{ color: "var(--bloom-ink-soft)" }}>所在地 / </span>
+              〒272-0138 千葉県市川市南行徳3-10-14
+            </div>
+            <div>
+              <span style={{ color: "var(--bloom-ink-soft)" }}>連絡先 / </span>
+              azusa-y@n-pc.jp
+            </div>
+            <div>
+              <span style={{ color: "var(--bloom-ink-soft)" }}>電話 / </span>
+              090-1077-5123
+            </div>
+            <div>
+              <span style={{ color: "var(--bloom-ink-soft)" }}>
+                インボイス登録番号 /{" "}
+              </span>
+              T7810616364509
+            </div>
+          </div>
         </Section>
 
         {/* 末尾: 問い合わせ先（dashed 枠） */}
@@ -344,7 +393,14 @@ export default function PrivacyPage() {
           </div>
         </div>
 
-        <div className="mt-5 text-center">
+        <div className="mt-5 flex flex-col items-center gap-2">
+          <Link
+            href="/terms"
+            className="font-hand text-[0.8125rem]"
+            style={{ color: "var(--bloom-accent)" }}
+          >
+            利用規約はこちら →
+          </Link>
           <Link
             href="/login"
             className="font-hand text-[0.8125rem]"

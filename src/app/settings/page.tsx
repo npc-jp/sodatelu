@@ -441,6 +441,9 @@ export default function SettingsPage() {
         <Link href="/privacy" className="block">
           <Row label="プライバシーポリシー" />
         </Link>
+        <Link href="/terms" className="block">
+          <Row label="利用規約" />
+        </Link>
 
         {/* その他 */}
         <SectionTitle icon={<Cloud size={20} color="var(--bloom-line)" />}>

@@ -382,6 +382,14 @@ export default function LoginPage() {
           <p className="mt-4 text-center text-[0.75rem]" style={{ color: "var(--bloom-ink-soft)", lineHeight: 1.7 }}>
             登録することで
             <Link
+              href="/terms"
+              className="mx-0.5 underline"
+              style={{ color: "var(--bloom-accent)" }}
+            >
+              利用規約
+            </Link>
+            ・
+            <Link
               href="/privacy"
               className="mx-0.5 underline"
               style={{ color: "var(--bloom-accent)" }}
