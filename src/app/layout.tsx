@@ -100,6 +100,9 @@ export const viewport: Viewport = {
   themeColor: "#7BA85F",
   // ブラウザ既定のカラースキーム（明るめ）
   colorScheme: "light",
+  // Capacitor Androidでステータスバー領域(ノッチ含む)に背景は描画しつつ
+  // env(safe-area-inset-*) でコンテンツを避けるためにcover指定が必要
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
